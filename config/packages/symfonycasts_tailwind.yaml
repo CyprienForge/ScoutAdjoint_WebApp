@@ -1,0 +1,5 @@
+symfonycasts_tailwind:
+    input_css: '%kernel.project_dir%/assets/styles/app.css'
+    config_file: '%kernel.project_dir%/tailwind.config.js'
+    postcss_config_file: '%kernel.project_dir%/postcss.config.js'
+    binary_version: 'v3.4.17'
