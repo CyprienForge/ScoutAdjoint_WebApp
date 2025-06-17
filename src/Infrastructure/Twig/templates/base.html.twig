@@ -12,7 +12,23 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body style="display: flex">
+        <div id="menu" class="bg-base-200 w-1/6 h-screen">
+            <h3 class="text-3xl font-bold mt-4 text-center">ScoutAdjoint</h3>
+            <aside>
+                <ul class="pt-8 text-center mt-8 font-semibold">
+                    <li>
+                        <a href="{{ path('home') }}">Accueil</a>
+                    </li>
+                    <li class="mt-8">
+                        <a href="{{ path('get_players') }}">Joueurs</a>
+                    </li>
+                    <li class="mt-8">Matchs</li>
+                </ul>
+            </aside>
+        </div>
+        <div id="content" class="w-3/4">
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>

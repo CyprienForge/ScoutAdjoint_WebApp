@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Joueurs{% endblock %}
+
+{% block body %}
+    <h2 class="text-3xl font-bold mt-8 text-center">Joueurs</h2>
+
+    {% for player in players %}
+        <p>{{ player.fullName }} — {{ player.teamName }}</p>
+    {% endfor %}
+{% endblock %}

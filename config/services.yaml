@@ -14,7 +14,6 @@ services:
         resource: '../src/Domain'
         exclude:
             - '../src/Domain/Entity'
-            - '../src/Domain/Presenter'
             - '../src/Domain/ViewModel'
 
     Infrastructure\Symfony\Controller\:
@@ -26,3 +25,15 @@ services:
         exclude:
             - '../src/Infrastructure/Symfony/Controller'
             - '../src/Infrastructure/Twig'
+
+    Infrastructure\Repository\:
+        resource: '../src/Infrastructure/Repository'
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $apiUrl: '%env(SUPABASE_URL)%'
+            string $apiKey: '%env(SUPABASE_API_KEY)%'
+
+    Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Players\PlayerRepositorySupabase'
+    Domain\Repository\TeamRepository: '@Infrastructure\Repository\Teams\TeamRepositorySupabase'
+    Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'

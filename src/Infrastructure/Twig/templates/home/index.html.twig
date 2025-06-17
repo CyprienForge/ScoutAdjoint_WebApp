@@ -1,5 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Page d'accueil{% endblock %}
+
 {% block body %}
-    
+    <h2 class="text-3xl font-bold mt-8 text-center">Page d'accueil</h2>
+
+    <h3 id="custom-underline" class="ms-8 mt-24 text-xl">Tes derniers matchs</h3>
+
+    <div id="last-matchs" class="ms-24 mt-8 flex justify-between">
+        {% include 'home/card_match.html.twig' %}
+        {% include 'home/card_match.html.twig' %}
+        {% include 'home/card_match.html.twig' %}
+    </div>
+
 {% endblock %}
