@@ -15,8 +15,10 @@ class PlayerFactory implements Factory
         $player->setId($attributes['id']);
         $player->setFirstName($attributes['first_name']);
         $player->setLastName($attributes['last_name']);
-        $player->setBirthDate($attributes['birth_date']);
+        $birth_date = new \DateTime($attributes['birth_date']);
+        $player->setBirthDate($birth_date);
         $player->setTeam($attributes['team']);
+        $player->setIdentificationCode($attributes['identification_code']);
 
         return $player;
     }

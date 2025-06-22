@@ -2,13 +2,17 @@
 
 namespace Domain\Entity;
 
+use phpDocumentor\Reflection\Types\This;
+
 class Player
 {
     private int $id;
     private string $firstName;
     private string $lastName;
-    private string $birthDate;
+    private \DateTime $birthDate;
     private Team $team;
+    private string $identificationCode;
+
     public function getId(): int
     {
         return $this->id;
@@ -39,14 +43,15 @@ class Player
         $this->lastName = $lastName;
     }
 
-    public function getBirthDate(): string
+    public function getBirthDate(): \DateTime
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(string $birthDate): void
+    public function setBirthDate(?\DateTime $birthDate): Player
     {
         $this->birthDate = $birthDate;
+        return $this;
     }
 
     public function getTeam(): Team
@@ -57,5 +62,16 @@ class Player
     public function setTeam(Team $team): void
     {
         $this->team = $team;
+    }
+
+    public function getIdentificationCode(): string
+    {
+        return $this->identificationCode;
+    }
+
+    public function setIdentificationCode(string $identificationCode): Player
+    {
+        $this->identificationCode = $identificationCode;
+        return $this;
     }
 }

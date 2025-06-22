@@ -5,6 +5,12 @@
 {% block body %}
     <h2 class="text-3xl font-bold mt-8 text-center">Joueurs</h2>
 
+    <table>
+        <thead>
+            <th>Prénom</th>
+            <th>Nom</th>
+        </thead>
+    </table>
     {% for player in players %}
         <p>{{ player.fullName }} — {{ player.teamName }}</p>
     {% endfor %}

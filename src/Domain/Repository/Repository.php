@@ -21,4 +21,12 @@ interface Repository
      * return T|null
      */
     public function findById(int $id);
+
+    public function deleteAll();
+
+    /**
+     * @param string $identificationCode
+     * @return T
+     */
+    public function findByIdentificationCode(string $identificationCode);
 }

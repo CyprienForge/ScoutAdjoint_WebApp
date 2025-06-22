@@ -26,6 +26,19 @@ services:
             - '../src/Infrastructure/Symfony/Controller'
             - '../src/Infrastructure/Twig'
 
+    Domain\UseCase\FetchData\FetchDataUseCase:
+        arguments:
+            $readChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
+            $writeChampionshipRepository: '@Infrastructure\Repository\Doctrine\ChampionshipRepositoryDoctrine'
+            $readTeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
+            $writeTeamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
+            $readPlayerRepository: '@Infrastructure\Repository\Supabase\PlayerRepositorySupabase'
+            $writePlayerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
+
+    Domain\UseCase\FetchPlayers\FetchPlayersUseCase:
+        arguments:
+            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
+
     Infrastructure\Repository\:
         resource: '../src/Infrastructure/Repository'
         autowire: true
@@ -34,6 +47,7 @@ services:
             string $apiUrl: '%env(SUPABASE_URL)%'
             string $apiKey: '%env(SUPABASE_API_KEY)%'
 
-    Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Players\PlayerRepositorySupabase'
-    Domain\Repository\TeamRepository: '@Infrastructure\Repository\Teams\TeamRepositorySupabase'
+    Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Supabase\PlayerRepositorySupabase'
+    Domain\Repository\TeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
+    Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
     Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'

@@ -7,7 +7,9 @@ class Team
     private int $id;
     private string $name;
     private ?string $logoPath;
-    private Championship $championship;
+    private ?Championship $championship;
+    private string $identificationCode;
+
     public function getId(): int
     {
         return $this->id;
@@ -30,7 +32,7 @@ class Team
         return $this;
     }
 
-    public function getLogoPath(): string
+    public function getLogoPath(): ?string
     {
         return $this->logoPath;
     }
@@ -41,14 +43,25 @@ class Team
         return $this;
     }
 
-    public function getChampionship(): Championship
+    public function getChampionship(): ?Championship
     {
         return $this->championship;
     }
 
-    public function setChampionship(Championship $championship): Team
+    public function setChampionship(?Championship $championship): Team
     {
         $this->championship = $championship;
+        return $this;
+    }
+
+    public function getIdentificationCode(): string
+    {
+        return $this->identificationCode;
+    }
+
+    public function setIdentificationCode(string $identificationCode): Team
+    {
+        $this->identificationCode = $identificationCode;
         return $this;
     }
 }

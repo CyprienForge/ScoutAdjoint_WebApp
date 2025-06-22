@@ -3,8 +3,7 @@
 namespace App\Tests\Repository\Players;
 
 use Domain\Entity\Player;
-use Infrastructure\Repository\Players\PlayerRepositorySupabase;
-use PHPUnit\Framework\Test;
+use Infrastructure\Repository\Supabase\PlayerRepositorySupabase;
 use PHPUnit\Framework\TestCase;
 
 class PlayerRepositorySupabaseTest extends TestCase

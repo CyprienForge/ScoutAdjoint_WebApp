@@ -1,10 +1,11 @@
 <?php
 
-namespace Infrastructure\Repository\Players;
+namespace Infrastructure\Repository\Supabase;
 
 use Domain\Entity\Player;
+use Domain\Factory\PlayerFactory;
 use Domain\Repository\PlayerRepository;
-use Domain\Repository\Repository;
+use Domain\Repository\TeamRepository;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
@@ -12,6 +13,7 @@ class PlayerRepositorySupabase implements PlayerRepository
 {
     public function __construct(
         private HttpClientInterface $client,
+        private TeamRepository $teamRepository,
         private string $apiUrl,
         private string $apiKey
     ){}
@@ -37,11 +39,28 @@ class PlayerRepositorySupabase implements PlayerRepository
         );
 
         $data = $response->toArray();
-        return $data;
+        $players = [];
+
+        foreach($data as $player){
+            $player['team'] = $this->teamRepository->findById($player['team']);
+            $players[] = PlayerFactory::build($player);
+        }
+
+        return $players;
     }
 
     public function findById(int $id): ?Player
     {
         return null;
+    }
+
+    public function deleteAll()
+    {
+        // TODO: Implement deleteAll() method.
+    }
+
+    public function findByIdentificationCode(string $identificationCode)
+    {
+        // TODO: Implement findByIdentificationCode() method.
     }
 }

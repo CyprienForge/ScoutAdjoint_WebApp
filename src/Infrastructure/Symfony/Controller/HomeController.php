@@ -20,6 +20,7 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
+
     #[Route('/players', name: 'get_players')]
     public function fetchPlayers(FetchPlayersUseCase $fetchPlayersUseCase): Response
     {

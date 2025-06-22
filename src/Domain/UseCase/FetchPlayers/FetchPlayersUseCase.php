@@ -7,13 +7,13 @@ use Domain\Repository\PlayerRepository;
 use Domain\Repository\TeamRepository;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
 use Domain\Response\FetchPlayers\FetchPlayersResponse;
+use Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine;
 
 class FetchPlayersUseCase
 {
 
     public function __construct(
       private PlayerRepository $playerRepository,
-      private TeamRepository $teamRepository,
       private FetchPlayersOutputBoundary $presenter
     ){}
 
@@ -23,9 +23,7 @@ class FetchPlayersUseCase
 
         $playersResponse = $this->playerRepository->findAll();
         foreach($playersResponse as $playerResponse){
-            $team = $this->teamRepository->findById($playerResponse['team']);
-            $playerResponse['team'] = $team;
-            $players[] = PlayerFactory::build($playerResponse);
+            $players[] = PlayerMapperDoctrine::toDomain($playerResponse);
         }
 
         $response = new FetchPlayersResponse($players);
