@@ -63,4 +63,9 @@ class PlayerRepositorySupabase implements PlayerRepository
     {
         // TODO: Implement findByIdentificationCode() method.
     }
+
+    public function findPaginated(int $limit, int $offset, ?string $firstName, ?string $lastName)
+    {
+        // TODO: Implement findPaginated() method.
+    }
 }

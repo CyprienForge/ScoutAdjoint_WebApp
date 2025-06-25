@@ -7,7 +7,11 @@ use Domain\Response\FetchPlayers\FetchPlayersResponse;
 class FetchPlayersViewModel
 {
     public function __construct(
-        public string $fullName,
-        public string $teamName
+        public int $positionLoop,
+        public string $firstName,
+        public string $lastName,
+        public string $teamName,
+        public string $birthDate,
     ){}
+
 }

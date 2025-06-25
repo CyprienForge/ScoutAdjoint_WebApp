@@ -3,15 +3,62 @@
 {% block title %}Joueurs{% endblock %}
 
 {% block body %}
-    <h2 class="text-3xl font-bold mt-8 text-center">Joueurs</h2>
+    <h2 class="text-3xl  font-bold mt-8 text-center">Joueurs</h2>
 
-    <table>
-        <thead>
-            <th>Prénom</th>
-            <th>Nom</th>
-        </thead>
-    </table>
-    {% for player in players %}
-        <p>{{ player.fullName }} — {{ player.teamName }}</p>
-    {% endfor %}
+    <div class="my-8">
+        {{ form_start(form, {'method': 'get'}) }}
+        <div class="grid grid-cols-3 gap-4">
+            {{ form_row(form.first_name) }}
+            {{ form_row(form.last_name) }}
+        </div>
+        <div class="mt-8 flex justify-center items-center">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <div class="overflow-x-auto mt-8">
+        <table class="table table-zebra">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Équipe actuelle</th>
+                <th>Poste</th>
+                <th>Date de naissance</th>
+                <th>Fiche</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for player in players %}
+                <tr>
+                    <th>{{ player.positionLoop }}</th>
+                    <td>{{ player.lastName }}</td>
+                    <td>{{ player.firstName }}</td>
+                    <td>{{ player.teamName }}</td>
+                    <td>Pas renseigné pour le moment</td>
+                    <td>{{ player.birthDate }}</td>
+                    <td><i class="fa-solid fa-circle-right"></i></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <section id="pagination-section" class="flex justify-center">
+        <div class="w-1/4 flex justify-evenly items-center mt-8">
+            <a href="/players/{{ previousPageNumber }}" class="btn btn-soft btn-primary">
+                Précédent
+            </a>
+            <h4 class="font-bold">
+                Page {{ pageNumber }}
+            </h4>
+            <a href="/players/{{ nextPageNumber }}" class="btn btn-soft btn-primary">
+                Suivant
+            </a>
+        </div>
+    </section>
+
+
 {% endblock %}

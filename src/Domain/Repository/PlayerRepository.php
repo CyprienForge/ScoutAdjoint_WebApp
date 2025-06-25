@@ -7,6 +7,6 @@ use Domain\Entity\Player;
 /**
  * @extends Repository<Player>
  */
-interface PlayerRepository extends Repository
+interface PlayerRepository extends Repository, PaginatedRepository
 {
 }

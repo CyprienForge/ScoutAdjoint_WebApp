@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Domain\Repository\PlayerRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
+use function Symfony\Component\Translation\t;
 
 class PlayerRepositoryDoctrine extends ServiceEntityRepository implements PlayerRepository
 {
@@ -38,5 +39,22 @@ class PlayerRepositoryDoctrine extends ServiceEntityRepository implements Player
     public function findByIdentificationCode(string $identificationCode)
     {
        return $this->findOneBy(['identificationCode' => $identificationCode]);
+    }
+
+    public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('p');
+
+        if($firstName){
+            $queryBuilder->andWhere('p.firstName like :firstName')->setParameter('firstName', '%'.$firstName.'%');
+        }
+        if($lastName){
+            $queryBuilder->andWhere('p.lastName like :lastName')->setParameter('lastName', '%'.$lastName.'%');
+        }
+
+        return $queryBuilder->setFirstResult($offset)
+                    ->setMaxResults($limit)
+                    ->getQuery()
+                    ->getResult();
     }
 }

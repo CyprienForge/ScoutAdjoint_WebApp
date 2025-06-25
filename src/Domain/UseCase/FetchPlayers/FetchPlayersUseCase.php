@@ -21,12 +21,12 @@ class FetchPlayersUseCase
     {
         $players = [];
 
-        $playersResponse = $this->playerRepository->findAll();
+        $playersResponse = $this->playerRepository->findPaginated($request->limit,  $request->offset, $request->firstNameSearch, $request->lastNameSearch);
         foreach($playersResponse as $playerResponse){
             $players[] = PlayerMapperDoctrine::toDomain($playerResponse);
         }
 
-        $response = new FetchPlayersResponse($players);
+        $response = new FetchPlayersResponse($players, $request->pageNumber, $request->limit);
         $this->presenter->present($response);
 
         return $response;
