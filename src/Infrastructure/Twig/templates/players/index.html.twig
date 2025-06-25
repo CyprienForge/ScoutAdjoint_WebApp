@@ -17,6 +17,16 @@
         {{ form_end(form) }}
     </div>
 
+    <div data-controller="test">
+        <button class="btn btn-primary" data-action="click->test#test">
+            TEST STIUMLUS
+        </button>
+
+        <span data-test-target="output">
+
+        </span>
+    </div>
+
     <div class="overflow-x-auto mt-8">
         <table class="table table-zebra">
             <thead>
