@@ -2,6 +2,8 @@
 
 namespace Domain\Request\FetchPlayers;
 
+use DateTime;
+
 class FetchPlayersRequest
 {
     public function __construct(
@@ -10,5 +12,7 @@ class FetchPlayersRequest
       public string $pageNumber,
       public ?string $firstNameSearch,
       public ?string $lastNameSearch,
+      public ?DateTime $startBirthDate,
+      public ?DateTime $endBirthDate,
     ){}
 }

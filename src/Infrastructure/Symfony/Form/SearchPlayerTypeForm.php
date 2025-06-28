@@ -3,6 +3,7 @@
 namespace Infrastructure\Symfony\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,6 +18,12 @@ class SearchPlayerTypeForm extends AbstractType
                 'required' => false,
             ])
             ->add('last_name',  TextType::class, [
+                'required' => false,
+            ])
+            ->add('start_birth_date', DateType::class, [
+                'required' => false,
+            ])
+            ->add('end_birth_date', DateType::class, [
                 'required' => false,
             ])
         ;

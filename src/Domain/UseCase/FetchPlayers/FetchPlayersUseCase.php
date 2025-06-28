@@ -21,7 +21,14 @@ class FetchPlayersUseCase
     {
         $players = [];
 
-        $playersResponse = $this->playerRepository->findPaginated($request->limit,  $request->offset, $request->firstNameSearch, $request->lastNameSearch);
+        $playersResponse = $this->playerRepository->findPaginated(
+            $request->limit,
+            $request->offset,
+            $request->firstNameSearch,
+            $request->lastNameSearch,
+            $request->startBirthDate,
+            $request->endBirthDate
+        );
         foreach($playersResponse as $playerResponse){
             $players[] = PlayerMapperDoctrine::toDomain($playerResponse);
         }

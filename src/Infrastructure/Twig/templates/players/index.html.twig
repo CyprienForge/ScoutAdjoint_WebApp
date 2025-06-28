@@ -10,6 +10,8 @@
         <div class="grid grid-cols-3 gap-4">
             {{ form_row(form.first_name) }}
             {{ form_row(form.last_name) }}
+            {{ form_row(form.start_birth_date) }}
+            {{ form_row(form.end_birth_date) }}
         </div>
         <div class="mt-8 flex justify-center items-center">
             <button type="submit" class="btn btn-primary">Rechercher</button>
@@ -17,6 +19,7 @@
         {{ form_end(form) }}
     </div>
 
+    <!--
     <div data-controller="test">
         <button class="btn btn-primary" data-action="click->test#test">
             TEST STIUMLUS
@@ -26,6 +29,7 @@
 
         </span>
     </div>
+    -->
 
     <div class="overflow-x-auto mt-8">
         <table class="table table-zebra">

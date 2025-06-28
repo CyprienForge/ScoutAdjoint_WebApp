@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Repository\Doctrine;
 
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,7 +42,7 @@ class PlayerRepositoryDoctrine extends ServiceEntityRepository implements Player
        return $this->findOneBy(['identificationCode' => $identificationCode]);
     }
 
-    public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null)
+    public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null, ?DateTime $startBirthDate = null, ?DateTime $endBirthDate = null)
     {
         $queryBuilder = $this->createQueryBuilder('p');
 
@@ -50,6 +51,12 @@ class PlayerRepositoryDoctrine extends ServiceEntityRepository implements Player
         }
         if($lastName){
             $queryBuilder->andWhere('p.lastName like :lastName')->setParameter('lastName', '%'.$lastName.'%');
+        }
+        if ($startBirthDate) {
+            $queryBuilder->andWhere('p.birthDate >= :startBirthDate')->setParameter('startBirthDate', $startBirthDate->format('Y-m-d'));
+        }
+        if ($endBirthDate) {
+            $queryBuilder->andWhere('p.birthDate <= :endBirthDate')->setParameter('endBirthDate', $endBirthDate->format('Y-m-d'));
         }
 
         return $queryBuilder->setFirstResult($offset)

@@ -31,15 +31,19 @@ class HomeController extends AbstractController
 
         $firstName = null;
         $lastName = null;
+        $startBirthDate = null;
+        $endBirthDate = null;
 
         if($searchPlayerForm->isSubmitted() && $searchPlayerForm->isValid()){
             $task = $searchPlayerForm->getData();
             $firstName = $task['first_name'];
             $lastName = $task['last_name'];
+            $startBirthDate = $task['start_birth_date'];
+            $endBirthDate = $task['end_birth_date'];
         }
 
         $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($limit, $page * $limit, $page, $firstName, $lastName);
+        $fetchPlayersRequest = new FetchPlayersRequest($limit, $page * $limit, $page, $firstName, $lastName, $startBirthDate, $endBirthDate);
         $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return $this->render('players/index.html.twig', [

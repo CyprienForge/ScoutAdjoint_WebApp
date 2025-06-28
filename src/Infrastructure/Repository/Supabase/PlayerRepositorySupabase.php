@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Repository\Supabase;
 
+use DateTime;
 use Domain\Entity\Player;
 use Domain\Factory\PlayerFactory;
 use Domain\Repository\PlayerRepository;
@@ -64,7 +65,7 @@ class PlayerRepositorySupabase implements PlayerRepository
         // TODO: Implement findByIdentificationCode() method.
     }
 
-    public function findPaginated(int $limit, int $offset, ?string $firstName, ?string $lastName)
+    public function findPaginated(int $limit, int $offset, ?string $firstName, ?string $lastName, ?DateTime $startBirthDate, ?DateTime $endBirthDate)
     {
         // TODO: Implement findPaginated() method.
     }
