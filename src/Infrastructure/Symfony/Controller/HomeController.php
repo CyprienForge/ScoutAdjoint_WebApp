@@ -3,8 +3,11 @@
 namespace Infrastructure\Symfony\Controller;
 
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
+use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
+use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
+use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase;
 use Infrastructure\Symfony\Form\SearchPlayerTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     public function __construct(
-        private FetchPlayersOutputBoundary $presenter
+        private FetchPlayersOutputBoundary $presenter,
+        private ShowDetailsPlayerOutputBoundary $presenterShowDetails
     ){}
 
     #[Route('/', name: 'home')]
@@ -47,11 +51,19 @@ class HomeController extends AbstractController
         $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return $this->render('players/index.html.twig', [
-            'players' => $this->presenter->getViewModel(),
-            'pageNumber' => $this->presenter->getPageNumber(),
-            'previousPageNumber' => $this->presenter->getPagePreviousNumber(),
-            'nextPageNumber' => $this->presenter->getPageNextNumber(),
+            'viewModel' => $this->presenter->getViewModel(),
             'form' => $searchPlayerForm->createView(),
+        ]);
+    }
+
+    #[Route('/players/details/{idPlayer}', name: 'details_player')]
+    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, int $idPlayer) : Response
+    {
+        $request = new ShowDetailsPlayerRequest($idPlayer);
+        $useCase->execute($request);
+
+        return $this->render('players/details.html.twig', [
+           'viewModel' => $this->presenterShowDetails->getViewModel()
         ]);
     }
 }

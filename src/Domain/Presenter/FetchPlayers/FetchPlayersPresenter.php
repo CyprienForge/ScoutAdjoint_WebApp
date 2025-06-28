@@ -4,56 +4,40 @@ namespace Domain\Presenter\FetchPlayers;
 
 use Domain\Response\FetchPlayers\FetchPlayersResponse;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
+use Domain\ViewModel\Entity\PlayerViewModel;
 use Domain\ViewModel\FetchPlayers\FetchPlayersViewModel;
 
 class FetchPlayersPresenter implements FetchPlayersOutputBoundary
 {
-    private array $viewModels = [];
-    public string $pageNumber;
-    public string $pagePreviousNumber;
-    public string $pageNextNumber;
+    private FetchPlayersViewModel $viewModel;
 
     public function present(FetchPlayersResponse $response): void
     {
-        $this->pageNumber = $response->getPageNumber();
-        $this->pagePreviousNumber = (string)((int) $response->getPageNumber() - 1);
-        $this->pagePreviousNumber = $this->pagePreviousNumber < 0 ? 0 : $this->pagePreviousNumber;
-        $this->pageNextNumber = (string)((int) $response->getPageNumber() + 1);
+        $this->viewModel = new FetchPlayersViewModel();
+        $this->viewModel->pageNumber = $response->getPageNumber();
+        $this->viewModel->previousPageNumber = (string)((int) $response->getPageNumber() - 1);
+        $this->viewModel->previousPageNumber = $this->viewModel->previousPageNumber < 0 ? 0 : $this->viewModel->previousPageNumber;
+        $this->viewModel->nextPageNumber = (string)((int) $response->getPageNumber() + 1);
 
         $indexLoop = 1;
         foreach($response->getPlayers() as $player){
             $positionLoop = $response->getPageNumber() * $response->getLimit() + $indexLoop;
-            $viewModel = new FetchPlayersViewModel(
+            $this->viewModel->playerViewModels[] = new PlayerViewModel(
                 $positionLoop,
+                $player->getId(),
                 $player->getFirstName(),
                 $player->getLastName(),
                 $player->getTeam()->getName(),
-                $player->getBirthDate()->format('d-m-Y')
+                $player->getBirthDate()->format('d-m-Y'),
             );
-            $this->viewModels[] = $viewModel;
             $indexLoop++;
         }
 
-        $this->pageNextNumber = $indexLoop < $response->getLimit() ? $response->getPageNumber() : $this->pageNextNumber;
+        $this->viewModel->nextPageNumber = $indexLoop < $response->getLimit() ? $response->getPageNumber() : $this->viewModel->nextPageNumber;
     }
 
-    public function getViewModel() : array
+    public function getViewModel() : FetchPlayersViewModel
     {
-        return $this->viewModels;
-    }
-
-    public function getPageNumber() : string
-    {
-        return $this->pageNumber;
-    }
-
-    public function getPageNextNumber(): string
-    {
-        return $this->pageNextNumber;
-    }
-
-    public function getPagePreviousNumber(): string
-    {
-        return $this->pagePreviousNumber;
+        return $this->viewModel;
     }
 }

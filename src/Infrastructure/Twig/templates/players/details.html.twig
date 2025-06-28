@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Joueurs{% endblock %}
+
+{% block body %}
+
+    <div class="head">
+        <a href="{{ path('get_players') }}" class="btn btn-soft btn-info ms-8 mt-8">
+            Retour
+        </a>
+    </div>
+
+    <div class="flex justify-center">
+        <h2 class="text-3xl font-bold">
+            {{ viewModel.playerViewModel.firstName }}  {{ viewModel.playerViewModel.lastName }}
+        </h2>
+    </div>
+
+    <section class="flex justify-center">
+        <div class="flex justify-between items-center mt-8 w-3/4" id="player-infos">
+            <article>
+                <img
+                    src="{{ asset('images/arthur_vignaud.jpg') }}"
+                    alt="Photo of {{ viewModel.playerViewModel.firstName }} {{ viewModel.playerViewModel.lastName }}"
+                    style="width: 200px; height: 200px; object-fit: cover;"
+                />
+            </article>
+            <article>
+                <p>Nom : {{ viewModel.playerViewModel.lastName }}</p>
+                <p class="mt-4">Prénom : {{ viewModel.playerViewModel.firstName }}</p>
+                <p class="mt-4">Poste : Non renseigné</p>
+            </article>
+            <article>
+                <p>Date de naissance : {{ viewModel.playerViewModel.birthDate }}</p>
+                <p class="mt-4">Équipe actuelle : {{ viewModel.playerViewModel.teamName }}</p>
+                <p class="mt-4">Nationalité : Non renseigné</p>
+            </article>
+        </div>
+    </section>
+
+
+    <section class="mt-24">
+        <div class="ms-8">
+            <h2 class="text-3xl font-bold">
+                <span class="border-b-4 border-red-500">Historique</span> des observations
+            </h2>
+        </div>
+        <div id="observations" class="flex justify-center ms-8 mt-8">
+            <table class="table table-zebra">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Date observation</th>
+                    <th>Lieu</th>
+                    <th>Équipe</th>
+                    <th>Adversaire</th>
+                    <th>Numéro</th>
+                    <th>Rapport</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>a</th>
+                        <td>a</td>
+                        <td>a}</td>
+                        <td>a</td>
+                        <td>a</td>
+                        <td>Non renseigné pour le moment</td>
+                        <td>
+                            <a></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+{% endblock %}

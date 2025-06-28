@@ -31,44 +31,52 @@
     </div>
     -->
 
-    <div class="overflow-x-auto mt-8">
-        <table class="table table-zebra">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Équipe actuelle</th>
-                <th>Poste</th>
-                <th>Date de naissance</th>
-                <th>Fiche</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for player in players %}
+        <div class="overflow-x-auto mt-8">
+            <table class="table table-zebra">
+                <thead>
                 <tr>
-                    <th>{{ player.positionLoop }}</th>
-                    <td>{{ player.lastName }}</td>
-                    <td>{{ player.firstName }}</td>
-                    <td>{{ player.teamName }}</td>
-                    <td>Pas renseigné pour le moment</td>
-                    <td>{{ player.birthDate }}</td>
-                    <td><i class="fa-solid fa-circle-right"></i></td>
+                    <th></th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Équipe actuelle</th>
+                    <th>Poste</th>
+                    <th>Date de naissance</th>
+                    <th>Fiche</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                {% for player in viewModel.playerViewModels %}
+                    <tr>
+                        <th>{{ player.positionLoop }}</th>
+                        <td>{{ player.lastName }}</td>
+                        <td>{{ player.firstName }}</td>
+                        <td>{{ player.teamName }}</td>
+                        <td>Pas renseigné pour le moment</td>
+                        <td>{{ player.birthDate }}</td>
+                        <td>
+                            <a href="{{ path('details_player', { idPlayer: player.id }) }}">
+                                <i class="fa-solid fa-circle-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
 
     <section id="pagination-section" class="flex justify-center">
         <div class="w-1/4 flex justify-evenly items-center mt-8">
-            <a href="/players/{{ previousPageNumber }}" class="btn btn-soft btn-primary">
+            <a href="{{ path('get_players', { page: viewModel.previousPageNumber } | merge(app.request.query.all)) }}"
+               class="btn btn-soft btn-primary"
+               data-turbo-frame="players-list">
                 Précédent
             </a>
             <h4 class="font-bold">
-                Page {{ pageNumber }}
+                Page {{ viewModel.pageNumber }}
             </h4>
-            <a href="/players/{{ nextPageNumber }}" class="btn btn-soft btn-primary">
+            <a href="{{ path('get_players', { page: viewModel.nextPageNumber } | merge(app.request.query.all)) }}"
+               class="btn btn-soft btn-primary">
                 Suivant
             </a>
         </div>

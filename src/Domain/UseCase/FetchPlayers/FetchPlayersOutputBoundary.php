@@ -8,5 +8,5 @@ interface FetchPlayersOutputBoundary
 {
     public function present(FetchPlayersResponse $response) : void;
 
-    public function getViewModel() : array;
+    public function getViewModel();
 }

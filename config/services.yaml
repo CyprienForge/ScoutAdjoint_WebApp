@@ -26,6 +26,10 @@ services:
             - '../src/Infrastructure/Symfony/Controller'
             - '../src/Infrastructure/Twig'
 
+    Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase:
+        arguments:
+            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
+
     Domain\UseCase\FetchData\FetchDataUseCase:
         arguments:
             $readChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
@@ -51,3 +55,4 @@ services:
     Domain\Repository\TeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
     Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
     Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'
+    Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
