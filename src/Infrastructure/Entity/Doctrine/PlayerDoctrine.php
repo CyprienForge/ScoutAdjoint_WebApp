@@ -2,6 +2,8 @@
 
 namespace Infrastructure\Entity\Doctrine;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\PlayerDoctrineRepository;
 
@@ -28,6 +30,17 @@ class PlayerDoctrine
 
     #[ORM\Column(length: 255)]
     private ?string $identificationCode = null;
+
+    /**
+     * @var Collection<int, ParticipationDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: ParticipationDoctrine::class, mappedBy: 'player')]
+    private Collection $participationDoctrines;
+
+    public function __construct()
+    {
+        $this->participationDoctrines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,6 +110,36 @@ class PlayerDoctrine
     public function setIdentificationCode(string $identificationCode): static
     {
         $this->identificationCode = $identificationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParticipationDoctrine>
+     */
+    public function getParticipationDoctrines(): Collection
+    {
+        return $this->participationDoctrines;
+    }
+
+    public function addParticipationDoctrine(ParticipationDoctrine $participationDoctrine): static
+    {
+        if (!$this->participationDoctrines->contains($participationDoctrine)) {
+            $this->participationDoctrines->add($participationDoctrine);
+            $participationDoctrine->setPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipationDoctrine(ParticipationDoctrine $participationDoctrine): static
+    {
+        if ($this->participationDoctrines->removeElement($participationDoctrine)) {
+            // set the owning side to null (unless already changed)
+            if ($participationDoctrine->getPlayer() === $this) {
+                $participationDoctrine->setPlayer(null);
+            }
+        }
 
         return $this;
     }

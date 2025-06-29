@@ -2,8 +2,6 @@
 
 namespace Domain\Entity;
 
-use phpDocumentor\Reflection\Types\This;
-
 class Player
 {
     private int $id;

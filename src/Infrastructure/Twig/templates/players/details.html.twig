@@ -59,17 +59,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>a</th>
-                        <td>a</td>
-                        <td>a}</td>
-                        <td>a</td>
-                        <td>a</td>
-                        <td>Non renseigné pour le moment</td>
-                        <td>
-                            <a></a>
-                        </td>
-                    </tr>
+                    {% for participation in viewModel.participationViewModels %}
+                        <tr>
+                            <th>{{ participation.indexLoop }}</th>
+                            <td>{{ participation.date }}</td>
+                            <td>{{ participation.location }}</td>
+                            <td>{{ participation.teamName }}</td>
+                            <td>{{ participation.teamOpponentName }}</td>
+                            <td>{{ participation.numero }}</td>
+                            <td>
+                                <a></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

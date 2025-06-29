@@ -34,9 +34,23 @@ class TeamDoctrine
     #[ORM\Column(length: 255)]
     private ?string $identificationCode = null;
 
+    /**
+     * @var Collection<int, MatchDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: MatchDoctrine::class, mappedBy: 'homeTeam')]
+    private Collection $matchDoctrines;
+
+    /**
+     * @var Collection<int, ParticipationDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: ParticipationDoctrine::class, mappedBy: 'team')]
+    private Collection $participationDoctrines;
+
     public function __construct()
     {
         $this->playerDoctrines = new ArrayCollection();
+        $this->matchDoctrines = new ArrayCollection();
+        $this->participationDoctrines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +138,66 @@ class TeamDoctrine
     public function setIdentificationCode(string $identificationCode): static
     {
         $this->identificationCode = $identificationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MatchDoctrine>
+     */
+    public function getMatchDoctrines(): Collection
+    {
+        return $this->matchDoctrines;
+    }
+
+    public function addMatchDoctrine(MatchDoctrine $matchDoctrine): static
+    {
+        if (!$this->matchDoctrines->contains($matchDoctrine)) {
+            $this->matchDoctrines->add($matchDoctrine);
+            $matchDoctrine->setHomeTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatchDoctrine(MatchDoctrine $matchDoctrine): static
+    {
+        if ($this->matchDoctrines->removeElement($matchDoctrine)) {
+            // set the owning side to null (unless already changed)
+            if ($matchDoctrine->getHomeTeam() === $this) {
+                $matchDoctrine->setHomeTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParticipationDoctrine>
+     */
+    public function getParticipationDoctrines(): Collection
+    {
+        return $this->participationDoctrines;
+    }
+
+    public function addParticipationDoctrine(ParticipationDoctrine $participationDoctrine): static
+    {
+        if (!$this->participationDoctrines->contains($participationDoctrine)) {
+            $this->participationDoctrines->add($participationDoctrine);
+            $participationDoctrine->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipationDoctrine(ParticipationDoctrine $participationDoctrine): static
+    {
+        if ($this->participationDoctrines->removeElement($participationDoctrine)) {
+            // set the owning side to null (unless already changed)
+            if ($participationDoctrine->getTeam() === $this) {
+                $participationDoctrine->setTeam(null);
+            }
+        }
 
         return $this;
     }

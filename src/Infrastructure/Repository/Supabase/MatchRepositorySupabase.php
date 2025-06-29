@@ -2,15 +2,12 @@
 
 namespace Infrastructure\Repository\Supabase;
 
-use DateTime;
-use Domain\Entity\Player;
-use Domain\Factory\PlayerFactory;
-use Domain\Repository\PlayerRepository;
+use Domain\Factory\MatchFactory;
+use Domain\Repository\MatchRepository;
 use Domain\Repository\TeamRepository;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-
-class PlayerRepositorySupabase implements PlayerRepository
+class MatchRepositorySupabase implements MatchRepository
 {
     public function __construct(
         private HttpClientInterface $client,
@@ -18,20 +15,16 @@ class PlayerRepositorySupabase implements PlayerRepository
         private string $apiUrl,
         private string $apiKey
     ){}
-
-    /**
-     * @param Player $player
-     */
-    public function save($player) : void
+    public function save($item): void
     {
-
+        // TODO: Implement save() method.
     }
 
     public function findAll(): array
     {
         $response = $this->client->request(
             'GET',
-            $this->apiUrl . 'players', [
+            $this->apiUrl . 'matchs', [
                 'headers' => [
                     'apikey' => $this->apiKey,
                     'Authorization' => 'Bearer ' . $this->apiKey
@@ -40,21 +33,22 @@ class PlayerRepositorySupabase implements PlayerRepository
         );
 
         $data = $response->toArray();
-        $players = [];
+        $matchs = [];
 
-        foreach($data as $player){
-            $player['team'] = $this->teamRepository->findById($player['team']);
-            $players[] = PlayerFactory::build($player);
+        foreach($data as $match){
+            $match['home_team'] = $this->teamRepository->findById($match['home_team']);
+            $match['away_team'] = $this->teamRepository->findById($match['away_team']);
+            $matchs[] = MatchFactory::build($match);
         }
 
-        return $players;
+        return $matchs;
     }
 
-    public function findById(int $id): ?Player
+    public function findById(int $id)
     {
         $response = $this->client->request(
             'GET',
-            $this->apiUrl . 'players?id=eq.' . $id, [
+            $this->apiUrl . 'matchs?id=eq.' . $id, [
                 'headers' => [
                     'apikey' => $this->apiKey,
                     'Authorization' => 'Bearer ' . $this->apiKey
@@ -63,8 +57,9 @@ class PlayerRepositorySupabase implements PlayerRepository
         );
 
         $data = $response->toArray();
-        $data[0]['team'] = $this->teamRepository->findById($data[0]['team']);
-        $data = PlayerFactory::build($data[0]);
+        $data[0]['home_team'] = $this->teamRepository->findById($data[0]['home_team']);
+        $data[0]['away_team'] = $this->teamRepository->findById($data[0]['away_team']);
+        $data = MatchFactory::build($data[0]);
 
         return $data;
     }
@@ -77,10 +72,5 @@ class PlayerRepositorySupabase implements PlayerRepository
     public function findByIdentificationCode(string $identificationCode)
     {
         // TODO: Implement findByIdentificationCode() method.
-    }
-
-    public function findPaginated(int $limit, int $offset, ?string $firstName, ?string $lastName, ?DateTime $startBirthDate, ?DateTime $endBirthDate)
-    {
-        // TODO: Implement findPaginated() method.
     }
 }

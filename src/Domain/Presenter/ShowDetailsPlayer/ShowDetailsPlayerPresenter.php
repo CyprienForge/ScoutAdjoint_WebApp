@@ -4,6 +4,7 @@ namespace Domain\Presenter\ShowDetailsPlayer;
 
 use Domain\Response\ShowDetailsPlayer\ShowDetailsPlayerResponse;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
+use Domain\ViewModel\Entity\ParticipationViewModel;
 use Domain\ViewModel\Entity\PlayerViewModel;
 use Domain\ViewModel\ShowDetailsPlayer\ShowDetailsPlayerViewModel;
 
@@ -23,6 +24,23 @@ class ShowDetailsPlayerPresenter implements ShowDetailsPlayerOutputBoundary
             $player->getTeam()->getName(),
             $player->getBirthDate()->format('d-m-Y'),
         );
+
+        $indexLoop = 1;
+        foreach($response->participations as $participation){
+            $match = $participation->getMatch();
+            $teamOpponent = $match->getHomeTeam()->getIdentificationCode() != $participation->getTeam()->getIdentificationCode() ? $match->getHomeTeam() : $match->getAwayTeam();
+            $teamOpponentName = $teamOpponent->getName();
+
+            $this->viewModel->participationViewModels[] = new ParticipationViewModel(
+                $indexLoop,
+                $participation->getMatch()->getDate()->format('d-m-Y'),
+                '',
+                $participation->getTeam()->getName(),
+                $teamOpponentName,
+                $participation->getNumero()
+            );
+            $indexLoop++;
+        }
     }
 
     public function getViewModel()
