@@ -3,6 +3,7 @@
 namespace Domain\UseCase\FetchPlayers;
 
 use Domain\Factory\PlayerFactory;
+use Domain\Mapper\PlayerMapper;
 use Domain\Repository\PlayerRepository;
 use Domain\Repository\TeamRepository;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
@@ -14,7 +15,8 @@ class FetchPlayersUseCase
 
     public function __construct(
       private PlayerRepository $playerRepository,
-      private FetchPlayersOutputBoundary $presenter
+      private FetchPlayersOutputBoundary $presenter,
+        private PlayerMapper $playerMapper,
     ){}
 
     public function execute(FetchPlayersRequest $request) : FetchPlayersResponse
@@ -30,7 +32,7 @@ class FetchPlayersUseCase
             $request->endBirthDate
         );
         foreach($playersResponse as $playerResponse){
-            $players[] = PlayerMapperDoctrine::toDomain($playerResponse);
+            $players[] = $this->playerMapper->toDomain($playerResponse);
         }
 
         $response = new FetchPlayersResponse($players, $request->pageNumber, $request->limit);

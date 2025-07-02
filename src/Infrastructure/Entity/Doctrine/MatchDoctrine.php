@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine;
 
 #[ORM\Entity(repositoryClass: MatchRepositoryDoctrine::class)]
-#[ORM\Table(name: "Match")]
+#[ORM\Table(name: "matchs")]
 class MatchDoctrine
 {
     #[ORM\Id]
@@ -19,25 +19,27 @@ class MatchDoctrine
     #[ORM\Column]
     private ?\DateTime $date = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "score_home", length: 255)]
     private ?int $scoreHome = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "score_away", length: 255)]
     private ?int $scoreAway = null;
 
     #[ORM\ManyToOne(inversedBy: 'matchDoctrines')]
+    #[ORM\JoinColumn(name: "home_team", referencedColumnName: "id")]
     private ?TeamDoctrine $homeTeam = null;
 
     #[ORM\ManyToOne(inversedBy: 'matchDoctrines')]
+    #[ORM\JoinColumn(name: "away_team", referencedColumnName: "id")]
     private ?TeamDoctrine $awayTeam = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "is_prepared", length: 255)]
     private ?bool $isPrepared = null;
 
     #[ORM\Column(length: 255)]
     private ?string $infos = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "identification_code", length: 255)]
     private ?string $identificationCode = null;
 
     /**

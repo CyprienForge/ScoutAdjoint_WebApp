@@ -11,10 +11,10 @@ interface Mapper
     /**
      * @param T $item
      */
-    public static function toDomain($item);
+    public function toDomain($item);
 
     /**
      * @param V $item
      */
-    public static function toInfra($item);
+    public function toInfra($item);
 }

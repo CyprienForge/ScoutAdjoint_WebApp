@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\Doctrine\ChampionshipDoctrineRepository;
 
 #[ORM\Entity(repositoryClass: ChampionshipDoctrineRepository::class)]
-#[ORM\Table(name: "Championship")]
+#[ORM\Table(name: "championships")]
 class ChampionshipDoctrine
 {
     #[ORM\Id]
@@ -28,7 +28,7 @@ class ChampionshipDoctrine
     #[ORM\OneToMany(targetEntity: TeamDoctrine::class, mappedBy: 'championship')]
     private Collection $teams;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "identification_code", length: 255)]
     private ?string $identificationCode = null;
 
     public function __construct()

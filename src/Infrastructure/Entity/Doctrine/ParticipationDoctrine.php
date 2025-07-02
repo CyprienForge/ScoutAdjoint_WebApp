@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine;
 
 #[ORM\Entity(repositoryClass: ParticipationRepositoryDoctrine::class)]
-#[ORM\Table(name: "Participation")]
+#[ORM\Table(name: "participations")]
 class ParticipationDoctrine
 {
     #[ORM\Id]
@@ -15,18 +15,18 @@ class ParticipationDoctrine
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'participationDoctrines')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "player", referencedColumnName: "id")]
     private ?PlayerDoctrine $player = null;
 
     #[ORM\ManyToOne(inversedBy: 'participationDoctrines')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "match", referencedColumnName: "id")]
     private ?MatchDoctrine $match = null;
 
     #[ORM\Column]
     private ?int $numero = null;
 
     #[ORM\ManyToOne(inversedBy: 'participationDoctrines')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "team", referencedColumnName: "id")]
     private ?TeamDoctrine $team = null;
 
     public function getId(): ?int

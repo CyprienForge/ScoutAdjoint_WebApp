@@ -3,15 +3,16 @@
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\Championship;
+use Domain\Mapper\ChampionshipMapper;
 use Domain\Mapper\Mapper;
 use Infrastructure\Entity\Doctrine\ChampionshipDoctrine;
 
 /**
  * @implements Mapper<ChampionshipDoctrine, Championship>
  */
-class ChampionshipMapperDoctrine implements Mapper
+class ChampionshipMapperDoctrine implements ChampionshipMapper
 {
-    public static function toDomain($item)
+    public function toDomain($item)
     {
         $championship = new Championship();
         $championship->setId($item->getId());
@@ -22,7 +23,7 @@ class ChampionshipMapperDoctrine implements Mapper
         return $championship;
     }
 
-    public static function toInfra($item)
+    public function toInfra($item)
     {
         $championship = new ChampionshipDoctrine();
         $championship->setId($item->getId());

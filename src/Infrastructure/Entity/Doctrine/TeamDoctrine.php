@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\Doctrine\TeamDoctrineRepository;
 
 #[ORM\Entity(repositoryClass: TeamDoctrineRepository::class)]
-#[ORM\Table(name: "Team")]
+#[ORM\Table(name: "teams")]
 class TeamDoctrine
 {
     #[ORM\Id]
@@ -19,10 +19,11 @@ class TeamDoctrine
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(name: "logo_path", length: 255, nullable: true)]
     private ?string $logoPath = null;
 
     #[ORM\ManyToOne(inversedBy: 'teams')]
+    #[ORM\JoinColumn(name: "championship", referencedColumnName: "id")]
     private ?ChampionshipDoctrine $championship = null;
 
     /**
@@ -31,7 +32,7 @@ class TeamDoctrine
     #[ORM\OneToMany(targetEntity: PlayerDoctrine::class, mappedBy: 'team')]
     private Collection $playerDoctrines;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "identification_code", length: 255)]
     private ?string $identificationCode = null;
 
     /**

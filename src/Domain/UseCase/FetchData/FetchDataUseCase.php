@@ -2,6 +2,10 @@
 
 namespace Domain\UseCase\FetchData;
 
+use Domain\Mapper\ChampionshipMapper;
+use Domain\Mapper\ParticipationMapper;
+use Domain\Mapper\PlayerMapper;
+use Domain\Mapper\TeamMapper;
 use Domain\Repository\ChampionshipRepository;
 use Domain\Repository\MatchRepository;
 use Domain\Repository\ParticipationRepository;
@@ -29,6 +33,11 @@ class FetchDataUseCase
         private MatchRepository $writeMatchRepository,
         private ParticipationRepository $readParticipationRepository,
         private ParticipationRepository $writeParticipationRepository,
+        private PlayerMapper $playerMapper,
+        private ChampionshipMapper $championshipMapper,
+        private TeamMapper $teamMapper,
+        private MatchMapper $matchMapper,
+        private ParticipationMapper $participationMapper,
     ){}
 
     public function execute(FetchDataRequest $request) : FetchDataResponse
@@ -46,26 +55,26 @@ class FetchDataUseCase
         $this->writeChampionshipRepository->deleteAll();
 
         foreach ($championships as $championship) {
-            $championship = ChampionshipMapperDoctrine::toInfra($championship);
+            $championship = $this->championshipMapper->toInfra($championship);
             $this->writeChampionshipRepository->save($championship);
         }
 
         foreach($teams as $team){
-            $team = TeamMapperDoctrine::toInfra($team);
+            $team = $this->teamMapper->toInfra($team);
             $localChampionship = $this->writeChampionshipRepository->findByIdentificationCode($team->getChampionship()->getIdentificationCode());
             $team->setChampionship($localChampionship);
             $this->writeTeamRepository->save($team);
         }
 
         foreach($players as $player){
-            $player = PlayerMapperDoctrine::toInfra($player);
+            $player = $this->playerMapper->toInfra($player);
             $localTeam = $this->writeTeamRepository->findByIdentificationCode($player->getTeam()->getIdentificationCode());
             $player->setTeam($localTeam);
             $this->writePlayerRepository->save($player);
         }
 
         foreach($matchs as $match){
-            $match = MatchMapperDoctrine::toInfra($match);
+            $match = $this->matchMapper->toInfra($match);
             $localHomeTeam = $this->writeTeamRepository->findByIdentificationCode($match->getHomeTeam()->getIdentificationCode());
             $localAwayTeam = $this->writeTeamRepository->findByIdentificationCode($match->getAwayTeam()->getIdentificationCode());
             $match->setHomeTeam($localHomeTeam);
@@ -74,7 +83,7 @@ class FetchDataUseCase
         }
 
         foreach($participations as $participation){
-            $participation = ParticipationMapperDoctrine::toInfra($participation);
+            $participation = $this->participationMapper->toInfra($participation);
             $player = $this->writePlayerRepository->findByIdentificationCode($participation->getPlayer()->getIdentificationCode());
             $match = $this->writeMatchRepository->findByIdentificationCode($participation->getMatch()->getIdentificationCode());
             $team = $this->writeTeamRepository->findByIdentificationCode($participation->getTeam()->getIdentificationCode());

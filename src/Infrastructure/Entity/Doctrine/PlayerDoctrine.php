@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\PlayerDoctrineRepository;
 
 #[ORM\Entity(repositoryClass: PlayerDoctrineRepository::class)]
-#[ORM\Table(name: "Player")]
+#[ORM\Table(name: "players")]
 class PlayerDoctrine
 {
     #[ORM\Id]
@@ -16,19 +16,20 @@ class PlayerDoctrine
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "first_name", length: 255)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "last_name", length: 255)]
     private ?string $lastName = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "birth_date")]
     private ?\DateTime $birthDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'playerDoctrines')]
+    #[ORM\JoinColumn(name: "team", referencedColumnName: "id")]
     private ?TeamDoctrine $team = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "identification_code", length: 255)]
     private ?string $identificationCode = null;
 
     /**

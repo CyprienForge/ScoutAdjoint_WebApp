@@ -2,6 +2,8 @@
 
 namespace Domain\UseCase\ShowDetailsPlayer;
 
+use Domain\Mapper\ParticipationMapper;
+use Domain\Mapper\PlayerMapper;
 use Domain\Repository\ParticipationRepository;
 use Domain\Repository\PlayerRepository;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
@@ -14,18 +16,20 @@ class ShowDetailsPlayerUseCase
     public function __construct(
         private PlayerRepository $playerRepository,
         private ParticipationRepository $participationRepository,
-        private ShowDetailsPlayerOutputBoundary $presenter
+        private ShowDetailsPlayerOutputBoundary $presenter,
+        private PlayerMapper $playerMapper,
+        private ParticipationMapper $participationMapper,
     ){}
 
     public function execute(ShowDetailsPlayerRequest $request): ShowDetailsPlayerResponse
     {
         $player = $this->playerRepository->findById($request->idPlayer);
-        $player = PlayerMapperDoctrine::toDomain($player);
+        $player = $this->playerMapper->toDomain($player);
 
         $participationsInfra = $this->participationRepository->findByIdPlayer($player->getId());
         $participations = [];
         foreach($participationsInfra as $participation){
-            $participations[] = ParticipationMapperDoctrine::toDomain($participation);
+            $participations[] = $this->participationMapper->toDomain($participation);
         }
 
         $response = new ShowDetailsPlayerResponse($player, $participations);
