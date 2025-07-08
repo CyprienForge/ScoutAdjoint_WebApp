@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matchs{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-base-100 py-8">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mt-8 text-center">Matchs</h2>
+
+            <div class="mt-24 justify-center gap-4" style="display: flex; flex-wrap: wrap;">
+                {% for match in viewModel.matchsViewModels %}
+                    {% include 'matchs/card_match.html.twig' with { match: match } %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

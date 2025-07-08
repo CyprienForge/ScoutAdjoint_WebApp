@@ -31,6 +31,11 @@ services:
             $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
             $participationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
 
+    Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchUseCase:
+        arguments:
+            $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
+            $participationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
+
     Domain\UseCase\FetchData\FetchDataUseCase:
         arguments:
             $readChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
@@ -48,6 +53,11 @@ services:
         arguments:
             $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
 
+    Domain\UseCase\FetchMatchs\FetchMatchsUseCase:
+        arguments:
+            $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
+            $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
+
     Infrastructure\Repository\:
         resource: '../src/Infrastructure/Repository'
         autowire: true
@@ -62,4 +72,5 @@ services:
     Domain\Repository\MatchRepository: '@Infrastructure\Repository\Supabase\MatchRepositorySupabase'
     Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'
     Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
+    Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary: '@Domain\Presenter\FetchMatchs\FetchMatchsPresenter'
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'

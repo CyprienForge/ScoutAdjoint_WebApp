@@ -1,0 +1,60 @@
+<div class="ms-8 mt-8 card flex justify-center items-center bg-base-200 mb-4" style="width: 20%">
+
+    <a href="{{ path('details_match', { idMatch: match.id }) }}">
+        <div class="card-body p-6" style="cursor: pointer">
+
+            <div class="text-center md:text-right">
+                <div class="badge badge-sm mb-3">DOMICILE</div>
+                <h3 class="text-xl md:text-xl font-bold text-base-content leading-tight">
+                    {{ match.homeTeamName }}
+                </h3>
+            </div>
+
+
+            <div class="text-center">
+                <div class="bg-base-100 rounded-2xl p-4 shadow-inner border border-base-300">
+                    <div class="flex items-center justify-center gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl md:text-3xl font-black text-primary">
+                                {{ match.scoreHome }}
+                            </div>
+                            <div class="text-xs text-base-content/60 mt-1">DOM</div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <span class="text-lg md:text-xl font-bold text-base-content/40">VS</span>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="text-2xl md:text-3xl font-black text-secondary">
+                                {{ match.scoreAway }}
+                            </div>
+                            <div class="text-xs text-base-content/60 mt-1">EXT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-center md:text-right">
+                <div class="badge badge-secondary badge-sm mb-3">EXTÉRIEUR</div>
+                <h3 class="text-xl md:text-xl font-bold text-base-content leading-tight">
+                    {{ match.awayTeamName }}
+                </h3>
+            </div>
+
+            <div class="divider my-4"></div>
+
+            <div class="flex flex-wrap justify-center gap-4 text-sm text-base-content/70">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>{{ match.date }}</span>
+                </div>
+            </div>
+
+        </div>
+    </a>
+
+</div>
