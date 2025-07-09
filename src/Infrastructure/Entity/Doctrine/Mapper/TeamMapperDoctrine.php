@@ -23,7 +23,6 @@ class TeamMapperDoctrine implements TeamMapper
         $championship = $championshipMapperDoctrine->toDomain($item->getChampionship());
 
         $team->setChampionship($championship);
-        $team->setIdentificationCode($item->getIdentificationCode());
 
         return $team;
     }
@@ -38,7 +37,6 @@ class TeamMapperDoctrine implements TeamMapper
         $championshipDoctrine = $championshipDoctrineMapper->toInfra($item->getChampionship());
 
         $teamDoctrine->setChampionship($championshipDoctrine);
-        $teamDoctrine->setIdentificationCode($item->getIdentificationCode());
 
         return $teamDoctrine;
     }

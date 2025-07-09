@@ -8,7 +8,6 @@ class Team
     private string $name;
     private ?string $logoPath;
     private ?Championship $championship;
-    private string $identificationCode;
 
     public function getId(): int
     {
@@ -51,17 +50,6 @@ class Team
     public function setChampionship(?Championship $championship): Team
     {
         $this->championship = $championship;
-        return $this;
-    }
-
-    public function getIdentificationCode(): string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): Team
-    {
-        $this->identificationCode = $identificationCode;
         return $this;
     }
 }

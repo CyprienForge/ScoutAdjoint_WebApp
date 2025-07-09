@@ -35,6 +35,7 @@ services:
         arguments:
             $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
             $participationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
+            $noteRepository: '@Infrastructure\Repository\Doctrine\NoteRepositoryDoctrine'
 
     Domain\UseCase\FetchData\FetchDataUseCase:
         arguments:
@@ -48,6 +49,10 @@ services:
             $writeMatchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
             $readParticipationRepository: '@Infrastructure\Repository\Supabase\ParticipationRepositorySupabase'
             $writeParticipationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
+            $championshipMapper: '@Infrastructure\Entity\Doctrine\Mapper\ChampionshipMapperDoctrine'
+            $teamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
+            $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
+            $participationMapper: '@Infrastructure\Entity\Doctrine\Mapper\ParticipationMapperDoctrine'
 
     Domain\UseCase\FetchPlayers\FetchPlayersUseCase:
         arguments:
@@ -74,3 +79,5 @@ services:
     Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
     Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary: '@Domain\Presenter\FetchMatchs\FetchMatchsPresenter'
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
+    Domain\Mapper\NoteMapper: '@Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine'
+

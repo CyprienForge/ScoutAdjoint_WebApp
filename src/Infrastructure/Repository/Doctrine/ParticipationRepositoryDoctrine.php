@@ -40,4 +40,9 @@ class ParticipationRepositoryDoctrine extends ServiceEntityRepository implements
     {
         // TODO: Implement findByIdentificationCode() method.
     }
+
+    public function findByMatch(int $idMatch): array
+    {
+        return $this->findBy(['match' => $idMatch]);
+    }
 }

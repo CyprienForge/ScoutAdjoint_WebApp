@@ -28,9 +28,6 @@ class ChampionshipDoctrine
     #[ORM\OneToMany(targetEntity: TeamDoctrine::class, mappedBy: 'championship')]
     private Collection $teams;
 
-    #[ORM\Column(name: "identification_code", length: 255)]
-    private ?string $identificationCode = null;
-
     public function __construct()
     {
         $this->teams = new ArrayCollection();
@@ -97,18 +94,6 @@ class ChampionshipDoctrine
                 $team->setChampionship(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getIdentificationCode(): ?string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): static
-    {
-        $this->identificationCode = $identificationCode;
 
         return $this;
     }

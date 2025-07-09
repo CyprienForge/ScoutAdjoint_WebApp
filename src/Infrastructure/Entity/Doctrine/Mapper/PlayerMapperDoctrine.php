@@ -22,7 +22,6 @@ class PlayerMapperDoctrine implements PlayerMapper
         $team = $teamMapperDoctrine->toDomain($item->getTeam());
 
         $player->setTeam($team);
-        $player->setIdentificationCode($item->getIdentificationCode());
 
         return $player;
     }
@@ -38,7 +37,6 @@ class PlayerMapperDoctrine implements PlayerMapper
         $teamDoctrine =  $teamMapperDoctrine->toInfra($item->getTeam());
 
         $playerDoctrine->setTeam($teamDoctrine);
-        $playerDoctrine->setIdentificationCode($item->getIdentificationCode());
 
         return $playerDoctrine;
     }

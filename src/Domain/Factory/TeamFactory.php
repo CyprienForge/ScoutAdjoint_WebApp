@@ -19,7 +19,6 @@ class TeamFactory implements Factory
         $team->setName($attributes['name']);
         $team->setLogoPath($attributes['logo_path']);
         $team->setChampionship($attributes['championship']);
-        $team->setIdentificationCode($attributes['identification_code']);
 
         return $team;
     }

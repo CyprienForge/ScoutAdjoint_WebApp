@@ -28,7 +28,7 @@ class ShowDetailsPlayerPresenter implements ShowDetailsPlayerOutputBoundary
         $indexLoop = 1;
         foreach($response->participations as $participation){
             $match = $participation->getMatch();
-            $teamOpponent = $match->getHomeTeam()->getIdentificationCode() != $participation->getTeam()->getIdentificationCode() ? $match->getHomeTeam() : $match->getAwayTeam();
+            $teamOpponent = $match->getHomeTeam()->getId() != $participation->getTeam()->getId() ? $match->getHomeTeam() : $match->getAwayTeam();
             $teamOpponentName = $teamOpponent->getName();
 
             $this->viewModel->participationViewModels[] = new ParticipationViewModel(

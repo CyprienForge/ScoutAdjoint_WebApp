@@ -20,7 +20,6 @@ class MatchFactory implements Factory
         $match->setIdStadium($attributes['stadium']);
         $match->setIsPrepared($attributes['is_prepared']);
         $match->setInfos($attributes['infos']);
-        $match->setIdentificationCode($attributes['identification_code']);
 
         return $match;
     }

@@ -24,7 +24,6 @@ class MatchMapperDoctrine implements MatchMapper
         $match->setAwayTeam($awayTeam);
         $match->setIsPrepared($item->isPrepared());
         $match->setInfos($item->getInfos());
-        $match->setIdentificationCode($item->getIdentificationCode());
 
         return $match;
     }
@@ -44,7 +43,6 @@ class MatchMapperDoctrine implements MatchMapper
         $matchDoctrine->setAwayTeam($awayTeam);
         $matchDoctrine->setIsPrepared($item->isPrepared());
         $matchDoctrine->setInfos($item->getInfos());
-        $matchDoctrine->setIdentificationCode($item->getIdentificationCode());
 
         return $matchDoctrine;
     }

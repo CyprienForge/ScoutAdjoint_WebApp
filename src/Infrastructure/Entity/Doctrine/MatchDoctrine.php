@@ -39,9 +39,6 @@ class MatchDoctrine
     #[ORM\Column(length: 255)]
     private ?string $infos = null;
 
-    #[ORM\Column(name: "identification_code", length: 255)]
-    private ?string $identificationCode = null;
-
     /**
      * @var Collection<int, ParticipationDoctrine>
      */
@@ -144,18 +141,6 @@ class MatchDoctrine
     public function setInfos(string $infos): static
     {
         $this->infos = $infos;
-
-        return $this;
-    }
-
-    public function getIdentificationCode(): ?string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): static
-    {
-        $this->identificationCode = $identificationCode;
 
         return $this;
     }

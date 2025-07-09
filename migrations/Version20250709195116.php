@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250617203704 extends AbstractMigration
+final class Version20250709195116 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,16 +21,19 @@ final class Version20250617203704 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            DROP SEQUENCE championshipdoctrine_id_seq CASCADE
+            ALTER TABLE notes DROP CONSTRAINT fk_11ba68c6ace3b73
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE SEQUENCE Championship_id_seq INCREMENT BY 1 MINVALUE 1 START 1
+            DROP INDEX idx_11ba68c6ace3b73
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE Championship (id INT NOT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, PRIMARY KEY(id))
+            ALTER TABLE notes RENAME COLUMN participation_id TO participation
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE championshipdoctrine
+            ALTER TABLE notes ADD CONSTRAINT FK_11BA68CAB55E24F FOREIGN KEY (participation) REFERENCES participations (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE INDEX IDX_11BA68CAB55E24F ON notes (participation)
         SQL);
     }
 
@@ -41,16 +44,19 @@ final class Version20250617203704 extends AbstractMigration
             CREATE SCHEMA public
         SQL);
         $this->addSql(<<<'SQL'
-            DROP SEQUENCE Championship_id_seq CASCADE
+            ALTER TABLE notes DROP CONSTRAINT FK_11BA68CAB55E24F
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE SEQUENCE championshipdoctrine_id_seq INCREMENT BY 1 MINVALUE 1 START 1
+            DROP INDEX IDX_11BA68CAB55E24F
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE championshipdoctrine (id INT NOT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, PRIMARY KEY(id))
+            ALTER TABLE notes RENAME COLUMN participation TO participation_id
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE Championship
+            ALTER TABLE notes ADD CONSTRAINT fk_11ba68c6ace3b73 FOREIGN KEY (participation_id) REFERENCES participations (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE INDEX idx_11ba68c6ace3b73 ON notes (participation_id)
         SQL);
     }
 }

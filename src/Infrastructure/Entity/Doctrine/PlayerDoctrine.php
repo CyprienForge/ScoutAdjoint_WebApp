@@ -28,10 +28,6 @@ class PlayerDoctrine
     #[ORM\ManyToOne(inversedBy: 'playerDoctrines')]
     #[ORM\JoinColumn(name: "team", referencedColumnName: "id")]
     private ?TeamDoctrine $team = null;
-
-    #[ORM\Column(name: "identification_code", length: 255)]
-    private ?string $identificationCode = null;
-
     /**
      * @var Collection<int, ParticipationDoctrine>
      */
@@ -99,18 +95,6 @@ class PlayerDoctrine
     public function setTeam(?TeamDoctrine $team): static
     {
         $this->team = $team;
-
-        return $this;
-    }
-
-    public function getIdentificationCode(): ?string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): static
-    {
-        $this->identificationCode = $identificationCode;
 
         return $this;
     }

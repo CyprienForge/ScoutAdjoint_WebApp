@@ -3,6 +3,7 @@
 namespace Domain\UseCase\FetchData;
 
 use Domain\Mapper\ChampionshipMapper;
+use Domain\Mapper\MatchMapper;
 use Domain\Mapper\ParticipationMapper;
 use Domain\Mapper\PlayerMapper;
 use Domain\Mapper\TeamMapper;

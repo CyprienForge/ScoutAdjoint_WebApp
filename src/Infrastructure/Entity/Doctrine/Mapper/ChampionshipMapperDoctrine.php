@@ -18,7 +18,6 @@ class ChampionshipMapperDoctrine implements ChampionshipMapper
         $championship->setId($item->getId());
         $championship->setName($item->getName());
         $championship->setLevel($item->getLevel());
-        $championship->setIdentificationCode($item->getIdentificationCode());
 
         return $championship;
     }
@@ -29,7 +28,6 @@ class ChampionshipMapperDoctrine implements ChampionshipMapper
         $championship->setId($item->getId());
         $championship->setName($item->getName());
         $championship->setLevel($item->getLevel());
-        $championship->setIdentificationCode($item->getIdentificationCode());
 
         return $championship;
     }

@@ -2,6 +2,8 @@
 
 namespace Infrastructure\Entity\Doctrine;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine;
 
@@ -28,6 +30,17 @@ class ParticipationDoctrine
     #[ORM\ManyToOne(inversedBy: 'participationDoctrines')]
     #[ORM\JoinColumn(name: "team", referencedColumnName: "id")]
     private ?TeamDoctrine $team = null;
+
+    /**
+     * @var Collection<int, NoteDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: NoteDoctrine::class, mappedBy: 'participation')]
+    private Collection $noteDoctrines;
+
+    public function __construct()
+    {
+        $this->noteDoctrines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -84,6 +97,36 @@ class ParticipationDoctrine
     public function setTeam(?TeamDoctrine $team): static
     {
         $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NoteDoctrine>
+     */
+    public function getNoteDoctrines(): Collection
+    {
+        return $this->noteDoctrines;
+    }
+
+    public function addNoteDoctrine(NoteDoctrine $noteDoctrine): static
+    {
+        if (!$this->noteDoctrines->contains($noteDoctrine)) {
+            $this->noteDoctrines->add($noteDoctrine);
+            $noteDoctrine->setParticipation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNoteDoctrine(NoteDoctrine $noteDoctrine): static
+    {
+        if ($this->noteDoctrines->removeElement($noteDoctrine)) {
+            // set the owning side to null (unless already changed)
+            if ($noteDoctrine->getParticipation() === $this) {
+                $noteDoctrine->setParticipation(null);
+            }
+        }
 
         return $this;
     }

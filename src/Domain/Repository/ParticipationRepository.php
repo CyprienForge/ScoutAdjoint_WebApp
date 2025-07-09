@@ -9,5 +9,5 @@ use Domain\Entity\Participation;
  */
 interface ParticipationRepository extends Repository
 {
-
+    public function findByMatch(int $idMatch) : array;
 }

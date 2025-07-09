@@ -9,8 +9,6 @@ class Player
     private string $lastName;
     private \DateTime $birthDate;
     private Team $team;
-    private string $identificationCode;
-
     public function getId(): int
     {
         return $this->id;
@@ -60,16 +58,5 @@ class Player
     public function setTeam(Team $team): void
     {
         $this->team = $team;
-    }
-
-    public function getIdentificationCode(): string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): Player
-    {
-        $this->identificationCode = $identificationCode;
-        return $this;
     }
 }

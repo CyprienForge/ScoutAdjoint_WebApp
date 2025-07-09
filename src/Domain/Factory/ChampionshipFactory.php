@@ -17,7 +17,6 @@ class ChampionshipFactory implements Factory
         $championship->setId($attributes['id']);
         $championship->setName($attributes['name']);
         $championship->setLevel($attributes['level']);
-        $championship->setIdentificationCode($attributes['identification_code']);
 
         return $championship;
     }

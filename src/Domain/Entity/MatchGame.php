@@ -13,8 +13,6 @@ class MatchGame
     private int $idStadium;
     private bool $isPrepared;
     private string $infos;
-    private string $identificationCode;
-
 
     public function getId(): int
     {
@@ -112,17 +110,6 @@ class MatchGame
     public function setInfos(string $infos): MatchGame
     {
         $this->infos = $infos;
-        return $this;
-    }
-
-    public function getIdentificationCode(): string
-    {
-        return $this->identificationCode;
-    }
-
-    public function setIdentificationCode(string $identificationCode): MatchGame
-    {
-        $this->identificationCode = $identificationCode;
         return $this;
     }
 }

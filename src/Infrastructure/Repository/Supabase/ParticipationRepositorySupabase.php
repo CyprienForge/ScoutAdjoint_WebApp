@@ -64,4 +64,9 @@ class ParticipationRepositorySupabase implements ParticipationRepository
     {
         // TODO: Implement findByIdentificationCode() method.
     }
+
+    public function findByMatch(int $idMatch): array
+    {
+        // TODO: Implement findByMatch() method.
+    }
 }
