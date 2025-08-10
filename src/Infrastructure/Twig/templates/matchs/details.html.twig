@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matchs{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/details_match.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="head">
+        <a href="{{ path('get_matchs') }}" class="btn btn-soft btn-info ms-8 mt-8">
+            Retour
+        </a>
+    </div>
+
+    <div class="flex justify-center">
+        <h2 class="text-3xl font-bold">
+            {{ viewModel.homeTeamName }}  VS {{ viewModel.awayTeamName }}
+        </h2>
+    </div>
+
+    <turbo-frame id="buttons-frame">
+        <div id="change-team-button">
+            <a href="{{ path('details_match', { idMatch: viewModel.idMatch, idTeam: viewModel.homeTeamId }) }}"
+               class="btn {{ viewModel.homeTeamSelected }}"
+               style="margin-right: 2rem">
+                {{ viewModel.homeTeamName }}
+            </a>
+            <a href="{{ path('details_match', { idMatch: viewModel.idMatch, idTeam: viewModel.awayTeamId }) }}"
+               class="btn {{ viewModel.awayTeamSelected }}">
+                {{ viewModel.awayTeamName }}
+            </a>
+        </div>
+    </turbo-frame>
+
+    {% include 'matchs/participations_fragment.html.twig' with { notesViewModels: viewModel.notesViewModels } %}
+
+{% endblock %}

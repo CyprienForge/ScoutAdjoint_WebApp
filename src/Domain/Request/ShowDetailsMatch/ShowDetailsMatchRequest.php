@@ -7,6 +7,7 @@ class ShowDetailsMatchRequest
 
     public function __construct(
         public int $matchId,
+        public int $teamId
     ){}
 
 }

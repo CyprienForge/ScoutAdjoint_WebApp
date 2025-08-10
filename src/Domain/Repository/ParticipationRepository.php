@@ -10,4 +10,6 @@ use Domain\Entity\Participation;
 interface ParticipationRepository extends Repository
 {
     public function findByMatch(int $idMatch) : array;
+
+    public function findByMatchAndTeam(int $idMatch, int $idTeam) : array;
 }

@@ -12,4 +12,13 @@ class ParticipationNotesDTO
         private array $notes
     ){}
 
+    public function getParticipation(): Participation
+    {
+        return $this->participation;
+    }
+
+    public function getNotes(): array
+    {
+        return $this->notes;
+    }
 }

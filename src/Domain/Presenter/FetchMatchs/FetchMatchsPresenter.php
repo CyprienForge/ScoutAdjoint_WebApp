@@ -14,6 +14,7 @@ class FetchMatchsPresenter implements FetchMatchsOutputBoundary
     public function present(FetchMatchsResponse $response): void
     {
         $this->viewModel = new FetchMatchsViewModel();
+
         foreach($response->getMatchs() as $match)
         {
             $this->viewModel->matchsViewModels[] = new MatchViewModel(
@@ -21,6 +22,7 @@ class FetchMatchsPresenter implements FetchMatchsOutputBoundary
                 $match->getDate()->format('d/m/Y'),
                 $match->getScoreHome(),
                 $match->getScoreAway(),
+                $match->getHomeTeam()->getId(),
                 $match->getHomeTeam()->getName(),
                 $match->getAwayTeam()->getName(),
             );

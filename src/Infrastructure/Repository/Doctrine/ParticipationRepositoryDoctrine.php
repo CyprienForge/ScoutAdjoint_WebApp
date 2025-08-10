@@ -45,4 +45,19 @@ class ParticipationRepositoryDoctrine extends ServiceEntityRepository implements
     {
         return $this->findBy(['match' => $idMatch]);
     }
+
+    public function findByMatchAndTeam(int $idMatch, int $idTeam): array
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('p')
+            ->from(ParticipationDoctrine::class, 'p')
+            ->where('p.match = :match')
+            ->andWhere('p.team = :team')
+            ->setParameter('match', $idMatch)
+            ->setParameter('team', $idTeam)
+            ->orderBy('p.numero', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -77,6 +77,7 @@ services:
     Domain\Repository\MatchRepository: '@Infrastructure\Repository\Supabase\MatchRepositorySupabase'
     Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'
     Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
+    Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchOutputBoundary: '@Domain\Presenter\ShowDetailsMatch\ShowDetailsMatchPresenter'
     Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary: '@Domain\Presenter\FetchMatchs\FetchMatchsPresenter'
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
     Domain\Mapper\NoteMapper: '@Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine'

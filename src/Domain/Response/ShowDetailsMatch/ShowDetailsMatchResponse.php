@@ -6,7 +6,8 @@ class ShowDetailsMatchResponse
 {
 
     public function __construct(
-        private array $participationsNotes,
+        public array $participationsNotes,
+        public int $selectedTeamId
     ){}
 
 }

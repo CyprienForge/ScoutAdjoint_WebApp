@@ -33,11 +33,13 @@ class ShowDetailsPlayerPresenter implements ShowDetailsPlayerOutputBoundary
 
             $this->viewModel->participationViewModels[] = new ParticipationViewModel(
                 $indexLoop,
+                $participation->getMatch()->getId(),
                 $participation->getMatch()->getDate()->format('d-m-Y'),
                 '',
                 $participation->getTeam()->getName(),
                 $teamOpponentName,
-                $participation->getNumero()
+                $participation->getNumero(),
+                $participation->getTeam()->getId(),
             );
             $indexLoop++;
         }

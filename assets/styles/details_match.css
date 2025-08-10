@@ -1,0 +1,45 @@
+#participations h3{
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-align: center;
+    margin-bottom: 4%;
+    color: #f9fafb;
+}
+
+#participation{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    border-radius: 5%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 16px;
+    margin-left: 1.5rem;
+    margin-top: 4rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#notes{
+    color: #2563eb;
+    font-weight: normal;
+    font-size: 0.95rem;
+    margin: 6px 0;
+}
+
+#notes #content{
+    color: #f9fafb;
+}
+
+#change-team-button{
+    display: flex;
+    justify-content: end;
+    margin-top: 3rem;
+}
+
+#change-team-button button{
+    width: 7.5vw;
+}
+
+#infos-player{
+    display: flex;
+    justify-content: space-between;
+}

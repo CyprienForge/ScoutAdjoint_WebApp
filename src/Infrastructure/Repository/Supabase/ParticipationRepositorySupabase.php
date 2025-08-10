@@ -69,4 +69,9 @@ class ParticipationRepositorySupabase implements ParticipationRepository
     {
         // TODO: Implement findByMatch() method.
     }
+
+    public function findByMatchAndTeam(int $idMatch, int $idTeam): array
+    {
+        // TODO: Implement findByMatchAndTeam() method.
+    }
 }

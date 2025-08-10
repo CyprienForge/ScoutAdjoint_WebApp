@@ -68,7 +68,9 @@
                             <td>{{ participation.teamOpponentName }}</td>
                             <td>{{ participation.numero }}</td>
                             <td>
-                                <a></a>
+                                <a href="{{ path('details_match', { idMatch: participation.idMatch, idTeam: participation.teamId })  }}">
+                                    <i class="fa-solid fa-circle-right"></i>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

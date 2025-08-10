@@ -21,12 +21,13 @@ class ShowDetailsMatchUseCase
         private NoteRepository $noteRepository,
         private ParticipationMapper $participationMapper,
         private NoteMapper $noteMapper,
+        private ShowDetailsMatchOutputBoundary $presenter
     ){}
 
     public function execute(ShowDetailsMatchRequest $request) : ShowDetailsMatchResponse
     {
         $participationsNotes = [];
-        $participations = $this->participationRepository->findByMatch($request->matchId);
+        $participations = $this->participationRepository->findByMatchAndTeam($request->matchId, $request->teamId);
 
         foreach($participations as $participation)
         {
@@ -41,8 +42,9 @@ class ShowDetailsMatchUseCase
             $participationsNotes[] = new ParticipationNotesDTO($participation, $notes);
         }
 
-        $response = new ShowDetailsMatchResponse($participationsNotes);
-        dd($response);
+        $response = new ShowDetailsMatchResponse($participationsNotes, $request->teamId);
+        $this->presenter->present($response);
+
         return $response;
     }
 }

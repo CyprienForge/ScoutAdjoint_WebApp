@@ -6,10 +6,12 @@ class ParticipationViewModel
 {
     public function __construct(
         public int $indexLoop,
+        public int $idMatch,
         public string $date,
         public string $location,
         public string $teamName,
         public string $teamOpponentName,
-        public int $numero
+        public int $numero,
+        public int $teamId
     ){}
 }

@@ -9,6 +9,7 @@ class MatchViewModel
         public string $date,
         public int $scoreHome,
         public int $scoreAway,
+        public int $homeTeamId,
         public string $homeTeamName,
         public string $awayTeamName,
     ){}
