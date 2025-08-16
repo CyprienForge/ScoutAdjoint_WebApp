@@ -22,7 +22,7 @@ class ShowDetailsPlayerPresenter implements ShowDetailsPlayerOutputBoundary
             $player->getFirstName(),
             $player->getLastName(),
             $player->getTeam()->getName(),
-            $player->getBirthDate()->format('d-m-Y'),
+            $player->getBirthDate()->format('Y-m-d'),
         );
 
         $indexLoop = 1;

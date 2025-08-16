@@ -2,6 +2,11 @@
 
 {% block title %}Joueurs{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/details_player.css') }}">
+{% endblock %}
+
 {% block body %}
 
     <div class="head">
@@ -16,27 +21,40 @@
         </h2>
     </div>
 
-    <section class="flex justify-center">
-        <div class="flex justify-between items-center mt-8 w-3/4" id="player-infos">
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    <section class="flex justify-center" id="player-infos">
+        <div class="flex justify-between items-center mt-8 w-3/4">
             <article>
-                <img
-                    src="{{ asset('images/arthur_vignaud.jpg') }}"
-                    alt="Photo of {{ viewModel.playerViewModel.firstName }} {{ viewModel.playerViewModel.lastName }}"
-                    style="width: 200px; height: 200px; object-fit: cover;"
-                />
+                <label for="{{ form.image.vars.id }}" style="cursor: pointer;">
+                    <img
+                        src="{{ asset('images/arthur_vignaud.jpg') }}"
+                        alt="Photo de {{ viewModel.playerViewModel.firstName }} {{ viewModel.playerViewModel.lastName }}"
+                        id="player-photo"
+                    />
+                </label>
+                {{ form_row(form.image) }}
             </article>
+
             <article>
-                <p>Nom : {{ viewModel.playerViewModel.lastName }}</p>
-                <p class="mt-4">Prénom : {{ viewModel.playerViewModel.firstName }}</p>
+                <p>{{ form_row(form.last_name) }}</p>
+                <p class="mt-4">{{ form_row(form.first_name) }}</p>
                 <p class="mt-4">Poste : Non renseigné</p>
             </article>
+
             <article>
-                <p>Date de naissance : {{ viewModel.playerViewModel.birthDate }}</p>
-                <p class="mt-4">Équipe actuelle : {{ viewModel.playerViewModel.teamName }}</p>
+                <p>{{ form_row(form.birth_date) }}</p>
+                <p>{{ form_row(form.team) }}</p>
                 <p class="mt-4">Nationalité : Non renseigné</p>
             </article>
         </div>
+
+        <div class="mt-6">
+            <button type="submit" class="btn btn-primary text-white px-4 py-2 rounded">
+                Sauvegarder
+            </button>
+        </div>
     </section>
+    {{ form_end(form) }}
 
 
     <section class="mt-24">

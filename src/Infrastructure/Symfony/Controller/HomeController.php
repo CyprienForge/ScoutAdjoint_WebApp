@@ -2,12 +2,18 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Domain\Dto\EditPlayer\ImagePlayer;
+use Domain\Mapper\PlayerMapper;
+use Domain\Mapper\TeamMapper;
+use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
+use Domain\UseCase\EditPlayer\EditPlayerUseCase;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase;
+use Infrastructure\Symfony\Form\EditPlayerTypeForm;
 use Infrastructure\Symfony\Form\SearchPlayerTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +24,9 @@ class HomeController extends AbstractController
 {
     public function __construct(
         private FetchPlayersOutputBoundary $presenter,
-        private ShowDetailsPlayerOutputBoundary $presenterShowDetails
+        private ShowDetailsPlayerOutputBoundary $presenterShowDetails,
+        private TeamMapper $teamMapper,
+        private PlayerMapper $playerMapper,
     ){}
 
     #[Route('/', name: 'home')]
@@ -57,13 +65,35 @@ class HomeController extends AbstractController
     }
 
     #[Route('/players/details/{idPlayer}', name: 'details_player')]
-    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, int $idPlayer) : Response
+    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, EditPlayerUseCase $editUseCase, int $idPlayer) : Response
     {
-        $request = new ShowDetailsPlayerRequest($idPlayer);
-        $useCase->execute($request);
+        $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
+        $response = $useCase->execute($detailsRequest);
+
+        $playerInfra = $this->playerMapper->toInfra($response->player);
+
+        $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $playerInfra);
+        $editPlayerForm->handleRequest($request);
+
+        if($editPlayerForm->isSubmitted() && $editPlayerForm->isValid()){
+            $fileImage = $editPlayerForm->get('image')->getData();
+
+            $task = $editPlayerForm->getData();
+            $player = $this->playerMapper->toDomain($task);
+
+            $newFirstName = $player->getFirstName();
+            $newLastName = $player->getLastName();
+            $newBirthDate = $player->getBirthDate();
+            $newTeam = $player->getTeam();
+            // $newImage = new ImagePlayer($fileImage->getClientOriginalName(), $fileImage->getMimeType(), $fileImage->getSize());
+
+            $editRequest = new EditPlayerRequest($idPlayer, $newFirstName, $newLastName, $newBirthDate, $newTeam, null);
+            $editUseCase->execute($editRequest);
+        }
 
         return $this->render('players/details.html.twig', [
-           'viewModel' => $this->presenterShowDetails->getViewModel()
+           'viewModel' => $this->presenterShowDetails->getViewModel(),
+            'form' => $editPlayerForm->createView(),
         ]);
     }
 }

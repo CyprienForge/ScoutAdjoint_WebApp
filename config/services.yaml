@@ -26,6 +26,29 @@ services:
             - '../src/Infrastructure/Symfony/Controller'
             - '../src/Infrastructure/Twig'
 
+    Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine:
+        arguments:
+            $participationMapper: '@Infrastructure\Entity\Doctrine\Mapper\ParticipationMapperDoctrine'
+
+    Infrastructure\Entity\Doctrine\Mapper\ParticipationMapperDoctrine:
+        arguments:
+            $teamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
+            $playerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
+            $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
+
+    Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine:
+        arguments:
+            $teamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
+
+    Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine:
+        arguments:
+            $teamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
+
+    Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine:
+        arguments:
+            $teamMapperDoctrine: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
+            $teamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
+
     Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase:
         arguments:
             $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
@@ -63,6 +86,11 @@ services:
             $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
             $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
 
+    Domain\UseCase\EditPlayer\EditPlayerUseCase:
+        arguments:
+            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
+            $playerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
+
     Infrastructure\Repository\:
         resource: '../src/Infrastructure/Repository'
         autowire: true
@@ -71,7 +99,7 @@ services:
             string $apiUrl: '%env(SUPABASE_URL)%'
             string $apiKey: '%env(SUPABASE_API_KEY)%'
 
-    Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Supabase\PlayerRepositorySupabase'
+    Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
     Domain\Repository\TeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
     Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
     Domain\Repository\MatchRepository: '@Infrastructure\Repository\Supabase\MatchRepositorySupabase'
@@ -81,4 +109,5 @@ services:
     Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary: '@Domain\Presenter\FetchMatchs\FetchMatchsPresenter'
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
     Domain\Mapper\NoteMapper: '@Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine'
+    Domain\Mapper\TeamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
 

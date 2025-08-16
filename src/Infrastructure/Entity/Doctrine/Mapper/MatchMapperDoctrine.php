@@ -5,10 +5,14 @@ namespace Infrastructure\Entity\Doctrine\Mapper;
 use Domain\Entity\MatchGame;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\MatchMapper;
+use Domain\Mapper\TeamMapper;
 use Infrastructure\Entity\Doctrine\MatchDoctrine;
 
 class MatchMapperDoctrine implements MatchMapper
 {
+    public function __construct(
+        private TeamMapper $teamMapper,
+    ){}
     public function toDomain($item)
     {
         $match = new MatchGame();
@@ -17,9 +21,8 @@ class MatchMapperDoctrine implements MatchMapper
         $match->setScoreHome($item->getScoreHome());
         $match->setScoreAway($item->getScoreAway());
 
-        $teamMapperDoctrine = new TeamMapperDoctrine();
-        $homeTeam = $teamMapperDoctrine->toDomain($item->getHomeTeam());
-        $awayTeam = $teamMapperDoctrine->toDomain($item->getAwayTeam());
+        $homeTeam = $this->teamMapper->toDomain($item->getHomeTeam());
+        $awayTeam = $this->teamMapper->toDomain($item->getAwayTeam());
         $match->setHomeTeam($homeTeam);
         $match->setAwayTeam($awayTeam);
         $match->setIsPrepared($item->isPrepared());
@@ -36,9 +39,8 @@ class MatchMapperDoctrine implements MatchMapper
         $matchDoctrine->setScoreHome($item->getScoreHome());
         $matchDoctrine->setScoreAway($item->getScoreAway());
 
-        $teamMapperDoctrine = new TeamMapperDoctrine();
-        $homeTeam = $teamMapperDoctrine->toInfra($item->getHomeTeam());
-        $awayTeam = $teamMapperDoctrine->toInfra($item->getAwayTeam());
+        $homeTeam = $this->teamMapper->toInfra($item->getHomeTeam());
+        $awayTeam = $this->teamMapper->toInfra($item->getAwayTeam());
         $matchDoctrine->setHomeTeam($homeTeam);
         $matchDoctrine->setAwayTeam($awayTeam);
         $matchDoctrine->setIsPrepared($item->isPrepared());
