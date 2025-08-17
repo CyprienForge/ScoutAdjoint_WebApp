@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer équipe{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/form.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="form-wrapper bg-base-200">
+        <h2>Créer une équipe</h2>
+
+        {{ form_start(form, {'attr': {'class': 'player-form'}}) }}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-input'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.championship) }}
+                {{ form_widget(form.championship, {'attr': {'class': 'form-input'}}) }}
+                {{ form_errors(form.championship) }}
+            </div>
+
+            <div class="form-actions">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn-submit'}}) }}
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

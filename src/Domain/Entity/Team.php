@@ -4,12 +4,12 @@ namespace Domain\Entity;
 
 class Team
 {
-    private int $id;
+    private ?int $id = null;
     private string $name;
-    private ?string $logoPath;
+    private ?string $logoPath = null;
     private ?Championship $championship;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

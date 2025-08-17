@@ -5,9 +5,9 @@ namespace Infrastructure\Entity\Doctrine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Infrastructure\Repository\PlayerDoctrineRepository;
+use Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine;
 
-#[ORM\Entity(repositoryClass: PlayerDoctrineRepository::class)]
+#[ORM\Entity(repositoryClass: PlayerRepositoryDoctrine::class)]
 #[ORM\Table(name: "players")]
 class PlayerDoctrine
 {
@@ -34,9 +34,16 @@ class PlayerDoctrine
     #[ORM\OneToMany(targetEntity: ParticipationDoctrine::class, mappedBy: 'player')]
     private Collection $participationDoctrines;
 
+    /**
+     * @var Collection<int, PlacementDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: PlacementDoctrine::class, mappedBy: 'player')]
+    private Collection $placementDoctrines;
+
     public function __construct()
     {
         $this->participationDoctrines = new ArrayCollection();
+        $this->placementDoctrines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +131,33 @@ class PlayerDoctrine
             if ($participationDoctrine->getPlayer() === $this) {
                 $participationDoctrine->setPlayer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PlacementDoctrine>
+     */
+    public function getPlacementDoctrines(): Collection
+    {
+        return $this->placementDoctrines;
+    }
+
+    public function addPlacementDoctrine(PlacementDoctrine $placementDoctrine): static
+    {
+        if (!$this->placementDoctrines->contains($placementDoctrine)) {
+            $this->placementDoctrines->add($placementDoctrine);
+            $placementDoctrine->addPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlacementDoctrine(PlacementDoctrine $placementDoctrine): static
+    {
+        if ($this->placementDoctrines->removeElement($placementDoctrine)) {
+            $placementDoctrine->removePlayer($this);
         }
 
         return $this;

@@ -2,8 +2,17 @@
 
 {% block title %}Joueurs{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/players.css') }}">
+{% endblock %}
+
 {% block body %}
-    <h2 class="text-3xl  font-bold mt-8 text-center">Joueurs</h2>
+    <div class="head-page mt-8">
+        <h3></h3>
+        <h2 class="text-3xl  font-bold text-center">Joueurs</h2>
+        <a class="btn btn-primary" href="{{ path('create_player') }}">Créer joueur</a>
+    </div>
 
     <div class="my-8">
         {{ form_start(form, {'method': 'get'}) }}
@@ -18,18 +27,6 @@
         </div>
         {{ form_end(form) }}
     </div>
-
-    <!--
-    <div data-controller="test">
-        <button class="btn btn-primary" data-action="click->test#test">
-            TEST STIUMLUS
-        </button>
-
-        <span data-test-target="output">
-
-        </span>
-    </div>
-    -->
 
         <div class="overflow-x-auto mt-8">
             <table class="table table-zebra">

@@ -2,7 +2,7 @@
 
 namespace Domain\Request\EditPlayer;
 
-use Domain\Dto\EditPlayer\ImagePlayer;
+use Domain\Dto\EditPlayer\ImagePlayerDTO;
 use Domain\Entity\Team;
 
 class EditPlayerRequest
@@ -14,7 +14,7 @@ class EditPlayerRequest
         public string $newLastName,
         public \DateTime $newBirthDate,
         public Team $newTeam,
-        public ?ImagePlayer $newImage
+        public ?ImagePlayerDTO $newImage
     ){}
 
 }

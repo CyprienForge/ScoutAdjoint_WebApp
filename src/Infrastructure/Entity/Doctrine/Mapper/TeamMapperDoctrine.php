@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Domain\Entity\Team;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\TeamMapper;
+use Domain\Repository\ChampionshipRepository;
 use Domain\Repository\TeamRepository;
 use Infrastructure\Entity\Doctrine\TeamDoctrine;
 use Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine;
@@ -18,6 +19,7 @@ class TeamMapperDoctrine implements TeamMapper
 {
     public function __construct(
         private TeamRepository $teamRepository,
+        private ChampionshipRepository $championshipRepository,
     ){}
     public function toDomain($item)
     {
@@ -35,25 +37,15 @@ class TeamMapperDoctrine implements TeamMapper
     }
     public function toInfra($item, ?TeamDoctrine $existingTeamDoctrine = null): TeamDoctrine
     {
-        $teamDoctrine = $existingTeamDoctrine;
-
-        if ($teamDoctrine === null) {
-            if ($item->getId() !== null) {
-                $teamDoctrine = $this->teamRepository->find($item->getId());
-                if (!$teamDoctrine) {
-                    throw new \Exception("TeamDoctrine not found for id " . $item->getId());
-                }
-            } else {
-                $teamDoctrine = new TeamDoctrine();
-            }
-        }
+        $teamDoctrine = $existingTeamDoctrine ?? new TeamDoctrine();
 
         $teamDoctrine->setName($item->getName());
         $teamDoctrine->setLogoPath($item->getLogoPath());
 
-        $championshipDoctrineMapper = new ChampionshipMapperDoctrine();
-        $existingChampionshipDoctrine = $teamDoctrine->getChampionship();
-        $championshipDoctrine = $championshipDoctrineMapper->toInfra($item->getChampionship(), $existingChampionshipDoctrine);
+        $championshipDoctrine = null;
+        if($item->getChampionship() !== null && $item->getChampionship()->getId() !== null){
+            $championshipDoctrine = $this->championshipRepository->findById($item->getChampionship()->getId());
+        }
         $teamDoctrine->setChampionship($championshipDoctrine);
 
         return $teamDoctrine;

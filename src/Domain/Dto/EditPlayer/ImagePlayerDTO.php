@@ -2,7 +2,7 @@
 
 namespace Domain\Dto\EditPlayer;
 
-class ImagePlayer
+class ImagePlayerDTO
 {
 
     public function __construct(

@@ -22,9 +22,9 @@ class ChampionshipMapperDoctrine implements ChampionshipMapper
         return $championship;
     }
 
-    public function toInfra($item, ?ChampionshipDoctrine $existingChampionshipDoctrine = null)
+    public function toInfra($item)
     {
-        $championship = $existingChampionshipDoctrine ?? new ChampionshipDoctrine();
+        $championship = $item ?? new ChampionshipDoctrine();
         $championship->setId($item->getId());
         $championship->setName($item->getName());
         $championship->setLevel($item->getLevel());

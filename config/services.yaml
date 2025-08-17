@@ -99,9 +99,11 @@ services:
             string $apiUrl: '%env(SUPABASE_URL)%'
             string $apiKey: '%env(SUPABASE_API_KEY)%'
 
+    Domain\Repository\PlacementRepository: '@Infrastructure\Repository\Doctrine\PlacementRepositoryDoctrine'
+    Domain\Repository\PositionRepository: '@Infrastructure\Repository\Doctrine\PositionRepositoryDoctrine'
     Domain\Repository\PlayerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
-    Domain\Repository\TeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
-    Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
+    Domain\Repository\TeamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
+    Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Doctrine\ChampionshipRepositoryDoctrine'
     Domain\Repository\MatchRepository: '@Infrastructure\Repository\Supabase\MatchRepositorySupabase'
     Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'
     Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
@@ -110,4 +112,8 @@ services:
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
     Domain\Mapper\NoteMapper: '@Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine'
     Domain\Mapper\TeamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
+    Domain\Mapper\PositionMapper: '@Infrastructure\Entity\Doctrine\Mapper\PositionMapperDoctrine'
+    Domain\Mapper\PlacementMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlacementMapperDoctrine'
+    Domain\Mapper\ChampionshipMapper: '@Infrastructure\Entity\Doctrine\Mapper\ChampionshipMapperDoctrine'
+
 

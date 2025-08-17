@@ -14,9 +14,10 @@ class Player
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): Player
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getFirstName(): string
@@ -24,9 +25,10 @@ class Player
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $firstName): Player
     {
         $this->firstName = $firstName;
+        return $this;
     }
 
     public function getLastName(): string
@@ -34,9 +36,10 @@ class Player
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(string $lastName): Player
     {
         $this->lastName = $lastName;
+        return $this;
     }
 
     public function getBirthDate(): \DateTime
@@ -44,7 +47,7 @@ class Player
         return $this->birthDate;
     }
 
-    public function setBirthDate(?\DateTime $birthDate): Player
+    public function setBirthDate(\DateTime $birthDate): Player
     {
         $this->birthDate = $birthDate;
         return $this;
@@ -55,8 +58,9 @@ class Player
         return $this->team;
     }
 
-    public function setTeam(Team $team): void
+    public function setTeam(Team $team): Player
     {
         $this->team = $team;
+        return $this;
     }
 }

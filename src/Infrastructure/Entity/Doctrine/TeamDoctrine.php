@@ -5,7 +5,6 @@ namespace Infrastructure\Entity\Doctrine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Infrastructure\Repository\Doctrine\TeamDoctrineRepository;
 use Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine;
 
 #[ORM\Entity(repositoryClass: TeamRepositoryDoctrine::class)]
