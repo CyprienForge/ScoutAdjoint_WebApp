@@ -38,4 +38,15 @@ class PlacementRepositoryDoctrine extends ServiceEntityRepository implements Pla
     {
         // TODO: Implement findByIdentificationCode() method.
     }
+
+    public function findByPlayer(int $idPlayer): array
+    {
+        return $this->createQueryBuilder('pl')
+            ->join('pl.position', 'pos')
+            ->where('pl.player = :idPlayer')
+            ->setParameter('idPlayer', $idPlayer)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

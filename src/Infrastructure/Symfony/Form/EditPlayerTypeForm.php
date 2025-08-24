@@ -2,10 +2,14 @@
 
 namespace Infrastructure\Symfony\Form;
 
+use App\Domain\Entity\Position;
+use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Entity\Team;
+use Infrastructure\Entity\Doctrine\PositionDoctrine;
 use Infrastructure\Entity\Doctrine\TeamDoctrine;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,23 +21,35 @@ class EditPlayerTypeForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('first_name', TextType::class, [
+            ->add('newFirstName', TextType::class, [
                 'required' => false,
                 'label' => 'Prénom'
             ])
-            ->add('last_name', TextType::class, [
+            ->add('newLastName', TextType::class, [
                 'required' => false,
                 'label' => 'Nom'
             ])
-            ->add('birth_date', DateType::class, [
+            ->add('newBirthDate', DateType::class, [
                 'required' => false,
                 'label' => 'Date de naissance',
             ])
-            ->add('team', EntityType::class, [
-                'class' => TeamDoctrine::class,
-                'autocomplete' => true,
+            ->add('newTeam', ChoiceType::class, [
+                'choices' => $options['teams'],
+                'choice_label' => fn($team) => $team->getName(),
+                'choice_value' => fn($team) => $team ? $team->getId() : '',
+                'label' => 'Équipes',
+                'multiple' => false,
+                'expanded' => false,
             ])
-            ->add('image', FileType::class, [
+            ->add('newPositions', ChoiceType::class, [
+                'choices' => $options['positions'],
+                'choice_label' => fn($position) => $position->getLibelle(),
+                'choice_value' => fn($position) => $position ? $position->getId() : '',
+                'label' => 'Postes',
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            ->add('newImage', FileType::class, [
                 'label' => false,
                 'mapped' => false,
                 'required' => false,
@@ -48,7 +64,9 @@ class EditPlayerTypeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => EditPlayerDTO::class,
+            'teams' => [],
+            'positions' => [],
         ]);
     }
 }

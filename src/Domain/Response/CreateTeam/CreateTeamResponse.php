@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Response;
+namespace Domain\Response\CreateTeam;
 
 class CreateTeamResponse
 {

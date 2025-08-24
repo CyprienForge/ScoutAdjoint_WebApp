@@ -23,32 +23,43 @@
 
     {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
     <section class="flex justify-center" id="player-infos">
-        <div class="flex justify-between items-center mt-8 w-3/4">
-            <article>
-                <label for="{{ form.image.vars.id }}" style="cursor: pointer;">
+        <div class="flex justify-between items-center ms-8 mt-8 w-full">
+            <article class="w-1/4 ms-4">
+                <label for="{{ form.newImage.vars.id }}" style="cursor: pointer;">
                     <img
                         src="{{ asset('images/arthur_vignaud.jpg') }}"
                         alt="Photo de {{ viewModel.playerViewModel.firstName }} {{ viewModel.playerViewModel.lastName }}"
                         id="player-photo"
                     />
                 </label>
-                {{ form_row(form.image) }}
+                {{ form_row(form.newImage) }}
             </article>
 
-            <article>
-                <p>{{ form_row(form.last_name) }}</p>
-                <p class="mt-4">{{ form_row(form.first_name) }}</p>
-                <p class="mt-4">Poste : Non renseigné</p>
-            </article>
+            <div class="ms-24">
+                <article class="first-part-edit">
+                    <p>{{ form_row(form.newLastName) }}</p>
+                    <p class="mt-4">{{ form_row(form.newFirstName) }}</p>
+                    <p>{{ form_row(form.newBirthDate) }}</p>
+                    <p>{{ form_row(form.newTeam) }}</p>
+                    <p class="mt-4">Nationalité : Non renseigné</p>
+                </article>
 
-            <article>
-                <p>{{ form_row(form.birth_date) }}</p>
-                <p>{{ form_row(form.team) }}</p>
-                <p class="mt-4">Nationalité : Non renseigné</p>
-            </article>
+                <article>
+                    <label class="positions-label">Postes</label>
+                    <div class="positions-container">
+                        {% for choice in form.newPositions %}
+                            <label class="position-item">
+                                {{ form_widget(choice) }}
+                                {{ form_label(choice) }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(form.newPositions) }}
+                </article>
+            </div>
         </div>
 
-        <div class="mt-6">
+        <div class="mt-8">
             <button type="submit" class="btn btn-primary text-white px-4 py-2 rounded">
                 Sauvegarder
             </button>

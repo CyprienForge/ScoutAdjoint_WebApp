@@ -3,9 +3,11 @@
 namespace Infrastructure\Symfony\Controller;
 
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
+use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Mapper\PlayerMapper;
 use Domain\Mapper\PositionMapper;
 use Domain\Mapper\TeamMapper;
+use Domain\Repository\PlacementRepository;
 use Domain\Repository\PositionRepository;
 use Domain\Repository\TeamRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
@@ -35,7 +37,8 @@ class PlayerController extends AbstractController
         private PlayerMapper $playerMapper,
         private TeamRepository $teamRepository,
         private PositionRepository $positionRepository,
-        private PositionMapper $positionMapper
+        private PositionMapper $positionMapper,
+        private PlacementRepository $placementRepository,
     ){}
 
     #[Route('/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
@@ -73,24 +76,30 @@ class PlayerController extends AbstractController
         $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
         $response = $useCase->execute($detailsRequest);
 
-        $playerInfra = $this->playerMapper->toInfra($response->player);
+        $allPositionsInfra = $this->positionRepository->findAll();
+        $allPositions = array_map(fn($pos) => $this->positionMapper->toDomain($pos), $allPositionsInfra);
 
-        $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $playerInfra);
+        $placementsInfra = array_filter($this->placementRepository->findByPlayer($response->player->getId()));
+        $positions = array_map(fn($placement) => $this->positionMapper->toDomain($placement->getPosition()), $placementsInfra);
+
+        $teamsInfra = array_filter($this->teamRepository->findAll());
+        $teams = array_map(fn($team) => $this->teamMapper->toDomain($team), $teamsInfra);
+
+        $editPlayerDto = EditPlayerDTO::fromPlayer($response->player);
+        $editPlayerDto->setNewPositions($positions);
+
+        $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $editPlayerDto, [
+            'positions' => $allPositions,
+            'teams' => $teams
+        ]);
         $editPlayerForm->handleRequest($request);
 
         if($editPlayerForm->isSubmitted() && $editPlayerForm->isValid()){
-            $fileImage = $editPlayerForm->get('image')->getData();
+            $fileImage = $editPlayerForm->get('newImage')->getData();
+            $editPlayer = $editPlayerForm->getData();
 
-            $task = $editPlayerForm->getData();
-            $player = $this->playerMapper->toDomain($task);
-
-            $newFirstName = $player->getFirstName();
-            $newLastName = $player->getLastName();
-            $newBirthDate = $player->getBirthDate();
-            $newTeam = $player->getTeam();
             // $newImage = new ImagePlayer($fileImage->getClientOriginalName(), $fileImage->getMimeType(), $fileImage->getSize());
-
-            $editRequest = new EditPlayerRequest($idPlayer, $newFirstName, $newLastName, $newBirthDate, $newTeam, null);
+            $editRequest = new EditPlayerRequest($editPlayer);
             $editUseCase->execute($editRequest);
         }
 

@@ -6,7 +6,9 @@ use Domain\Entity\Team;
 use Domain\Mapper\ChampionshipMapper;
 use Domain\Repository\ChampionshipRepository;
 use Domain\Request\CreateTeam\CreateTeamRequest;
+use Domain\Request\ListChampionships\ListChampionshipsRequest;
 use Domain\UseCase\CreateTeam\CreateTeamUseCase;
+use Domain\UseCase\ListChampionships\ListChampionshipsUseCase;
 use Infrastructure\Symfony\Form\CreateTeamTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,19 +30,18 @@ class TeamController extends AbstractController
     }
 
     #[Route('/teams/create', name: 'create_team')]
-    public function createTeam(Request $request, CreateTeamUseCase $useCase): Response
+    public function createTeam(Request $request, CreateTeamUseCase $useCase, ListChampionshipsUseCase $listChampionshipsUseCase): Response
     {
-        $championshipsInfra = $this->championshipRepository->findAll();
-        $championships = array_map(fn($championship) => $this->championshipMapper->toDomain($championship), $championshipsInfra);
+        $listChampionshipsRequest = new ListChampionshipsRequest();
+        $response = $listChampionshipsUseCase->execute($listChampionshipsRequest);
 
         $createTeamForm = $this->createForm(CreateTeamTypeForm::class, new Team(), [
-            'championships' => $championships,
+            'championships' => $response->championships,
         ]);
         $createTeamForm->handleRequest($request);
 
         if($createTeamForm->isSubmitted() && $createTeamForm->isValid()){
             $request = new CreateTeamRequest($createTeamForm->getData());
-
             $useCase->execute($request);
         }
 
