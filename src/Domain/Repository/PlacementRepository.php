@@ -8,5 +8,6 @@ interface PlacementRepository extends Repository
 {
 
     public function findByPlayer(int $idPlayer);
+    public function deleteAllByPlayer(int $idPlayer);
 
 }

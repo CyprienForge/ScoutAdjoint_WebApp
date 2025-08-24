@@ -45,6 +45,7 @@ class EditPlayerUseCase
 
         }
         */
+        $this->placementRepository->deleteAllByPlayer($player->getId());
         foreach($request->editPlayerDTO->getNewPositions() as $position)
         {
             $placement = new Placement();

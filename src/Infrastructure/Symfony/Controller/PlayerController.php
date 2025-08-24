@@ -13,11 +13,13 @@ use Domain\Repository\TeamRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
+use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\UseCase\CreatePlayer\CreatePlayerUseCase;
 use Domain\UseCase\EditPlayer\EditPlayerUseCase;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
+use Domain\UseCase\ListEditPlayerInfos\ListEditPlayerInfosUseCase;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase;
 use Infrastructure\Symfony\Form\CreatePlayerTypeForm;
@@ -71,26 +73,20 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/players/details/{idPlayer}', name: 'details_player')]
-    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, EditPlayerUseCase $editUseCase, int $idPlayer) : Response
+    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, EditPlayerUseCase $editUseCase,ListEditPlayerInfosUseCase $listInfosUseCase, int $idPlayer) : Response
     {
         $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
         $response = $useCase->execute($detailsRequest);
 
-        $allPositionsInfra = $this->positionRepository->findAll();
-        $allPositions = array_map(fn($pos) => $this->positionMapper->toDomain($pos), $allPositionsInfra);
-
-        $placementsInfra = array_filter($this->placementRepository->findByPlayer($response->player->getId()));
-        $positions = array_map(fn($placement) => $this->positionMapper->toDomain($placement->getPosition()), $placementsInfra);
-
-        $teamsInfra = array_filter($this->teamRepository->findAll());
-        $teams = array_map(fn($team) => $this->teamMapper->toDomain($team), $teamsInfra);
+        $listInfosRequest = new ListEditPlayerInfosRequest($idPlayer);
+        $listInfosResponse = $listInfosUseCase->execute($listInfosRequest);
 
         $editPlayerDto = EditPlayerDTO::fromPlayer($response->player);
-        $editPlayerDto->setNewPositions($positions);
+        $editPlayerDto->setNewPositions($listInfosResponse->positionsSelected);
 
         $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $editPlayerDto, [
-            'positions' => $allPositions,
-            'teams' => $teams
+            'positions' => $listInfosResponse->allPositions,
+            'teams' => $listInfosResponse->teams,
         ]);
         $editPlayerForm->handleRequest($request);
 

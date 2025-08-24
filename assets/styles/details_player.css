@@ -16,3 +16,19 @@
 #player-photo:hover{
     filter: brightness(50%);
 }
+
+.positions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.position-item {
+    flex: 0 0 calc(100% / 4 - 12px);
+}
+
+.first-part-edit{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+}

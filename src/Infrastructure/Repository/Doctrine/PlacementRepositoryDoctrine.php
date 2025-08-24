@@ -49,4 +49,14 @@ class PlacementRepositoryDoctrine extends ServiceEntityRepository implements Pla
             ->getResult();
     }
 
+    public function deleteAllByPlayer(int $idPlayer): int
+    {
+        return $this->createQueryBuilder('p')
+            ->delete()
+            ->where('p.player = :idPlayer')
+            ->setParameter('idPlayer', $idPlayer)
+            ->getQuery()
+            ->execute();
+    }
+
 }
