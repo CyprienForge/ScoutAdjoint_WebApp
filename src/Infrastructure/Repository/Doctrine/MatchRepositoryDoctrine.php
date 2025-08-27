@@ -5,12 +5,13 @@ namespace Infrastructure\Repository\Doctrine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Mapper\MatchMapper;
 use Domain\Repository\MatchRepository;
 use Infrastructure\Entity\Doctrine\MatchDoctrine;
 
 class MatchRepositoryDoctrine extends ServiceEntityRepository implements MatchRepository
 {
-    public function __construct(private EntityManagerInterface $em, ManagerRegistry $registry){
+    public function __construct(private EntityManagerInterface $em, private MatchMapper $matchMapper, ManagerRegistry $registry){
         parent::__construct($registry, MatchDoctrine::class);
     }
     public function save($item): void
@@ -25,7 +26,8 @@ class MatchRepositoryDoctrine extends ServiceEntityRepository implements MatchRe
     }
     public function findById(int $id)
     {
-        // TODO: Implement findById() method.
+        $matchDotrine = $this->find($id);
+        return $this->matchMapper->toDomain($matchDotrine);
     }
 
     public function deleteAll()

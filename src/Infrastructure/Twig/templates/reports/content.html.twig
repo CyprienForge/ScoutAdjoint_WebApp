@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 8px;
+            margin: 0;
+            padding: 8px;
+            line-height: 1.2;
+        }
+
+        .main-layout {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Terrains sur les côtés */
+        .field-left, .field-right {
+            width: 140px;
+            vertical-align: top;
+            padding: 5px;
+        }
+
+        .field-diagram {
+            width: 130px;
+            height: 90px;
+            background-color: #90EE90;
+            position: relative;
+            border: 2px solid #333;
+            margin-bottom: 10px;
+        }
+
+        .penalty-box {
+            width: 35px;
+            height: 25px;
+            border: 1px solid #333;
+            position: absolute;
+        }
+
+        .penalty-box-left {
+            left: 0;
+            top: 32px;
+        }
+
+        .penalty-box-right {
+            right: 0;
+            top: 32px;
+        }
+
+        .center-circle {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            position: absolute;
+            left: 50px;
+            top: 30px;
+        }
+
+        .center-line {
+            position: absolute;
+            left: 65px;
+            top: 0;
+            bottom: 0;
+            border-left: 1px solid #333;
+        }
+
+        .player-number {
+            position: absolute;
+            font-weight: bold;
+            font-size: 9px;
+            background-color: white;
+            padding: 1px;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            text-align: center;
+            line-height: 14px;
+            border: 1px solid #333;
+        }
+
+        /* Section centrale */
+        .center-content {
+            vertical-align: top;
+            padding: 10px;
+        }
+
+        .match-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 15px;
+            background-color: #90EE90;
+            padding: 8px;
+        }
+
+        .top-comments {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+
+        .comment-cell {
+            width: 33.33%;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 4px;
+            vertical-align: top;
+            border: 1px solid #333;
+            font-size: 7px;
+        }
+
+        .match-info-cell {
+            text-align: center;
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+
+        .score-section {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 9px;
+        }
+
+        /* Section joueurs */
+        .players-section {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .team-players {
+            width: 50%;
+            vertical-align: top;
+            padding: 8px;
+            border: 1px solid #333;
+        }
+
+        .team-header {
+            background-color: #90EE90;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            font-size: 8px;
+            margin-bottom: 8px;
+        }
+
+        .player-list {
+            font-size: 7px;
+            line-height: 1.3;
+        }
+
+        .player-entry {
+            margin-bottom: 3px;
+            padding: 2px 0;
+        }
+
+        .substitutes {
+            margin-top: 15px;
+            font-size: 7px;
+            border-top: 1px solid #999;
+            padding-top: 8px;
+        }
+
+        /* Tableaux des joueurs */
+        .players-grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7px;
+        }
+
+        .player-cell {
+            border: 1px solid #333;
+            padding: 5px;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        .player-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .player-comment {
+            line-height: 1.2;
+        }
+
+        /* Section remplaçants */
+        .substitutes-section {
+            margin-top: 15px;
+        }
+
+        .substitutes-grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7px;
+        }
+
+        .substitute-cell {
+            border: 1px solid #666;
+            padding: 4px;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        /* Events section */
+        .events-section {
+            margin: 15px 0;
+            padding: 8px;
+            border: 1px solid #333;
+            font-size: 7px;
+        }
+
+        .events-row {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .event-column {
+            width: 33.33%;
+            vertical-align: top;
+            padding: 5px;
+            border-right: 1px solid #999;
+        }
+
+        .event-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-decoration: underline;
+        }
+
+        /* Commentaires finaux - GARDE IDENTIQUE */
+        .comments-final {
+            width: 96.5%;
+            border: 1px solid #333;
+            padding: 8px;
+            margin-left: 1%;
+            font-size: 7px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<table class="main-layout">
+    <tr>
+        <!-- CONTENU CENTRAL -->
+        <td class="center-content">
+            <!-- Commentaires du haut -->
+            <table class="top-comments">
+                <tr>
+                    <td class="comment-cell">
+                        <div class="bold">Remarque sur l'équipe domicile</div><br>
+                        J1 : Victoire 2-0 à Rousset<br><br>
+                        Une défense à 4, le N°18 devant la défense et un attaquant qui presse, le tout avec une ligne de 4 au milieu qui s'oppose à la progression en orientant le long de la ligne de touche. C'est comme ceci qu'évolue cette équipe de Lusitanos qui était en quête de chercher les ailiers côtés (11, 10) et d'attendre un dédoublement ou une prise d'appui (système en 4-1-4-1 en phase écrits).<br><br>
+                        Les grosses idées talent cartes: Il y a eu de la justesse technique cartes dans l'ensemble, le manque de précision devant le but aurait dû faire pencher la balance de leur côté.
+                    </td>
+                    <td class="comment-cell match-info-cell">
+                        <div class="bold">Andrézieux vs Lusitanos St-Maur</div><br>
+                        J02 National 2<br>
+                        23/08/2024 à 18h00<br>
+                        Envol Stadium
+
+                        <hr>
+
+                        <div class="bold">Remarque avant-match</div><br>
+                        20°, beau temps<br>
+                        Vent léger en faveur des Lusitanos en 1MT<br>
+                        Échauffement sérieux des 2 côtés<br><br>
+
+                    </td>
+                    <td class="comment-cell">
+                        <div class="bold">Remarque sur l'équipe visiteuse</div><br>
+                        J1 : 1-1 à domicile contre l'AS Cannes<br><br>
+                        Organisée en 4-2-3-1, les franciliens ont parfois souffert sans jamais craquer, le jeu peut être parfois peu séduisant, en usant de longs ballons mais c'est terriblement efficace. Le 9 sort de planche qui grâce à son jeu dur fait progresser l'équipe.<br><br>
+                        Cependant, certains joueurs du jeu long est aussi du à un manque de mouvement au milieu de terrain entre les lignes notamment du double pivot (5-8) qu'il faudra régler sur les prochaines rencontres.
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Section joueurs -->
+            <table class="players-section">
+                <tr>
+                    <td class="team-players">
+                        <div class="team-header">ÉQUIPE DOMICILE - Andrézieux</div>
+
+                        <!-- Tableau des 11 titulaires -->
+                        <table class="players-grid">
+                            {% for participationPair in awayPlayers|batch(2) %}
+                                <tr>
+                                    {% for participation in participationPair %}
+                                        <td class="player-cell">
+                                            <div class="player-name"><span class="bold">{{ participation.numero }} - {{ participation.player.firstName }} {{ participation.player.lastName }}</span> 2000</div>
+                                            <div class="player-comment">6m, jeu long au pied++ (45') | Sortie, parades (52') | 1v1</div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                        <!-- Section remplaçants -->
+                        <div class="substitutes-section">
+                            <div class="team-header" style="margin-top: 10px;">Banc des remplaçants</div>
+                            <table class="substitutes-grid">
+                                <tr>
+                                    <td class="substitute-cell">
+                                        <div class="player-name"><span class="bold">9 - Alvin Doucet</span> '03</div>
+                                    </td>
+                                    <td class="substitute-cell">
+                                        <div class="player-name"><span class="bold">7 - Amine Kashi</span> '03</div>
+                                        <div class="player-comment">Vivacité+</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="substitute-cell">
+                                        <div class="player-name"><span class="bold">17 - Yanis Ktari</span> '00</div>
+                                    </td>
+                                    <td class="substitute-cell">
+                                        <div class="player-name"><span class="bold">24 - Kylian Le Her</span> '02</div>
+                                        <div class="player-comment">Retour défensif très bon (80')</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="substitute-cell">
+                                        <div class="player-name"><span class="bold">27 - Tom Meyer</span> '05</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+
+                    <td class="team-players">
+                        <div class="team-header">ÉQUIPE EXTÉRIEUR - Lusitanos St-Maur</div>
+
+                        <!-- Tableau des 11 titulaires -->
+                        <table class="players-grid">
+                            {% for participationPair in homePlayers|batch(2) %}
+                                <tr>
+                                    {% for participation in participationPair %}
+                                        <td class="player-cell">
+                                            <div class="player-name"><span class="bold">{{ participation.numero }} - {{ participation.player.firstName }} {{ participation.player.lastName }}</span> 2000</div>
+                                            <div class="player-comment">6m, jeu long au pied++ (45') | Sortie, parades (52') | 1v1</div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                        <!-- Section remplaçants -->
+                        <div class="substitutes-section">
+                            <div class="team-header" style="margin-top: 10px;">Banc des remplaçants</div>
+                            <table class="substitutes-grid">
+                                <tr>
+                                    <td class="player-cell">
+                                        <div class="player-name"><span class="bold">21 - Younes Zemouni</span></div>
+                                    </td>
+                                    <td class="player-cell">
+                                        <div class="player-name"><span class="bold">24 - Aymeric Kissy</span></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="player-cell">
+                                        <div class="player-name"><span class="bold">17 - Dern Alain</span></div>
+                                        <div class="player-comment">Ouverture superbe, inspiration++ (95')</div>
+                                    </td>
+                                    <td class="player-cell">
+                                        <div class="player-name"><span class="bold">21 - Yohan Tade</span></div>
+                                        <div class="player-comment">Tacle non maîtrisés-- (39')</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="player-cell">
+                                        <div class="player-name"><span class="bold">27 - Paul Millet</span></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- SECTION COMMENTAIRES FINAUX - IDENTIQUE À LA PREMIÈRE VERSION -->
+<div class="comments-final">
+    <strong>Commentaire après-match</strong><br><br>
+    Dans une rencontre haletante avec un résultat final qui ne reflète pas la physionomie du match. Ligériens et Franciliens nous ont offerts un beau spectacle qui a quand même permis de faire ressortir quelques joueurs bien intéressants au niveau du jeu et du comportement.<br><br>
+
+    <strong>Les joueurs qui auront attiré mon attention sont : Mathéo Remars, Maël Yazid, Erwan Regulus et Sayon Keita</strong>
+</div>
+
+</body>
+</html>

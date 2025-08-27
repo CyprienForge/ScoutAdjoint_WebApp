@@ -2,8 +2,10 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Domain\Request\ExportReport\ExportReportRequest;
 use Domain\Request\FetchMatchs\FetchMatchsRequest;
 use Domain\Request\ShowDetailsMatch\ShowDetailsMatchRequest;
+use Domain\UseCase\ExportReport\ExportReportUseCase;
 use Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary;
 use Domain\UseCase\FetchMatchs\FetchMatchsUseCase;
 use Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
@@ -35,5 +37,14 @@ class MatchController extends AbstractController
         return $this->render('matchs/details.html.twig', [
             'viewModel' => $presenter->getViewModel()
         ]);
+    }
+
+    #[Route('/matchs/export/{idMatch}', name: 'export_match')]
+    public function exportMatch(Request $request, int $idMatch, ExportReportUseCase $useCase): Response
+    {
+        $request = new ExportReportRequest($idMatch);
+        $useCase->execute($request);
+
+        return $this->render('matchs/details.html.twig', []);
     }
 }
