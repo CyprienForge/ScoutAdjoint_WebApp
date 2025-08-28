@@ -32,12 +32,7 @@ class ShowDetailsMatchUseCase
         foreach($participations as $participation)
         {
             $participation = $this->participationMapper->toDomain($participation);
-            $notesInfra = $this->noteRepository->findByParticipation($participation->getId());
-            $notes = [];
-            foreach($notesInfra as $note)
-            {
-                $notes[] = $this->noteMapper->toDomain($note);
-            }
+            $notes = $this->noteRepository->findByParticipation($participation->getId());
 
             $participationsNotes[] = new ParticipationNotesDTO($participation, $notes);
         }

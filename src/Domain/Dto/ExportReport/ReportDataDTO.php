@@ -10,6 +10,8 @@ class ReportDataDTO
         public array $awayPlayers,
         public array $homeSubstitutes,
         public array $awaySubstitutes,
+        public string $homeTeamName,
+        public string $awayTeamName,
     ){}
 
 }

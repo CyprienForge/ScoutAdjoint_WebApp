@@ -26,6 +26,7 @@ class ParticipationMapperDoctrine implements ParticipationMapper
 
         $participation->setMatch($this->matchMapper->toDomain($item->getMatch()));
         $participation->setNumero($item->getNumero());
+        $participation->setIsSubstitute($item->isSubstitute());
 
         $participation->setTeam($this->teamMapper->toDomain($item->getTeam()));
 
@@ -41,6 +42,7 @@ class ParticipationMapperDoctrine implements ParticipationMapper
 
         $participationDoctrine->setMatch($this->matchMapper->toInfra($item->getMatch()));
         $participationDoctrine->setNumero($item->getNumero());
+        $participationDoctrine->setIsSubstitute($item->isSubstitute());
 
         $participationDoctrine->setTeam($this->teamMapper->toInfra($item->getTeam()));
 

@@ -4,10 +4,23 @@ namespace Domain\Entity;
 
 class Participation
 {
-    public int $id;
-    public Player $player;
-    public MatchGame $match;
-    public Team $team;
+    private int $id;
+    private Player $player;
+    private MatchGame $match;
+    private Team $team;
+    private int $numero;
+    private bool $isSubstitute;
+
+    public function isSubstitute(): bool
+    {
+        return $this->isSubstitute;
+    }
+
+    public function setIsSubstitute(bool $isSubstitute): Participation
+    {
+        $this->isSubstitute = $isSubstitute;
+        return $this;
+    }
 
     public function getTeam(): Team
     {
@@ -19,9 +32,6 @@ class Participation
         $this->team = $team;
         return $this;
     }
-
-    public int $numero;
-
     public function getId(): int
     {
         return $this->id;

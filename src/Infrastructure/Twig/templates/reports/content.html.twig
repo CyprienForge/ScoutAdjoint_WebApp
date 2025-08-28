@@ -260,7 +260,7 @@
                         Les grosses idées talent cartes: Il y a eu de la justesse technique cartes dans l'ensemble, le manque de précision devant le but aurait dû faire pencher la balance de leur côté.
                     </td>
                     <td class="comment-cell match-info-cell">
-                        <div class="bold">Andrézieux vs Lusitanos St-Maur</div><br>
+                        <div class="bold">{{ homeTeamName }} vs {{ awayTeamName }}</div><br>
                         J02 National 2<br>
                         23/08/2024 à 18h00<br>
                         Envol Stadium
@@ -286,16 +286,18 @@
             <table class="players-section">
                 <tr>
                     <td class="team-players">
-                        <div class="team-header">ÉQUIPE DOMICILE - Andrézieux</div>
+                        <div class="team-header">ÉQUIPE DOMICILE - {{ homeTeamName }}</div>
 
                         <!-- Tableau des 11 titulaires -->
                         <table class="players-grid">
-                            {% for participationPair in awayPlayers|batch(2) %}
+                            {% for playerViewModels in homePlayers|batch(2) %}
                                 <tr>
-                                    {% for participation in participationPair %}
+                                    {% for playerVM in playerViewModels %}
                                         <td class="player-cell">
-                                            <div class="player-name"><span class="bold">{{ participation.numero }} - {{ participation.player.firstName }} {{ participation.player.lastName }}</span> 2000</div>
-                                            <div class="player-comment">6m, jeu long au pied++ (45') | Sortie, parades (52') | 1v1</div>
+                                            <div class="player-name"><span class="bold">{{ playerVM.numero }} - {{ playerVM.name }}</span> {{ playerVM.year }}</div>
+                                            {% for note in playerVM.notes %}
+                                                {{ note.content }} ({{ note.minute }}') |
+                                            {% endfor %}
                                         </td>
                                     {% endfor %}
                                 </tr>
@@ -306,44 +308,35 @@
                         <div class="substitutes-section">
                             <div class="team-header" style="margin-top: 10px;">Banc des remplaçants</div>
                             <table class="substitutes-grid">
-                                <tr>
-                                    <td class="substitute-cell">
-                                        <div class="player-name"><span class="bold">9 - Alvin Doucet</span> '03</div>
-                                    </td>
-                                    <td class="substitute-cell">
-                                        <div class="player-name"><span class="bold">7 - Amine Kashi</span> '03</div>
-                                        <div class="player-comment">Vivacité+</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="substitute-cell">
-                                        <div class="player-name"><span class="bold">17 - Yanis Ktari</span> '00</div>
-                                    </td>
-                                    <td class="substitute-cell">
-                                        <div class="player-name"><span class="bold">24 - Kylian Le Her</span> '02</div>
-                                        <div class="player-comment">Retour défensif très bon (80')</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="substitute-cell">
-                                        <div class="player-name"><span class="bold">27 - Tom Meyer</span> '05</div>
-                                    </td>
-                                </tr>
+                                {% for substituteViewModels in homeSubstitutes|batch(2) %}
+                                    <tr class="player-cell">
+                                        {% for substituteVM in substituteViewModels %}
+                                            <td class="player-cell">
+                                                <div class="player-name"><span class="bold">{{ substituteVM.numero }} - {{ substituteVM.name }}</span> {{ substituteVM.year }}</div>
+                                                {% for note in substituteVM.notes %}
+                                                    {{ note.content }} ({{ note.minute }}') |
+                                                {% endfor %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
                             </table>
                         </div>
                     </td>
 
                     <td class="team-players">
-                        <div class="team-header">ÉQUIPE EXTÉRIEUR - Lusitanos St-Maur</div>
+                        <div class="team-header">ÉQUIPE EXTÉRIEUR - {{ awayTeamName }}</div>
 
                         <!-- Tableau des 11 titulaires -->
                         <table class="players-grid">
-                            {% for participationPair in homePlayers|batch(2) %}
+                            {% for playerViewModels in awayPlayers|batch(2) %}
                                 <tr>
-                                    {% for participation in participationPair %}
+                                    {% for playerVM in playerViewModels %}
                                         <td class="player-cell">
-                                            <div class="player-name"><span class="bold">{{ participation.numero }} - {{ participation.player.firstName }} {{ participation.player.lastName }}</span> 2000</div>
-                                            <div class="player-comment">6m, jeu long au pied++ (45') | Sortie, parades (52') | 1v1</div>
+                                            <div class="player-name"><span class="bold">{{ playerVM.numero }} - {{ playerVM.name }}</span> {{ playerVM.year }}</div>
+                                            {% for note in playerVM.notes %}
+                                                {{ note.content }} ({{ note.minute }}') |
+                                            {% endfor %}
                                         </td>
                                     {% endfor %}
                                 </tr>
@@ -354,29 +347,18 @@
                         <div class="substitutes-section">
                             <div class="team-header" style="margin-top: 10px;">Banc des remplaçants</div>
                             <table class="substitutes-grid">
-                                <tr>
-                                    <td class="player-cell">
-                                        <div class="player-name"><span class="bold">21 - Younes Zemouni</span></div>
-                                    </td>
-                                    <td class="player-cell">
-                                        <div class="player-name"><span class="bold">24 - Aymeric Kissy</span></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="player-cell">
-                                        <div class="player-name"><span class="bold">17 - Dern Alain</span></div>
-                                        <div class="player-comment">Ouverture superbe, inspiration++ (95')</div>
-                                    </td>
-                                    <td class="player-cell">
-                                        <div class="player-name"><span class="bold">21 - Yohan Tade</span></div>
-                                        <div class="player-comment">Tacle non maîtrisés-- (39')</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="player-cell">
-                                        <div class="player-name"><span class="bold">27 - Paul Millet</span></div>
-                                    </td>
-                                </tr>
+                                {% for substituteViewModels in awaySubstitutes|batch(2) %}
+                                    <tr class="player-cell">
+                                        {% for substituteVM in substituteViewModels %}
+                                            <td class="player-cell">
+                                                <div class="player-name"><span class="bold">{{ substituteVM.numero }} - {{ substituteVM.name }}</span> {{ substituteVM.year }}</div>
+                                                {% for note in substituteVM.notes %}
+                                                    {{ note.content }} ({{ note.minute }}') |
+                                                {% endfor %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
                             </table>
                         </div>
                     </td>
@@ -386,7 +368,7 @@
     </tr>
 </table>
 
-<!-- SECTION COMMENTAIRES FINAUX - IDENTIQUE À LA PREMIÈRE VERSION -->
+<!-- SECTION COMMENTAIRES FINAUX  -->
 <div class="comments-final">
     <strong>Commentaire après-match</strong><br><br>
     Dans une rencontre haletante avec un résultat final qui ne reflète pas la physionomie du match. Ligériens et Franciliens nous ont offerts un beau spectacle qui a quand même permis de faire ressortir quelques joueurs bien intéressants au niveau du jeu et du comportement.<br><br>

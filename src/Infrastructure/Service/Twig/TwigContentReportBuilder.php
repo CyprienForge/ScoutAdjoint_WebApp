@@ -16,6 +16,10 @@ class TwigContentReportBuilder implements ContentReportBuilder
         return $this->twig->render('reports/content.html.twig', [
             'homePlayers' => $matchData->homePlayers,
             'awayPlayers' => $matchData->awayPlayers,
+            'homeSubstitutes' => $matchData->homeSubstitutes,
+            'awaySubstitutes' => $matchData->awaySubstitutes,
+            'homeTeamName' => $matchData->homeTeamName,
+            'awayTeamName' => $matchData->awayTeamName,
         ]);
     }
 }

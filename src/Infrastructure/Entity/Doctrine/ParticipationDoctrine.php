@@ -37,6 +37,9 @@ class ParticipationDoctrine
     #[ORM\OneToMany(targetEntity: NoteDoctrine::class, mappedBy: 'participation')]
     private Collection $noteDoctrines;
 
+    #[ORM\Column]
+    private ?bool $is_substitute = null;
+
     public function __construct()
     {
         $this->noteDoctrines = new ArrayCollection();
@@ -127,6 +130,18 @@ class ParticipationDoctrine
                 $noteDoctrine->setParticipation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isSubstitute(): ?bool
+    {
+        return $this->is_substitute;
+    }
+
+    public function setIsSubstitute(bool $is_substitute): static
+    {
+        $this->is_substitute = $is_substitute;
 
         return $this;
     }

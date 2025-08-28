@@ -6,6 +6,7 @@ namespace Infrastructure\Repository\Doctrine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Mapper\NoteMapper;
 use Domain\Repository\NoteRepository;
 use Infrastructure\Entity\Doctrine\NoteDoctrine;
 
@@ -13,7 +14,8 @@ class NoteRepositoryDoctrine extends ServiceEntityRepository implements NoteRepo
 {
     public function __construct(
         EntityManagerInterface $em,
-        ManagerRegistry $registry
+        ManagerRegistry $registry,
+        private NoteMapper $noteMapper
     ){
         parent::__construct($registry, NoteDoctrine::class);
     }
@@ -40,6 +42,13 @@ class NoteRepositoryDoctrine extends ServiceEntityRepository implements NoteRepo
 
     public function findByParticipation(int $idParticipation) : array
     {
-        return $this->findBy(['participation' => $idParticipation]);
+        $notesDoctrine = $this->findBy(['participation' => $idParticipation]);
+        $notes = [];
+
+        foreach ($notesDoctrine as $note){
+            $notes[] = $this->noteMapper->toDomain($note);
+        }
+
+        return $notes;
     }
 }
