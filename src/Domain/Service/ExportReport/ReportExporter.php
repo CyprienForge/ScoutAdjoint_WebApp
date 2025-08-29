@@ -4,5 +4,5 @@ namespace Domain\Service\ExportReport;
 
 interface ReportExporter
 {
-    public function export($content);
+    public function export($content, $fileName);
 }

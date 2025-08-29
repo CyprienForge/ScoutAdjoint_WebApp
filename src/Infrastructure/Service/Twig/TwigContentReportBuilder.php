@@ -20,6 +20,8 @@ class TwigContentReportBuilder implements ContentReportBuilder
             'awaySubstitutes' => $matchData->awaySubstitutes,
             'homeTeamName' => $matchData->homeTeamName,
             'awayTeamName' => $matchData->awayTeamName,
+            'dateMatch' => $matchData->dateMatch,
+            'matchInfos' => $matchData->matchInfos,
         ]);
     }
 }

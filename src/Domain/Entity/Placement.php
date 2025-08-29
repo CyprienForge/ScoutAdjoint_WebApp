@@ -2,7 +2,7 @@
 
 namespace Domain\Entity;
 
-use App\Domain\Entity\Position;
+use Domain\Entity\Position;
 
 class Placement
 {

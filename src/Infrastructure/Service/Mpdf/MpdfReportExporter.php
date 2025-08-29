@@ -8,7 +8,7 @@ use Mpdf\Mpdf;
 class MpdfReportExporter implements ReportExporter
 {
 
-    public function export($html)
+    public function export($html, $fileName)
     {
         $mpdf = new Mpdf([
             'format' => 'A4-L',
@@ -19,6 +19,6 @@ class MpdfReportExporter implements ReportExporter
         ]);
 
         $mpdf->WriteHTML($html);
-        $mpdf->Output('filename.pdf', 'D');
+        $mpdf->Output($fileName, 'D');
     }
 }

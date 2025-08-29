@@ -5,38 +5,38 @@ namespace Infrastructure\Repository\Doctrine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Domain\Mapper\MatchMapper;
-use Domain\Repository\MatchRepository;
-use Infrastructure\Entity\Doctrine\MatchDoctrine;
+use Domain\Mapper\MatchInfosMapper;
+use Domain\Repository\MatchInfosRepository;
+use Infrastructure\Entity\Doctrine\ChampionshipDoctrine;
+use Infrastructure\Entity\Doctrine\MatchInfosDoctrine;
 
-class MatchRepositoryDoctrine extends ServiceEntityRepository implements MatchRepository
+class MatchInfosRepositoryDoctrine extends ServiceEntityRepository implements MatchInfosRepository
 {
     public function __construct(private EntityManagerInterface $em, ManagerRegistry $registry){
-        parent::__construct($registry, MatchDoctrine::class);
+        parent::__construct($registry, MatchInfosDoctrine::class);
     }
     public function save($item): void
     {
         $this->em->persist($item);
         $this->em->flush();
     }
-
-    public function findAll(): array
+    public function findByMatch(int $idMatch)
     {
-        return parent::findAll();
+        return $this->findOneBy(['match' => $idMatch]);
     }
+
     public function findById(int $id)
     {
-        return $this->find($id);
+        // TODO: Implement findById() method.
     }
 
     public function deleteAll()
     {
-        $queryBuilder = $this->em->createQueryBuilder();
-        $queryBuilder->delete(MatchDoctrine::class, 'match')->getQuery()->execute();
+        // TODO: Implement deleteAll() method.
     }
 
     public function findByIdentificationCode(string $identificationCode)
     {
-        return $this->findOneBy(['identificationCode' => $identificationCode]);
+        // TODO: Implement findByIdentificationCode() method.
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
-use App\Domain\Entity\Position;
+use Domain\Entity\Position;
 use Domain\Mapper\PositionMapper;
 
 class PositionMapperDoctrine implements PositionMapper

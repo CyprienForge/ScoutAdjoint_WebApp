@@ -255,29 +255,22 @@
                 <tr>
                     <td class="comment-cell">
                         <div class="bold">Remarque sur l'équipe domicile</div><br>
-                        J1 : Victoire 2-0 à Rousset<br><br>
-                        Une défense à 4, le N°18 devant la défense et un attaquant qui presse, le tout avec une ligne de 4 au milieu qui s'oppose à la progression en orientant le long de la ligne de touche. C'est comme ceci qu'évolue cette équipe de Lusitanos qui était en quête de chercher les ailiers côtés (11, 10) et d'attendre un dédoublement ou une prise d'appui (système en 4-1-4-1 en phase écrits).<br><br>
-                        Les grosses idées talent cartes: Il y a eu de la justesse technique cartes dans l'ensemble, le manque de précision devant le but aurait dû faire pencher la balance de leur côté.
+                        {{ matchInfos.homeTeamInfo }}
                     </td>
                     <td class="comment-cell match-info-cell">
                         <div class="bold">{{ homeTeamName }} vs {{ awayTeamName }}</div><br>
                         J02 National 2<br>
-                        23/08/2024 à 18h00<br>
+                        {{ dateMatch }}<br>
                         Envol Stadium
 
                         <hr>
 
                         <div class="bold">Remarque avant-match</div><br>
-                        20°, beau temps<br>
-                        Vent léger en faveur des Lusitanos en 1MT<br>
-                        Échauffement sérieux des 2 côtés<br><br>
-
+                        {{ matchInfos.preMatchInfo }}
                     </td>
                     <td class="comment-cell">
                         <div class="bold">Remarque sur l'équipe visiteuse</div><br>
-                        J1 : 1-1 à domicile contre l'AS Cannes<br><br>
-                        Organisée en 4-2-3-1, les franciliens ont parfois souffert sans jamais craquer, le jeu peut être parfois peu séduisant, en usant de longs ballons mais c'est terriblement efficace. Le 9 sort de planche qui grâce à son jeu dur fait progresser l'équipe.<br><br>
-                        Cependant, certains joueurs du jeu long est aussi du à un manque de mouvement au milieu de terrain entre les lignes notamment du double pivot (5-8) qu'il faudra régler sur les prochaines rencontres.
+                        {{ matchInfos.awayTeamInfo|nl2br }}
                     </td>
                 </tr>
             </table>
@@ -370,10 +363,7 @@
 
 <!-- SECTION COMMENTAIRES FINAUX  -->
 <div class="comments-final">
-    <strong>Commentaire après-match</strong><br><br>
-    Dans une rencontre haletante avec un résultat final qui ne reflète pas la physionomie du match. Ligériens et Franciliens nous ont offerts un beau spectacle qui a quand même permis de faire ressortir quelques joueurs bien intéressants au niveau du jeu et du comportement.<br><br>
-
-    <strong>Les joueurs qui auront attiré mon attention sont : Mathéo Remars, Maël Yazid, Erwan Regulus et Sayon Keita</strong>
+    {{ matchInfos.postMatchInfo }}
 </div>
 
 </body>

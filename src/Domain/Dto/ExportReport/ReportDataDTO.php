@@ -2,6 +2,8 @@
 
 namespace Domain\Dto\ExportReport;
 
+use Domain\Entity\MatchInfos;
+
 class ReportDataDTO
 {
 
@@ -12,6 +14,8 @@ class ReportDataDTO
         public array $awaySubstitutes,
         public string $homeTeamName,
         public string $awayTeamName,
+        public string $dateMatch,
+        public MatchInfos $matchInfos
     ){}
 
 }

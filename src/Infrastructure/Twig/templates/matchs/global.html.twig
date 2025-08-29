@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Infos globales du match{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/details_match.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {% include 'matchs/menu.html.twig' with { viewModel: viewModel } %}
+
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice" style="color: black; margin-top: 4%; margin-left: auto; padding: 1%; border-radius: 1rem; margin-right: auto; text-align: center; background-color: #27F535; width: 50%;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <section class="form-wrapper bg-base-200">
+        <h2>Modifier les infos globales</h2>
+
+        {{ form_start(form, {'attr': {'class': 'global-infos-form'}}) }}
+
+        <div class="form-group">
+            {{ form_label(form.preMatchInfo) }}
+            {{ form_widget(form.preMatchInfo, {'attr': {'class': 'form-textarea'}}) }}
+            {{ form_errors(form.preMatchInfo) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.homeTeamInfo) }}
+            {{ form_widget(form.homeTeamInfo, {'attr': {'class': 'form-textarea'}}) }}
+            {{ form_errors(form.homeTeamInfo) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.awayTeamInfo) }}
+            {{ form_widget(form.awayTeamInfo, {'attr': {'class': 'form-textarea'}}) }}
+            {{ form_errors(form.awayTeamInfo) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.postMatchInfo) }}
+            {{ form_widget(form.postMatchInfo, {'attr': {'class': 'form-textarea'}}) }}
+            {{ form_errors(form.postMatchInfo) }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Enregistrer</button>
+        </div>
+
+        {{ form_end(form) }}
+    </section>
+
+{% endblock %}

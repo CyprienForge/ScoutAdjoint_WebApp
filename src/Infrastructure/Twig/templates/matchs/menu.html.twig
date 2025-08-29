@@ -1,0 +1,36 @@
+<div class="head">
+    <a href="{{ path('get_matchs') }}" class="btn btn-soft btn-info ms-8 mt-8">
+        Retour
+    </a>
+</div>
+
+<div class="flex justify-center">
+    <h2 class="text-3xl font-bold">
+        {{ viewModel.homeTeamName }}  VS {{ viewModel.awayTeamName }}
+    </h2>
+</div>
+
+<turbo-frame id="buttons-frame">
+    <div id="export-report-button" class="ms-24">
+        <a href="{{ path('export_match', { idMatch: viewModel.idMatch }) }}"
+           class="btn btn-soft btn-info">
+            Exporter
+        </a>
+    </div>
+    <div id="change-team-button">
+        <a href="{{ path('details_match_global', { idMatch: viewModel.idMatch }) }}"
+           class="btn btn-soft btn-info"
+           style="margin-right: 2rem">
+            Global
+        </a>
+        <a href="{{ path('details_match', { idMatch: viewModel.idMatch, idTeam: viewModel.homeTeamId }) }}"
+           class="btn {{ viewModel.homeTeamSelected }}"
+           style="margin-right: 2rem">
+            {{ viewModel.homeTeamName }}
+        </a>
+        <a href="{{ path('details_match', { idMatch: viewModel.idMatch, idTeam: viewModel.awayTeamId }) }}"
+           class="btn {{ viewModel.awayTeamSelected }}">
+            {{ viewModel.awayTeamName }}
+        </a>
+    </div>
+</turbo-frame>

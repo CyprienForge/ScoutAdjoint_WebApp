@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Symfony\Form;
 
-use App\Domain\Entity\Position;
+use Domain\Entity\Position;
 use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Entity\Team;
 use Infrastructure\Entity\Doctrine\PositionDoctrine;
