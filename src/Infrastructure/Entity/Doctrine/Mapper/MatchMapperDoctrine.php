@@ -3,8 +3,10 @@
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\MatchGame;
+use Domain\Mapper\ChampionshipMapper;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\MatchMapper;
+use Domain\Mapper\StadiumMapper;
 use Domain\Mapper\TeamMapper;
 use Infrastructure\Entity\Doctrine\MatchDoctrine;
 
@@ -12,6 +14,8 @@ class MatchMapperDoctrine implements MatchMapper
 {
     public function __construct(
         private TeamMapper $teamMapper,
+        private StadiumMapper $stadiumMapper,
+        private ChampionshipMapper $championshipMapper,
     ){}
     public function toDomain($item)
     {
@@ -27,6 +31,8 @@ class MatchMapperDoctrine implements MatchMapper
         $match->setAwayTeam($awayTeam);
         $match->setIsPrepared($item->isPrepared());
         $match->setInfos($item->getInfos());
+        $match->setStadium($this->stadiumMapper->toDomain($item->getStadium()));
+        $match->setChampionship($this->championshipMapper->toDomain($item->getChampionship()));
 
         return $match;
     }
@@ -45,6 +51,7 @@ class MatchMapperDoctrine implements MatchMapper
         $matchDoctrine->setAwayTeam($awayTeam);
         $matchDoctrine->setIsPrepared($item->isPrepared());
         $matchDoctrine->setInfos($item->getInfos());
+        $matchDoctrine->setStadium($this->stadiumMapper->toInfra($item->getStadium()));
 
         return $matchDoctrine;
     }

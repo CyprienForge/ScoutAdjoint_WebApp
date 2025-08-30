@@ -28,9 +28,16 @@ class ChampionshipDoctrine
     #[ORM\OneToMany(targetEntity: TeamDoctrine::class, mappedBy: 'championship')]
     private Collection $teams;
 
+    /**
+     * @var Collection<int, MatchDoctrine>
+     */
+    #[ORM\OneToMany(targetEntity: MatchDoctrine::class, mappedBy: 'ChampionshipDoctrine')]
+    private Collection $matchDoctrines;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
+        $this->matchDoctrines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +99,36 @@ class ChampionshipDoctrine
             // set the owning side to null (unless already changed)
             if ($team->getChampionship() === $this) {
                 $team->setChampionship(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MatchDoctrine>
+     */
+    public function getMatchDoctrines(): Collection
+    {
+        return $this->matchDoctrines;
+    }
+
+    public function addMatchDoctrine(MatchDoctrine $matchDoctrine): static
+    {
+        if (!$this->matchDoctrines->contains($matchDoctrine)) {
+            $this->matchDoctrines->add($matchDoctrine);
+            $matchDoctrine->setChampionship($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatchDoctrine(MatchDoctrine $matchDoctrine): static
+    {
+        if ($this->matchDoctrines->removeElement($matchDoctrine)) {
+            // set the owning side to null (unless already changed)
+            if ($matchDoctrine->getChampionship() === $this) {
+                $matchDoctrine->setChampionship(null);
             }
         }
 

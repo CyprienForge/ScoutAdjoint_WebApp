@@ -255,13 +255,13 @@
                 <tr>
                     <td class="comment-cell">
                         <div class="bold">Remarque sur l'équipe domicile</div><br>
-                        {{ matchInfos.homeTeamInfo }}
+                        {{ matchInfos.homeTeamInfo|nl2br }}
                     </td>
                     <td class="comment-cell match-info-cell">
                         <div class="bold">{{ homeTeamName }} vs {{ awayTeamName }}</div><br>
-                        J02 National 2<br>
+                        J02 {{ competitionName }}<br>
                         {{ dateMatch }}<br>
-                        Envol Stadium
+                        {{ stadiumName }}
 
                         <hr>
 
@@ -363,7 +363,7 @@
 
 <!-- SECTION COMMENTAIRES FINAUX  -->
 <div class="comments-final">
-    {{ matchInfos.postMatchInfo }}
+    {{ matchInfos.postMatchInfo|nl2br }}
 </div>
 
 </body>

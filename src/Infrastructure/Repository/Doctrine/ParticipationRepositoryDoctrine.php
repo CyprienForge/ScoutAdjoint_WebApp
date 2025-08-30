@@ -44,7 +44,10 @@ class ParticipationRepositoryDoctrine extends ServiceEntityRepository implements
 
     public function findByMatch(int $idMatch): array
     {
-        $participationsDoctrine = $this->findBy(['match' => $idMatch]);
+        $participationsDoctrine = $this->findBy(
+            ['match' => $idMatch],
+            ['numero' => 'ASC']
+        );
 
         $participations = [];
         foreach($participationsDoctrine as $participationDoctrine)

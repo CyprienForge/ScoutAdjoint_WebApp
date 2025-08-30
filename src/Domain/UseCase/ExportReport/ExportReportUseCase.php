@@ -5,6 +5,7 @@ namespace Domain\UseCase\ExportReport;
 use Domain\Dto\ExportReport\ReportDataDTO;
 use Domain\Entity\MatchInfos;
 use Domain\Mapper\MatchInfosMapper;
+use Domain\Mapper\MatchMapper;
 use Domain\Repository\MatchInfosRepository;
 use Domain\Repository\MatchRepository;
 use Domain\Repository\NoteRepository;
@@ -26,11 +27,13 @@ class ExportReportUseCase
         private NoteRepository $noteRepository,
         private MatchInfosRepository $matchInfosRepository,
         private MatchInfosMapper $matchInfosMapper,
+        private MatchMapper $matchMapper
     ){}
 
     public function execute(ExportReportRequest $request) : ExportReportResponse
     {
-        $match = $this->matchRepository->findById($request->idMatch);
+        $matchInfra = $this->matchRepository->findById($request->idMatch);
+        $match = $this->matchMapper->toDomain($matchInfra);
         $participations = $this->participationRepository->findByMatch($match->getId());
 
         $homeTeamPlayers = [];
@@ -70,6 +73,8 @@ class ExportReportUseCase
             $match->getHomeTeam()->getName(),
             $match->getAwayTeam()->getName(),
             $match->getDate()->format('d/m/Y H:i'),
+            $match->getStadium()->getName(),
+            $match->getChampionship()->getName(),
             $matchInfos
         );
         $fileName = $match->getHomeTeam()->getName() . '_' . $match->getAwayTeam()->getName() . '_' . $match->getDate()->format('dmYHis');

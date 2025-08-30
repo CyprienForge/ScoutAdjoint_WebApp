@@ -13,6 +13,30 @@ class MatchGame
     private int $idStadium;
     private bool $isPrepared;
     private string $infos;
+    private Stadium $stadium;
+    private Championship $championship;
+
+    public function getChampionship(): Championship
+    {
+        return $this->championship;
+    }
+
+    public function setChampionship(Championship $championship): MatchGame
+    {
+        $this->championship = $championship;
+        return $this;
+    }
+
+    public function getStadium(): Stadium
+    {
+        return $this->stadium;
+    }
+
+    public function setStadium(Stadium $stadium): MatchGame
+    {
+        $this->stadium = $stadium;
+        return $this;
+    }
 
     public function getId(): int
     {

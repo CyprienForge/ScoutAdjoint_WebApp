@@ -15,6 +15,8 @@ class ReportDataDTO
         public string $homeTeamName,
         public string $awayTeamName,
         public string $dateMatch,
+        public string $stadiumName,
+        public string $competitionName,
         public MatchInfos $matchInfos
     ){}
 

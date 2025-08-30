@@ -38,7 +38,7 @@ class MatchInfos
         return $this->preMatchInfo;
     }
 
-    public function setPreMatchInfo(string $preMatchInfo): MatchInfos
+    public function setPreMatchInfo(?string $preMatchInfo): MatchInfos
     {
         $this->preMatchInfo = $preMatchInfo;
         return $this;
@@ -49,7 +49,7 @@ class MatchInfos
         return $this->postMatchInfo;
     }
 
-    public function setPostMatchInfo(string $postMatchInfo): MatchInfos
+    public function setPostMatchInfo(?string $postMatchInfo): MatchInfos
     {
         $this->postMatchInfo = $postMatchInfo;
         return $this;
@@ -60,7 +60,7 @@ class MatchInfos
         return $this->homeTeamInfo;
     }
 
-    public function setHomeTeamInfo(string $homeTeamInfo): MatchInfos
+    public function setHomeTeamInfo(?string $homeTeamInfo): MatchInfos
     {
         $this->homeTeamInfo = $homeTeamInfo;
         return $this;
@@ -71,7 +71,7 @@ class MatchInfos
         return $this->awayTeamInfo;
     }
 
-    public function setAwayTeamInfo(string $awayTeamInfo): MatchInfos
+    public function setAwayTeamInfo(?string $awayTeamInfo): MatchInfos
     {
         $this->awayTeamInfo = $awayTeamInfo;
         return $this;

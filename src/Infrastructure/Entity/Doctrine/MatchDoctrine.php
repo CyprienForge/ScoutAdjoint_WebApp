@@ -19,31 +19,36 @@ class MatchDoctrine
     #[ORM\Column]
     private ?\DateTime $date = null;
 
-    #[ORM\Column(name: "score_home", length: 255)]
+    #[ORM\Column(name: "score_home", type: "integer")]
     private ?int $scoreHome = null;
 
-    #[ORM\Column(name: "score_away", length: 255)]
+    #[ORM\Column(name: "score_away", type: "integer")]
     private ?int $scoreAway = null;
 
-    #[ORM\ManyToOne(inversedBy: 'matchDoctrines')]
+    #[ORM\ManyToOne(inversedBy: 'homeMatches')]
     #[ORM\JoinColumn(name: "home_team", referencedColumnName: "id")]
     private ?TeamDoctrine $homeTeam = null;
 
-    #[ORM\ManyToOne(inversedBy: 'matchDoctrines')]
+    #[ORM\ManyToOne(inversedBy: 'awayMatches')]
     #[ORM\JoinColumn(name: "away_team", referencedColumnName: "id")]
     private ?TeamDoctrine $awayTeam = null;
 
-    #[ORM\Column(name: "is_prepared", length: 255)]
+    #[ORM\Column(name: "is_prepared", type: "boolean")]
     private ?bool $isPrepared = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $infos = null;
 
-    /**
-     * @var Collection<int, ParticipationDoctrine>
-     */
     #[ORM\OneToMany(targetEntity: ParticipationDoctrine::class, mappedBy: 'match')]
     private Collection $participationDoctrines;
+
+    #[ORM\ManyToOne(targetEntity: StadiumDoctrine::class)]
+    #[ORM\JoinColumn(name: "stadium", referencedColumnName: "id", nullable: true)]
+    private ?StadiumDoctrine $stadium = null;
+
+    #[ORM\ManyToOne(inversedBy: 'matchDoctrines')]
+    #[ORM\JoinColumn(name: "championship", referencedColumnName: "id", nullable: true)]
+    private ?ChampionshipDoctrine $ChampionshipDoctrine = null;
 
     public function __construct()
     {
@@ -55,7 +60,7 @@ class MatchDoctrine
         return $this->id;
     }
 
-    public function setId(?int $id) : static
+    public function setId(?int $id): static
     {
         $this->id = $id;
         return $this;
@@ -69,7 +74,6 @@ class MatchDoctrine
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -81,7 +85,6 @@ class MatchDoctrine
     public function setScoreHome(int $scoreHome): static
     {
         $this->scoreHome = $scoreHome;
-
         return $this;
     }
 
@@ -93,7 +96,6 @@ class MatchDoctrine
     public function setScoreAway(int $scoreAway): static
     {
         $this->scoreAway = $scoreAway;
-
         return $this;
     }
 
@@ -105,7 +107,6 @@ class MatchDoctrine
     public function setHomeTeam(?TeamDoctrine $homeTeam): static
     {
         $this->homeTeam = $homeTeam;
-
         return $this;
     }
 
@@ -117,7 +118,6 @@ class MatchDoctrine
     public function setAwayTeam(?TeamDoctrine $awayTeam): static
     {
         $this->awayTeam = $awayTeam;
-
         return $this;
     }
 
@@ -129,7 +129,6 @@ class MatchDoctrine
     public function setIsPrepared(bool $isPrepared): static
     {
         $this->isPrepared = $isPrepared;
-
         return $this;
     }
 
@@ -138,10 +137,9 @@ class MatchDoctrine
         return $this->infos;
     }
 
-    public function setInfos(string $infos): static
+    public function setInfos(?string $infos): static
     {
         $this->infos = $infos;
-
         return $this;
     }
 
@@ -159,18 +157,38 @@ class MatchDoctrine
             $this->participationDoctrines->add($participationDoctrine);
             $participationDoctrine->setMatch($this);
         }
-
         return $this;
     }
 
     public function removeParticipationDoctrine(ParticipationDoctrine $participationDoctrine): static
     {
         if ($this->participationDoctrines->removeElement($participationDoctrine)) {
-            // set the owning side to null (unless already changed)
             if ($participationDoctrine->getMatch() === $this) {
                 $participationDoctrine->setMatch(null);
             }
         }
+        return $this;
+    }
+
+    public function getStadium(): ?StadiumDoctrine
+    {
+        return $this->stadium;
+    }
+
+    public function setStadium(?StadiumDoctrine $stadium): static
+    {
+        $this->stadium = $stadium;
+        return $this;
+    }
+
+    public function getChampionship(): ?ChampionshipDoctrine
+    {
+        return $this->ChampionshipDoctrine;
+    }
+
+    public function setChampionship(?ChampionshipDoctrine $ChampionshipDoctrine): static
+    {
+        $this->ChampionshipDoctrine = $ChampionshipDoctrine;
 
         return $this;
     }
