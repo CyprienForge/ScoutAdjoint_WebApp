@@ -99,6 +99,13 @@ services:
             string $apiUrl: '%env(SUPABASE_URL)%'
             string $apiKey: '%env(SUPABASE_API_KEY)%'
 
+    Infrastructure\Service\GoogleAPISearch\GoogleApiLinkProfileTransfermarktSearcher:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $apiKey: '%env(GOOGLE_SEARCH_API_KEY)%'
+            string $cx: '%env(GOOGLE_SEARCH_API_CX)%'
+
     Domain\Repository\ParticipationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
     Domain\Repository\PlacementRepository: '@Infrastructure\Repository\Doctrine\PlacementRepositoryDoctrine'
     Domain\Repository\PositionRepository: '@Infrastructure\Repository\Doctrine\PositionRepositoryDoctrine'

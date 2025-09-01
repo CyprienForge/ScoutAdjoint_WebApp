@@ -6,8 +6,13 @@ use Domain\Entity\Team;
 use Domain\Mapper\ChampionshipMapper;
 use Domain\Repository\ChampionshipRepository;
 use Domain\Request\CreateTeam\CreateTeamRequest;
+use Domain\Request\FetchTeams\FetchTeamsRequest;
+use Domain\Request\FillSquadTransfermarkt\FillSquadTransfermarktRequest;
 use Domain\Request\ListChampionships\ListChampionshipsRequest;
 use Domain\UseCase\CreateTeam\CreateTeamUseCase;
+use Domain\UseCase\FetchTeams\FetchTeamsOutputBoundary;
+use Domain\UseCase\FetchTeams\FetchTeamsUseCase;
+use Domain\UseCase\FillSquadTransfermarkt\FillSquadTransfermarktUseCase;
 use Domain\UseCase\ListChampionships\ListChampionshipsUseCase;
 use Infrastructure\Symfony\Form\CreateTeamTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,9 +29,14 @@ class TeamController extends AbstractController
     ){}
 
     #[Route('/teams/show', name: 'get_teams')]
-    public function fetchTeams(Request $request): Response
+    public function fetchTeams(Request $request, FetchTeamsUseCase $useCase, FetchTeamsOutputBoundary $presenter): Response
     {
-        return $this->render('teams/index.html.twig');
+        $request = new FetchTeamsRequest();
+        $response = $useCase->execute($request);
+
+        return $this->render('teams/index.html.twig', [
+            'viewModel' => $presenter->getViewModel()
+        ]);
     }
 
     #[Route('/teams/create', name: 'create_team')]
@@ -48,5 +58,14 @@ class TeamController extends AbstractController
         return $this->render('teams/create.html.twig', [
             'form' => $createTeamForm->createView(),
         ]);
+    }
+
+    #[Route('/teams/fill', name: 'fill_squad_transfermarkt')]
+    public function fillSquadTransfermarkt(Request $request, FillSquadTransfermarktUseCase $useCase) : Response
+    {
+        $request = new FillSquadTransfermarktRequest();
+        $useCase->execute($request);
+
+        return new Response();
     }
 }

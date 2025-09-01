@@ -12,6 +12,7 @@ class PlayerViewModel
         public string $lastName,
         public string $teamName,
         public string $birthDate,
+        public ?string $transfermarktUrl
     ){}
 
 }

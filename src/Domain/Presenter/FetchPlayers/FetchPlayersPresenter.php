@@ -29,6 +29,7 @@ class FetchPlayersPresenter implements FetchPlayersOutputBoundary
                 $player->getLastName(),
                 $player->getTeam()->getName(),
                 $player->getBirthDate()->format('d-m-Y'),
+                $player->getTransfermarktUrl()
             );
             $indexLoop++;
         }

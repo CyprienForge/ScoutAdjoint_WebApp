@@ -9,6 +9,8 @@ class Player
     private string $lastName;
     private \DateTime $birthDate;
     private Team $team;
+    private ?string $transfermarktUrl;
+
     public function getId(): int
     {
         return $this->id;
@@ -61,6 +63,17 @@ class Player
     public function setTeam(Team $team): Player
     {
         $this->team = $team;
+        return $this;
+    }
+
+    public function getTransfermarktUrl(): ?string
+    {
+        return $this->transfermarktUrl;
+    }
+
+    public function setTransfermarktUrl(?string $transfermarktUrl): Player
+    {
+        $this->transfermarktUrl = $transfermarktUrl;
         return $this;
     }
 }

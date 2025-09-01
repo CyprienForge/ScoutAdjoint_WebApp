@@ -44,6 +44,10 @@
                     <p class="mt-4">Nationalité : Non renseigné</p>
                 </article>
 
+                <article class="first-part-edit">
+                    <p class="mt-4"></p>
+                </article>
+
                 <article>
                     <label class="positions-label">Postes</label>
                     <div class="positions-container">
@@ -59,11 +63,21 @@
             </div>
         </div>
 
-        <div class="mt-8">
+        <div class="mt-8" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
             <button type="submit" class="btn btn-primary text-white px-4 py-2 rounded">
                 Sauvegarder
             </button>
+
+            <a href="{{ path('link_transfermarkt_profile', { idPlayer: viewModel.playerViewModel.id }) }}"
+               class="btn btn-soft btn-info">
+                Lier profil Transfermarkt
+            </a>
+
+            <a href="{{ viewModel.playerViewModel.transfermarktUrl }}" target="_blank" style="display: {{ viewModel.displayTransfermarkt }}">
+                <img src="{{ asset('images/tm_logo.png') }}" alt="Transfermarkt's logo" style="width: 100px; height: auto;">
+            </a>
         </div>
+
     </section>
     {{ form_end(form) }}
 

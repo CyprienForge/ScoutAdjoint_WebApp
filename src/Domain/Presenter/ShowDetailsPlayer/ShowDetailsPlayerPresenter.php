@@ -23,7 +23,10 @@ class ShowDetailsPlayerPresenter implements ShowDetailsPlayerOutputBoundary
             $player->getLastName(),
             $player->getTeam()->getName(),
             $player->getBirthDate()->format('Y-m-d'),
+            $player->getTransfermarktUrl()
         );
+
+        $this->viewModel->displayTransfermarkt = $player->getTransfermarktUrl() == null ? 'none' : 'block';
 
         $indexLoop = 1;
         foreach($response->participations as $participation){

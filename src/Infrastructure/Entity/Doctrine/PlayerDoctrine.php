@@ -40,6 +40,9 @@ class PlayerDoctrine
     #[ORM\OneToMany(targetEntity: PlacementDoctrine::class, mappedBy: 'player')]
     private Collection $placementDoctrines;
 
+    #[ORM\Column(name: 'transfermarkt_url', length: 255, nullable: true)]
+    private ?string $transfermarktUrl = null;
+
     public function __construct()
     {
         $this->participationDoctrines = new ArrayCollection();
@@ -159,6 +162,18 @@ class PlayerDoctrine
         if ($this->placementDoctrines->removeElement($placementDoctrine)) {
             $placementDoctrine->removePlayer($this);
         }
+
+        return $this;
+    }
+
+    public function getTransfermarktUrl(): ?string
+    {
+        return $this->transfermarktUrl;
+    }
+
+    public function setTransfermarktUrl(?string $transfermarktUrl): static
+    {
+        $this->transfermarktUrl = $transfermarktUrl;
 
         return $this;
     }

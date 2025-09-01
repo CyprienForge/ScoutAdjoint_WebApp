@@ -13,12 +13,14 @@ use Domain\Repository\TeamRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
+use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\UseCase\CreatePlayer\CreatePlayerUseCase;
 use Domain\UseCase\EditPlayer\EditPlayerUseCase;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
+use Domain\UseCase\LinkProfileTransfermarkt\LinkProfileTransfermarktUseCase;
 use Domain\UseCase\ListEditPlayerInfos\ListEditPlayerInfosUseCase;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase;
@@ -130,5 +132,14 @@ class PlayerController extends AbstractController
         return $this->render('players/create.html.twig', [
             'form' => $createPlayerForm->createView(),
         ]);
+    }
+
+    #[Route('/players/link-transfermarkt/{idPlayer}', name: 'link_transfermarkt_profile')]
+    public function linkTransfermarktProfile(Request $request, int $idPlayer, LinkProfileTransfermarktUseCase $useCase) : Response
+    {
+        $request = new LinkProfileTransfermarktRequest($idPlayer);
+        $useCase->execute($request);
+
+        return $this->redirectToRoute('details_player', ['idPlayer' => $idPlayer]);
     }
 }

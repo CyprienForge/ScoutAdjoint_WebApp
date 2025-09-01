@@ -5,6 +5,7 @@ namespace Infrastructure\Entity\Doctrine\Mapper;
 use Domain\Entity\Player;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\PlayerMapper;
+use Domain\Repository\PlayerRepository;
 use Domain\Repository\TeamRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 
@@ -13,6 +14,7 @@ class PlayerMapperDoctrine implements PlayerMapper
     public function __construct(
         private TeamMapperDoctrine $teamMapperDoctrine,
         private TeamRepository $teamRepository,
+        private PlayerRepository $playerRepository,
     ) {}
 
     public function toDomain($item)
@@ -26,14 +28,24 @@ class PlayerMapperDoctrine implements PlayerMapper
         $team = $this->teamMapperDoctrine->toDomain($item->getTeam());
 
         $player->setTeam($team);
+        $player->setTransfermarktUrl($item->getTransfermarktUrl());
 
         return $player;
     }
 
-    public function toInfra($item, ?PlayerDoctrine $existingItemDoctrine = null)
+    public function toInfra($item)
     {
-        $playerDoctrine = $existingItemDoctrine ?? new PlayerDoctrine();
+        $playerDoctrine = null;
 
+        if ($item->getId()) {
+            $playerDoctrine = $this->playerRepository->findById($item->getId());
+        }
+
+        if (!$playerDoctrine) {
+            $playerDoctrine = new PlayerDoctrine();
+        }
+
+        $playerDoctrine->setId($item->getId());
         $playerDoctrine->setFirstName($item->getFirstName());
         $playerDoctrine->setLastName($item->getLastName());
         $playerDoctrine->setBirthDate($item->getBirthDate());
@@ -43,6 +55,7 @@ class PlayerMapperDoctrine implements PlayerMapper
             $teamDoctrine = $this->teamRepository->findById($item->getTeam()->getId());
         }
         $playerDoctrine->setTeam($teamDoctrine);
+        $playerDoctrine->setTransfermarktUrl($item->getTransfermarktUrl());
 
         return $playerDoctrine;
     }
