@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'accueil{% endblock %}
+
+{% block body %}
+    <h2 class="text-3xl font-bold mt-8 text-center">Se connecter / S'inscrire</h2>
+
+    {% for message in app.flashes('error') %}
+        <div class="flash-notice" style="color: red; margin-top: 4%; margin-left: auto; padding: 1%; border-radius: 1rem; margin-right: auto; text-align: center; width: 50%;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(registerForm, { 'action': path('register'), 'method': 'POST' }) }}
+    {{ form_end(registerForm) }}
+
+    {{ form_start(loginForm, { 'action': path('login'), 'method': 'POST' }) }}
+    {{ form_end(loginForm) }}
+
+{% endblock %}

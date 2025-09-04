@@ -17,8 +17,28 @@
         <div id="menu" class="bg-base-200 w-1/6 h-screen">
             <h3 class="text-3xl font-bold mt-4 text-center">ScoutAdjoint</h3>
             <aside>
-                <ul class="pt-8 text-center mt-8 font-semibold">
+                <ul class="pt-8 text-center font-semibold">
                     <li>
+                        {% if global_vm().isAuthenticated %}
+                            <form method="post" action="{{ path('logout') }}">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                                <button type="submit" class="btn btn-info btn-soft">
+                                    Se déconnecter
+                                </button>
+                            </form>
+                        {% else %}
+                            <a class="btn btn-info btn-soft" href="{{ path('login_page') }}">
+                                Se connecter
+                            </a>
+                        {% endif %}
+
+
+                        <br>
+                        <span>
+                            {{ global_vm().isAuthenticated ? 'Connecté en tant que ' ~ global_vm().identifier : '' }}
+                        </span>
+                    </li>
+                    <li class="mt-8">
                         <a href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="mt-8">

@@ -65,7 +65,7 @@ class PlayerController extends AbstractController
         }
 
         $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($limit, $page * $limit, $page, $firstName, $lastName, $startBirthDate, $endBirthDate);
+        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstName, $lastName, $startBirthDate, $endBirthDate, $limit, $page * $limit);
         $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return $this->render('players/index.html.twig', [
