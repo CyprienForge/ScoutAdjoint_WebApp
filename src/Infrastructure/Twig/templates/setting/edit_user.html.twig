@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+
+    <div class="head">
+        <a href="{{ path('settings') }}" class="btn btn-soft btn-info ms-8 mt-8">
+            Retour
+        </a>
+    </div>
+
+    <div class="flex justify-center">
+        <h2 class="text-3xl font-bold">
+            {{ viewModel.identifier }}
+        </h2>
+    </div>
+
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+
+{% endblock %}

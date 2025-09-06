@@ -3,6 +3,7 @@
 namespace Infrastructure\Symfony\Form;
 
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
+use Domain\Dto\EditUser\EditUserDTO;
 use Domain\Entity\Player;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,35 +14,31 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegisterTypeForm extends AbstractType
+class EditUserTypeForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('identifier', TextType::class, [
-                'label' => 'Identifiant',
-            ])
-            ->add('email', TextType::class, [
-                'label' => 'Email',
-            ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe',
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Roles',
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Scout' => 'ROLE_SCOUT',
+                    'Chief Scout' => 'ROLE_CHIEF_SCOUT',
+                ],
+                'multiple' => true,
+                'expanded' => true,
             ])
             ->add('submit', SubmitType::class, [
-                'attr' => ['style' => 'display: block; margin-left: auto; margin-right: auto; margin-top: 6%', 'class' => 'btn btn-primary'],
-                'label' => "S'inscrire"
+                'label' => 'Modifier',
             ])
         ;
     }
-
-    public function getBlockPrefix() : string
-    {
-       return '';
-    }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'data_class' => EditUserDTO::class,
+        ]);
     }
 
 }

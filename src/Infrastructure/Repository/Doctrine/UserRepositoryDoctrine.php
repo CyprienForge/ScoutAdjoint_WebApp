@@ -23,7 +23,7 @@ class UserRepositoryDoctrine extends ServiceEntityRepository implements UserRepo
 
     public function findAll(): array
     {
-        return [];
+        return parent::findAll();
     }
 
     public function findById(int $id)
@@ -39,6 +39,16 @@ class UserRepositoryDoctrine extends ServiceEntityRepository implements UserRepo
     public function findByIdentificationCode(string $identificationCode)
     {
         // TODO: Implement findByIdentificationCode() method.
+    }
+
+    public function deleteById(int $id)
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->delete(UserDoctrine::class, 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
     }
 
     public function findByIdentifier(string $identifier)

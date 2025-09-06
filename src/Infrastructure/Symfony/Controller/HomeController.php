@@ -20,13 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
+    #[Route('/home', name: 'home')]
     public function home(): Response
     {
         return $this->render('home/index.html.twig');
     }
 
-    #[Route('/login-page', name: 'login_page')]
+    #[Route('/', name: 'login_page')]
     public function loginPage(Request $request) : Response
     {
         $registerForm = $this->createForm(RegisterTypeForm::class);

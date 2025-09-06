@@ -1,0 +1,26 @@
+<?php
+
+namespace Domain\UseCase\ShowDetailsUser;
+
+use Domain\Entity\User;
+use Domain\Mapper\UserMapper;
+use Domain\Repository\UserRepository;
+use Domain\Request\ShowDetailsUser\ShowDetailsUserRequest;
+use Domain\Response\ShowDetailsUser\ShowDetailsUserResponse;
+
+class ShowDetailsUserUseCase
+{
+    public function __construct(
+        private UserRepository $userRepository,
+        private UserMapper $userMapper
+    ){}
+
+    public function execute(ShowDetailsUserRequest $request): ShowDetailsUserResponse
+    {
+        $userInfra = $this->userRepository->findById($request->idUser);
+        $user = $this->userMapper->toDomain($userInfra);
+
+        return new ShowDetailsUserResponse($user);
+    }
+
+}

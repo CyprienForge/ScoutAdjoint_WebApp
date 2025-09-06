@@ -24,6 +24,10 @@ class UserValidator
             $min_indentifier_length = self::MIN_IDENTIFIER_LENGTH;
             throw new InvalidIdentifierException("{$identifier} est trop court (minimum {$min_indentifier_length} caractères)");
         }
+        if (preg_match('/\s/', $identifier)) {
+            throw new InvalidIdentifierException("L'identifiant : {$identifier} contient des espaces, ce n’est pas autorisé.");
+        }
+
     }
 
     public function validateEmail(string $email): void

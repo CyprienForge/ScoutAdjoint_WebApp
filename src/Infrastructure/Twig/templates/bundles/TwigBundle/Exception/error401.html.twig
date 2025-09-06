@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Non authentifié{% endblock %}
+
+{% block body %}
+    <div class="text-center mt-20">
+        <h1 class="text-5xl font-bold text-yellow-600">🔒 401 - Authentification requise</h1>
+        <p class="mt-6 text-lg">
+            Tu dois être connecté pour accéder à cette page.
+        </p>
+        <a href="{{ path('login_page') }}" class="btn btn-primary mt-8">Se connecter</a>
+    </div>
+{% endblock %}

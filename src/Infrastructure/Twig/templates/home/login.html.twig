@@ -2,6 +2,10 @@
 
 {% block title %}Page d'accueil{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/auth.css') }}">
+{% endblock %}
+
 {% block body %}
     <h2 class="text-3xl font-bold mt-8 text-center">Se connecter / S'inscrire</h2>
 
@@ -11,10 +15,18 @@
         </div>
     {% endfor %}
 
-    {{ form_start(registerForm, { 'action': path('register'), 'method': 'POST' }) }}
-    {{ form_end(registerForm) }}
+    <div class="auth-forms">
+        <div class="auth-form-wrapper">
+            <h3>Inscription</h3>
+            {{ form_start(registerForm, { 'action': path('register'), 'method': 'POST' }) }}
+            {{ form_end(registerForm) }}
+        </div>
 
-    {{ form_start(loginForm, { 'action': path('login'), 'method': 'POST' }) }}
-    {{ form_end(loginForm) }}
+        <div class="auth-form-wrapper">
+            <h3>Connexion</h3>
+            {{ form_start(loginForm, { 'action': path('login'), 'method': 'POST' }) }}
+            {{ form_end(loginForm) }}
+        </div>
+    </div>
 
 {% endblock %}

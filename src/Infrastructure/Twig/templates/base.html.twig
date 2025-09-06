@@ -2,8 +2,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <title>{% block title %}ScoutAdjoint{% endblock %}</title>
+
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -16,42 +16,49 @@
     <body style="display: flex">
         <div id="menu" class="bg-base-200 w-1/6 h-screen">
             <h3 class="text-3xl font-bold mt-4 text-center">ScoutAdjoint</h3>
+            {% set current_route = app.request.attributes.get('_route') %}
+
             <aside>
-                <ul class="pt-8 text-center font-semibold">
-                    <li>
-                        {% if global_vm().isAuthenticated %}
-                            <form method="post" action="{{ path('logout') }}">
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                <button type="submit" class="btn btn-info btn-soft">
-                                    Se déconnecter
-                                </button>
-                            </form>
-                        {% else %}
-                            <a class="btn btn-info btn-soft" href="{{ path('login_page') }}">
-                                Se connecter
-                            </a>
-                        {% endif %}
+                {% if current_route != 'login_page' %}
+                    <ul class="pt-8 text-center font-semibold">
+                        <li>
+                            {% if global_vm().isAuthenticated %}
+                                <form method="post" action="{{ path('logout') }}">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                                    <button type="submit" class="btn btn-info btn-soft">
+                                        Se déconnecter
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a class="btn btn-info btn-soft" href="{{ path('login_page') }}">
+                                    Se connecter
+                                </a>
+                            {% endif %}
 
-
-                        <br>
-                        <span>
-                            {{ global_vm().isAuthenticated ? 'Connecté en tant que ' ~ global_vm().identifier : '' }}
-                        </span>
-                    </li>
-                    <li class="mt-8">
-                        <a href="{{ path('home') }}">Accueil</a>
-                    </li>
-                    <li class="mt-8">
-                        <a href="{{ path('get_players') }}">Joueurs</a>
-                    </li>
-                    <li class="mt-8">
-                        <a href="{{ path('get_matchs') }}">Matchs</a>
-                    </li>
-                    <li class="mt-8">
-                        <a href="{{ path('get_teams') }}">Équipes</a>
-                    </li>
-                </ul>
+                            <br>
+                            <span>
+                    {{ global_vm().isAuthenticated ? 'Connecté en tant que ' ~ global_vm().identifier : '' }}
+                </span>
+                        </li>
+                        <li class="mt-8">
+                            <a href="{{ path('home') }}">🏠 Accueil</a>
+                        </li>
+                        <li class="mt-8">
+                            <a href="{{ path('get_players') }}">🦶 Joueurs</a>
+                        </li>
+                        <li class="mt-8">
+                            <a href="{{ path('get_matchs') }}">⚽ Matchs</a>
+                        </li>
+                        <li class="mt-8">
+                            <a href="{{ path('get_teams') }}">👥 Équipes</a>
+                        </li>
+                        <li class="mt-8">
+                            <a href="{{ path('settings') }}" class="font-semibold">⚙️ Paramètres</a>
+                        </li>
+                    </ul>
+                {% endif %}
             </aside>
+
         </div>
         <div id="content" class="w-3/4">
             {% block body %}

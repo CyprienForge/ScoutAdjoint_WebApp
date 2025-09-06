@@ -25,7 +25,7 @@ class LoginTypeForm extends AbstractType
                 'label' => 'Mot de passe',
             ])
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['style' => 'display: block; margin-left: auto; margin-right: auto; margin-top: 6%', 'class' => 'btn btn-primary'],
                 'label' => "Se connecter"
             ])
         ;

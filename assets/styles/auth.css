@@ -1,0 +1,111 @@
+/* Wrapper principal pour aligner les 2 formulaires côte à côte */
+.auth-forms {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+}
+
+/* Chaque bloc de formulaire */
+.auth-form-wrapper {
+    flex: 1;
+    max-width: 400px;
+    min-width: 320px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 30px 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* Titre du formulaire */
+.auth-form-wrapper h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* Groupes de champs */
+.auth-form-wrapper .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form-wrapper label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #34495e;
+}
+
+/* Champs input */
+.auth-form-wrapper input[type="text"],
+.auth-form-wrapper input[type="email"],
+.auth-form-wrapper input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.auth-form-wrapper input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+    outline: none;
+}
+
+/* Bouton submit */
+.auth-form-wrapper .btn-submit {
+    display: inline-block;
+    background: #3498db;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    width: 100%;
+}
+
+.auth-form-wrapper .btn-submit:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.auth-form-wrapper .btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Message flash */
+.flash-notice {
+    color: red;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #ffe5e5;
+    border: 1px solid #e74c3c;
+    text-align: center;
+    font-weight: 600;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-forms {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .auth-form-wrapper {
+        width: 90%;
+        max-width: 500px;
+    }
+}
