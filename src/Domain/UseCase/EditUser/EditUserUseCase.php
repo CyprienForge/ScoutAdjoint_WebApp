@@ -2,6 +2,7 @@
 
 namespace Domain\UseCase\EditUser;
 
+use Domain\Exception\EditUser\EditCurrentPlayerException;
 use Domain\Mapper\UserMapper;
 use Domain\Repository\UserRepository;
 use Domain\Request\EditUser\EditUserRequest;
@@ -16,7 +17,13 @@ class EditUserUseCase
 
     public function execute(EditUserRequest $request): EditUserResponse
     {
-        $request->user->setRoles($request->newRoles);
+        if($request->user->getId() == $request->idCurrentUser){
+            throw new EditCurrentPlayerException("Vous essayez de modifier votre compte en étant connecté !");
+        }
+
+        $request->newRoles[] = 'ROLE_USER';
+
+        $request->user->setRoles(array_values($request->newRoles));
         $userInfra = $this->userMapper->toInfra($request->user);
         $this->userRepository->save($userInfra);
 

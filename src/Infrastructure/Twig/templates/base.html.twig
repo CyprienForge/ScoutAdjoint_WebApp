@@ -43,18 +43,22 @@
                         <li class="mt-8">
                             <a href="{{ path('home') }}">🏠 Accueil</a>
                         </li>
-                        <li class="mt-8">
-                            <a href="{{ path('get_players') }}">🦶 Joueurs</a>
-                        </li>
-                        <li class="mt-8">
-                            <a href="{{ path('get_matchs') }}">⚽ Matchs</a>
-                        </li>
-                        <li class="mt-8">
-                            <a href="{{ path('get_teams') }}">👥 Équipes</a>
-                        </li>
-                        <li class="mt-8">
-                            <a href="{{ path('settings') }}" class="font-semibold">⚙️ Paramètres</a>
-                        </li>
+                        {% if is_granted('ROLE_SCOUT') %}
+                            <li class="mt-8">
+                                <a href="{{ path('get_players') }}">🦶 Joueurs</a>
+                            </li>
+                            <li class="mt-8">
+                                <a href="{{ path('get_matchs') }}">⚽ Matchs</a>
+                            </li>
+                            <li class="mt-8">
+                                <a href="{{ path('get_teams') }}">👥 Équipes</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CHIEF_SCOUT') %}
+                            <li class="mt-8">
+                                <a href="{{ path('settings') }}" class="font-semibold">⚙️ Paramètres</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 {% endif %}
             </aside>

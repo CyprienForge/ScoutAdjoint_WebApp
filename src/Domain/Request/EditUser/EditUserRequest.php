@@ -9,7 +9,8 @@ class EditUserRequest
 
     public function __construct(
         public User $user,
-        public array $newRoles
+        public array $newRoles,
+        public int $idCurrentUser
     ){}
 
 }

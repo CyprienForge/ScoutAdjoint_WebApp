@@ -22,7 +22,6 @@ class EditUserTypeForm extends AbstractType
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',
                 'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
                     'Scout' => 'ROLE_SCOUT',
                     'Chief Scout' => 'ROLE_CHIEF_SCOUT',
                 ],

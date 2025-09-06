@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Joueurs{% endblock %}
+{% block title %}Gestion des utilisateurs{% endblock %}
 
 {% block body %}
 
     <div class="head-page mt-8">
-        <h3></h3>
-        <h2 class="text-3xl  font-bold text-center">Paramètres</h2>
+        <h2 class="text-3xl font-bold text-center">Paramètres</h2>
     </div>
 
     {% for message in app.flashes('error') %}
@@ -38,12 +37,17 @@
                         {% endfor %}
                     </td>
                     <td>
-                        <a href="{{ path('delete_user', { idUser: user.id }) }}"
-                           data-controller="confirm"
-                           data-action="click->confirm#confirm"
-                           data-confirm-message-value="Es-tu sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.">
-                            <i class="fa-solid fa-trash text-red-600"></i>
-                        </a>
+                        <form method="post"
+                              action="{{ path('delete_user', { idUser: user.id }) }}"
+                              data-controller="confirm"
+                              data-action="submit->confirm#confirm"
+                              data-confirm-message-value="Es-tu sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible."
+                              style="display:inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_user' ~ user.id) }}">
+                            <button type="submit" class="bg-transparent border-0 cursor-pointer">
+                                <i class="fa-solid fa-trash text-red-600"></i>
+                            </button>
+                        </form>
                         <a href="{{ path('edit_user', { idUser: user.id }) }}">
                             <i class="fa-solid fa-pencil"></i>
                         </a>

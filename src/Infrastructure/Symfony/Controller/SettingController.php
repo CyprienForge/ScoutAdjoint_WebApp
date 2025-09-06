@@ -37,7 +37,7 @@ final class SettingController extends AbstractController
         ]);
     }
 
-    #[Route('/delete-user/{idUser}', name: 'delete_user')]
+    #[Route('/settings/delete-user/{idUser}', name: 'delete_user')]
     public function deleteUser(DeleteUserUseCase $useCase, UserMapper $userMapper, int $idUser): Response
     {
         $currentUserInfra = $this->getUser();
@@ -53,7 +53,7 @@ final class SettingController extends AbstractController
         return $this->redirectToRoute('settings');
     }
 
-    #[Route('/edit-user/{idUser}', name: 'edit_user')]
+    #[Route('/settings/edit-user/{idUser}', name: 'edit_user')]
     public function editUser(Request $request, ShowDetailsUserUseCase $useCase, int $idUser, ShowDetailsUserOutputBoundary $presenter, EditUserUseCase $editUserUseCase): Response
     {
         $requestDetailsUser = new ShowDetailsUserRequest($idUser);
@@ -66,8 +66,12 @@ final class SettingController extends AbstractController
 
         if($editUserForm->isSubmitted() && $editUserForm->isValid())
         {
-            $editUserRequest = new EditUserRequest($responseDetailsUser->user, $editUserForm->getData()->roles);
-            $editUserUseCase->execute($editUserRequest);
+            try{
+                $editUserRequest = new EditUserRequest($responseDetailsUser->user, $editUserForm->getData()->roles, $this->getUser()->getId());
+                $editUserUseCase->execute($editUserRequest);
+            }catch(DomainException $e){
+                $this->addFlash('error', $e->getMessage());
+            }
 
             return $this->redirectToRoute('settings');
         }
