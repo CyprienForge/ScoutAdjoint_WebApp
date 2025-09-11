@@ -14,19 +14,43 @@
         <a class="btn btn-primary" href="{{ path('create_player') }}">Créer joueur</a>
     </div>
 
-    <div class="my-8">
-        {{ form_start(form, {'method': 'get'}) }}
-        <div class="grid grid-cols-3 gap-4">
+    {{ form_start(form, {
+        'method': 'get',
+        'attr': {'data-controller': 'reset', 'data-reset-target': 'form'}
+    }) }}
+    <div id="form" class="mt-8">
+        <article class="ms-24" style="display: flex; flex-direction: row;">
             {{ form_row(form.first_name) }}
             {{ form_row(form.last_name) }}
             {{ form_row(form.start_birth_date) }}
             {{ form_row(form.end_birth_date) }}
+            {{ form_row(form.team) }}
+        </article>
+
+        <div class="ms-24 mt-4">
+            <label>Positions</label>
+            <div style="display: flex; flex-wrap: wrap;">
+                {% for choice in form.positions %}
+                    <label style="padding-right: 5%;">
+                        {{ form_label(choice) }}
+                        {{ form_widget(choice) }}
+                    </label>
+                {% endfor %}
+            </div>
         </div>
-        <div class="mt-8 flex justify-center items-center">
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </div>
-        {{ form_end(form) }}
     </div>
+
+    <div class="mt-8 flex justify-center items-center gap-4 mx-auto w-full max-w-md">
+        {{ form_row(form.submit, { 'attr': {'class' : 'btn btn-primary'} }) }}
+        <button
+            type="button"
+            class="btn btn-info btn-soft px-6 py-2 rounded-xl shadow-md"
+            data-action="click->reset#reset"
+        >
+            Vider
+        </button>
+    </div>
+    {{ form_end(form) }}
 
         <div class="overflow-x-auto mt-8">
             <table class="table table-zebra">

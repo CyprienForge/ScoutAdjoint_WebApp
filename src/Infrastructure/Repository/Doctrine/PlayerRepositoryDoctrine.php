@@ -42,21 +42,31 @@ class PlayerRepositoryDoctrine extends ServiceEntityRepository implements Player
        return $this->findOneBy(['identificationCode' => $identificationCode]);
     }
 
-    public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null, ?DateTime $startBirthDate = null, ?DateTime $endBirthDate = null)
+    public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null, ?DateTime $startBirthDate = null, ?DateTime $endBirthDate = null, ?array $positions = null, ?string $team = null)
     {
         $queryBuilder = $this->createQueryBuilder('p');
 
         if($firstName){
-            $queryBuilder->andWhere('p.firstName like :firstName')->setParameter('firstName', '%'.$firstName.'%');
+            $queryBuilder->andWhere('LOWER(p.firstName) like LOWER(:firstName)')->setParameter('firstName', '%'.strtolower($firstName).'%');
         }
         if($lastName){
-            $queryBuilder->andWhere('p.lastName like :lastName')->setParameter('lastName', '%'.$lastName.'%');
+            $queryBuilder->andWhere('LOWER(p.lastName) like LOWER(:lastName)')->setParameter('lastName', '%'.strtolower($lastName).'%');
         }
         if ($startBirthDate) {
             $queryBuilder->andWhere('p.birthDate >= :startBirthDate')->setParameter('startBirthDate', $startBirthDate->format('Y-m-d'));
         }
         if ($endBirthDate) {
             $queryBuilder->andWhere('p.birthDate <= :endBirthDate')->setParameter('endBirthDate', $endBirthDate->format('Y-m-d'));
+        }
+        if($positions) {
+            $queryBuilder->join('p.placementDoctrines', 'plac')
+                         ->andWhere('plac.position IN (:positions)')
+                         ->setParameter('positions', $positions);
+        }
+        if($team){
+            $queryBuilder->join('p.team', 't')
+                           ->andWhere('LOWER(t.name) like LOWER(:team)')
+                           ->setParameter('team', '%'.strtolower($team).'%');
         }
 
         return $queryBuilder->setFirstResult($offset)

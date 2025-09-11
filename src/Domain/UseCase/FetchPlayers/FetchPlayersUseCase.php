@@ -29,7 +29,9 @@ class FetchPlayersUseCase
             $request->firstNameSearch,
             $request->lastNameSearch,
             $request->startBirthDate,
-            $request->endBirthDate
+            $request->endBirthDate,
+            $request->positions,
+            $request->team
         );
         foreach($playersResponse as $playerResponse){
             $players[] = $this->playerMapper->toDomain($playerResponse);

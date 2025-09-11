@@ -13,6 +13,7 @@ use Domain\Repository\TeamRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
+use Domain\Request\FetchPositions\FetchPositionsRequest;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
@@ -20,6 +21,7 @@ use Domain\UseCase\CreatePlayer\CreatePlayerUseCase;
 use Domain\UseCase\EditPlayer\EditPlayerUseCase;
 use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
+use Domain\UseCase\FetchPositions\FetchPositionsUseCase;
 use Domain\UseCase\LinkProfileTransfermarkt\LinkProfileTransfermarktUseCase;
 use Domain\UseCase\ListEditPlayerInfos\ListEditPlayerInfosUseCase;
 use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
@@ -46,15 +48,20 @@ class PlayerController extends AbstractController
     ){}
 
     #[Route('/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
-    public function fetchPlayers(Request $request, FetchPlayersUseCase $fetchPlayersUseCase, int $page): Response
+    public function fetchPlayers(Request $request, FetchPlayersUseCase $fetchPlayersUseCase, FetchPositionsUseCase $fetchPositionsUseCase, int $page): Response
     {
-        $searchPlayerForm = $this->createForm(SearchPlayerTypeForm::class);
+        $fetchPositionsResponse = $fetchPositionsUseCase->execute(new FetchPositionsRequest());
+        $searchPlayerForm = $this->createForm(SearchPlayerTypeForm::class, null, [
+            'positions' => $fetchPositionsResponse->positions,
+        ]);
         $searchPlayerForm->handleRequest($request);
 
         $firstName = null;
         $lastName = null;
         $startBirthDate = null;
         $endBirthDate = null;
+        $positions = null;
+        $team = null;
 
         if($searchPlayerForm->isSubmitted() && $searchPlayerForm->isValid()){
             $task = $searchPlayerForm->getData();
@@ -62,10 +69,12 @@ class PlayerController extends AbstractController
             $lastName = $task['last_name'];
             $startBirthDate = $task['start_birth_date'];
             $endBirthDate = $task['end_birth_date'];
+            $positions = $task['positions'];
+            $team = $task['team'];
         }
 
         $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstName, $lastName, $startBirthDate, $endBirthDate, $limit, $page * $limit);
+        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstName, $lastName, $startBirthDate, $endBirthDate, $positions, $team, $limit, $page * $limit);
         $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return $this->render('players/index.html.twig', [

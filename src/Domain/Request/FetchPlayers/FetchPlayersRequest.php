@@ -12,6 +12,8 @@ class FetchPlayersRequest
       public ?string $lastNameSearch,
       public ?DateTime $startBirthDate,
       public ?DateTime $endBirthDate,
+      public ?array $positions,
+      public ?string $team,
       public int $limit = 15,
       public int $offset = 0
     ){}

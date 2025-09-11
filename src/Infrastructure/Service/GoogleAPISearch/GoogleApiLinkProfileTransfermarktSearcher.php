@@ -12,7 +12,7 @@ class GoogleApiLinkProfileTransfermarktSearcher implements LinkProfileTransferma
 
     public function searchLinkProfileTransfermarkt(Player $player) : string
     {
-        $searchCriterias = $player->getFirstName() . ' ' . $player->getLastName() . ' ' . $player->getTeam()->getName() . ' Transfermarkt';
+        $searchCriterias = $player->getFirstName() . ' ' . $player->getLastName() . ' Transfermarkt';
 
         $response = $this->http->request('GET', 'https://www.googleapis.com/customsearch/v1', [
             'query' => [
