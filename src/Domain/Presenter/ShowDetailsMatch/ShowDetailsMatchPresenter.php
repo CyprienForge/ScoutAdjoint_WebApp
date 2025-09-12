@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\ShowDetailsMatch;
 
+use Application\Query\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
 use Domain\Response\ShowDetailsMatch\ShowDetailsMatchResponse;
-use Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
 use Domain\ViewModel\Entity\NoteViewModel;
 use Domain\ViewModel\ShowDetailsMatch\ContentNoteViewModel;
 use Domain\ViewModel\ShowDetailsMatch\ShowDetailsMatchViewModel;

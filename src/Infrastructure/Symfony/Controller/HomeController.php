@@ -2,14 +2,16 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Application\Query\FetchBaseData\FetchBaseDataQuery;
+use Application\Command\Login\LoginCommand;
+use Application\Command\Logout\LogoutCommand;
+use Application\Command\RegisterUser\RegisterUserCommand;
 use Domain\Exception\DomainException;
 use Domain\Mapper\UserMapper;
+use Domain\Request\FetchBaseData\FetchBaseDataRequest;
 use Domain\Request\Login\LoginRequest;
 use Domain\Request\Logout\LogoutRequest;
 use Domain\Request\RegisterUser\RegisterUserRequest;
-use Domain\UseCase\Login\LoginUseCase;
-use Domain\UseCase\Logout\LogoutUseCase;
-use Domain\UseCase\RegisterUser\RegisterUserUseCase;
 use Infrastructure\Symfony\Form\LoginTypeForm;
 use Infrastructure\Symfony\Form\RegisterTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,7 +41,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/register', name: 'register')]
-    public function register(Request $request, RegisterUserUseCase $registerUseCase, UserMapper $userMapper, Security $security): Response
+    public function register(Request $request, RegisterUserCommand $registerUseCase, UserMapper $userMapper, Security $security): Response
     {
         $registerForm = $this->createForm(RegisterTypeForm::class);
         $registerForm->handleRequest($request);
@@ -70,7 +72,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/login', name: 'login')]
-    public function login(Request $request, Security $security, LoginUseCase $useCase, UserMapper $userMapper): Response
+    public function login(Request $request, Security $security, LoginCommand $useCase, UserMapper $userMapper): Response
     {
         $loginForm = $this->createForm(LoginTypeForm::class);
         $loginForm->handleRequest($request);
@@ -100,9 +102,16 @@ class HomeController extends AbstractController
     }
 
     #[Route('/logout', name: 'logout', methods: ['POST'])]
-    public function logout(Request $request, LogoutUseCase $useCase): Response
+    public function logout(Request $request, LogoutCommand $useCase): Response
     {
         $useCase->execute(new LogoutRequest());
         return $this->redirectToRoute('home');
+    }
+
+    #[Route('/fetch-base-data', name: 'fetch_base_data')]
+    public function fetchBaseData(Request $request, FetchBaseDataQuery $useCase): Response
+    {
+        $useCase->execute(new FetchBaseDataRequest());
+        return new Response();
     }
 }

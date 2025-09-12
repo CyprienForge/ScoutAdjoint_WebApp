@@ -2,6 +2,15 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Application\Command\CreatePlayer\CreatePlayerCommand;
+use Application\Command\EditPlayer\EditPlayerCommand;
+use Application\Query\FetchPlayers\FetchPlayersOutputBoundary;
+use Application\Query\FetchPlayers\FetchPlayersQuery;
+use Application\Query\FetchPositions\FetchPositionsQuery;
+use Application\Command\LinkProfileTransfermarkt\LinkProfileTransfermarktCommand;
+use Application\Query\ListEditPlayerInfos\ListEditPlayerInfosQuery;
+use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
+use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerQuery;
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
 use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Mapper\PlayerMapper;
@@ -17,15 +26,6 @@ use Domain\Request\FetchPositions\FetchPositionsRequest;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
-use Domain\UseCase\CreatePlayer\CreatePlayerUseCase;
-use Domain\UseCase\EditPlayer\EditPlayerUseCase;
-use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
-use Domain\UseCase\FetchPlayers\FetchPlayersUseCase;
-use Domain\UseCase\FetchPositions\FetchPositionsUseCase;
-use Domain\UseCase\LinkProfileTransfermarkt\LinkProfileTransfermarktUseCase;
-use Domain\UseCase\ListEditPlayerInfos\ListEditPlayerInfosUseCase;
-use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
-use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase;
 use Infrastructure\Symfony\Form\CreatePlayerTypeForm;
 use Infrastructure\Symfony\Form\EditPlayerTypeForm;
 use Infrastructure\Symfony\Form\SearchPlayerTypeForm;
@@ -48,7 +48,7 @@ class PlayerController extends AbstractController
     ){}
 
     #[Route('/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
-    public function fetchPlayers(Request $request, FetchPlayersUseCase $fetchPlayersUseCase, FetchPositionsUseCase $fetchPositionsUseCase, int $page): Response
+    public function fetchPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
     {
         $fetchPositionsResponse = $fetchPositionsUseCase->execute(new FetchPositionsRequest());
         $searchPlayerForm = $this->createForm(SearchPlayerTypeForm::class, null, [
@@ -84,7 +84,7 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/players/details/{idPlayer}', name: 'details_player')]
-    public function detailsPlayer(Request $request, ShowDetailsPlayerUseCase $useCase, EditPlayerUseCase $editUseCase,ListEditPlayerInfosUseCase $listInfosUseCase, int $idPlayer) : Response
+    public function detailsPlayer(Request $request, ShowDetailsPlayerQuery $useCase, EditPlayerCommand $editUseCase,ListEditPlayerInfosQuery $listInfosUseCase, int $idPlayer) : Response
     {
         $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
         $response = $useCase->execute($detailsRequest);
@@ -117,7 +117,7 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/players/create', name: 'create_player')]
-    public function createPlayer(Request $request, CreatePlayerUseCase $useCase): Response
+    public function createPlayer(Request $request, CreatePlayerCommand $useCase): Response
     {
         $teamsInfra = array_filter($this->teamRepository->findAll());
         $positionsInfra = array_filter($this->positionRepository->findAll());
@@ -144,11 +144,17 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/players/link-transfermarkt/{idPlayer}', name: 'link_transfermarkt_profile')]
-    public function linkTransfermarktProfile(Request $request, int $idPlayer, LinkProfileTransfermarktUseCase $useCase) : Response
+    public function linkTransfermarktProfile(Request $request, int $idPlayer, LinkProfileTransfermarktCommand $useCase) : Response
     {
         $request = new LinkProfileTransfermarktRequest($idPlayer);
         $useCase->execute($request);
 
         return $this->redirectToRoute('details_player', ['idPlayer' => $idPlayer]);
+    }
+
+    #[Route('/players/merge-players/{idPlayer}', name: 'merge_players')]
+    public function mergePlayers(Request $request, int $idPlayer) : Response
+    {
+        return $this->render('players/merge.html.twig', []);
     }
 }

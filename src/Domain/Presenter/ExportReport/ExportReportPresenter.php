@@ -2,7 +2,7 @@
 
 namespace Domain\Presenter\ExportReport;
 
-use Domain\UseCase\ExportReport\ExportReportOutputBoundary;
+use Application\UseCase\ExportReport\ExportReportOutputBoundary;
 
 class ExportReportPresenter implements ExportReportOutputBoundary
 {

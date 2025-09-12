@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\ShowDetailsUser;
 
+use Application\Query\ShowDetailsUser\ShowDetailsUserOutputBoundary;
 use Domain\Response\ShowDetailsUser\ShowDetailsUserResponse;
-use Domain\UseCase\ShowDetailsUser\ShowDetailsUserOutputBoundary;
 use Domain\ViewModel\Entity\UserViewModel;
 
 class ShowDetailsUserPresenter implements ShowDetailsUserOutputBoundary

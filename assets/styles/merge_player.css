@@ -1,0 +1,9 @@
+.merge-infos{
+    display: flex;
+    justify-content: center;
+}
+
+#merge-section{
+    display: flex;
+    justify-content: space-evenly;
+}

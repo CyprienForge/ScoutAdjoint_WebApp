@@ -2,6 +2,11 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Application\Command\CreateTeam\CreateTeamCommand;
+use Application\Query\FetchTeams\FetchTeamsOutputBoundary;
+use Application\Query\FetchTeams\FetchTeamsQuery;
+use Application\Command\FillSquadTransfermarkt\FillSquadTransfermarktCommand;
+use Application\Query\ListChampionships\ListChampionshipsQuery;
 use Domain\Entity\Team;
 use Domain\Mapper\ChampionshipMapper;
 use Domain\Repository\ChampionshipRepository;
@@ -9,11 +14,6 @@ use Domain\Request\CreateTeam\CreateTeamRequest;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Request\FillSquadTransfermarkt\FillSquadTransfermarktRequest;
 use Domain\Request\ListChampionships\ListChampionshipsRequest;
-use Domain\UseCase\CreateTeam\CreateTeamUseCase;
-use Domain\UseCase\FetchTeams\FetchTeamsOutputBoundary;
-use Domain\UseCase\FetchTeams\FetchTeamsUseCase;
-use Domain\UseCase\FillSquadTransfermarkt\FillSquadTransfermarktUseCase;
-use Domain\UseCase\ListChampionships\ListChampionshipsUseCase;
 use Infrastructure\Symfony\Form\CreateTeamTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +29,7 @@ class TeamController extends AbstractController
     ){}
 
     #[Route('/teams/show', name: 'get_teams')]
-    public function fetchTeams(Request $request, FetchTeamsUseCase $useCase, FetchTeamsOutputBoundary $presenter): Response
+    public function fetchTeams(Request $request, FetchTeamsQuery $useCase, FetchTeamsOutputBoundary $presenter): Response
     {
         $request = new FetchTeamsRequest();
         $response = $useCase->execute($request);
@@ -40,7 +40,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/teams/create', name: 'create_team')]
-    public function createTeam(Request $request, CreateTeamUseCase $useCase, ListChampionshipsUseCase $listChampionshipsUseCase): Response
+    public function createTeam(Request $request, CreateTeamCommand $useCase, ListChampionshipsQuery $listChampionshipsUseCase): Response
     {
         $listChampionshipsRequest = new ListChampionshipsRequest();
         $response = $listChampionshipsUseCase->execute($listChampionshipsRequest);
@@ -61,7 +61,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/teams/fill', name: 'fill_squad_transfermarkt')]
-    public function fillSquadTransfermarkt(Request $request, FillSquadTransfermarktUseCase $useCase) : Response
+    public function fillSquadTransfermarkt(Request $request, FillSquadTransfermarktCommand $useCase) : Response
     {
         $request = new FillSquadTransfermarktRequest();
         $useCase->execute($request);

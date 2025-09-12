@@ -1,0 +1,95 @@
+<?php
+
+namespace Application\Query\FetchData;
+
+use Domain\Mapper\ChampionshipMapper;
+use Domain\Mapper\MatchMapper;
+use Domain\Mapper\ParticipationMapper;
+use Domain\Mapper\PlayerMapper;
+use Domain\Mapper\TeamMapper;
+use Domain\Repository\ChampionshipRepository;
+use Domain\Repository\MatchRepository;
+use Domain\Repository\ParticipationRepository;
+use Domain\Repository\PlayerRepository;
+use Domain\Repository\TeamRepository;
+use Domain\Request\FetchData\FetchDataRequest;
+use Domain\Response\FetchData\FetchDataResponse;
+
+class FetchDataQuery
+{
+
+    public function __construct(
+        private ChampionshipRepository $readChampionshipRepository,
+        private ChampionshipRepository $writeChampionshipRepository,
+        private TeamRepository $readTeamRepository,
+        private TeamRepository $writeTeamRepository,
+        private PlayerRepository $readPlayerRepository,
+        private PlayerRepository $writePlayerRepository,
+        private MatchRepository $readMatchRepository,
+        private MatchRepository $writeMatchRepository,
+        private ParticipationRepository $readParticipationRepository,
+        private ParticipationRepository $writeParticipationRepository,
+        private PlayerMapper $playerMapper,
+        private ChampionshipMapper $championshipMapper,
+        private TeamMapper $teamMapper,
+        private MatchMapper $matchMapper,
+        private ParticipationMapper $participationMapper,
+    ){}
+
+    public function execute(FetchDataRequest $request) : FetchDataResponse
+    {
+        $championships = $this->readChampionshipRepository->findAll();
+        $teams = $this->readTeamRepository->findAll();
+        $players = $this->readPlayerRepository->findAll();
+        $matchs = $this->readMatchRepository->findAll();
+        $participations = $this->readParticipationRepository->findAll();
+
+        $this->writeParticipationRepository->deleteAll();
+        $this->writeMatchRepository->deleteAll();
+        $this->writePlayerRepository->deleteAll();
+        $this->writeTeamRepository->deleteAll();
+        $this->writeChampionshipRepository->deleteAll();
+
+        foreach ($championships as $championship) {
+            $championship = $this->championshipMapper->toInfra($championship);
+            $this->writeChampionshipRepository->save($championship);
+        }
+
+        foreach($teams as $team){
+            $team = $this->teamMapper->toInfra($team);
+            $localChampionship = $this->writeChampionshipRepository->findByIdentificationCode($team->getChampionship()->getIdentificationCode());
+            $team->setChampionship($localChampionship);
+            $this->writeTeamRepository->save($team);
+        }
+
+        foreach($players as $player){
+            $player = $this->playerMapper->toInfra($player);
+            $localTeam = $this->writeTeamRepository->findByIdentificationCode($player->getTeam()->getIdentificationCode());
+            $player->setTeam($localTeam);
+            $this->writePlayerRepository->save($player);
+        }
+
+        foreach($matchs as $match){
+            $match = $this->matchMapper->toInfra($match);
+            $localHomeTeam = $this->writeTeamRepository->findByIdentificationCode($match->getHomeTeam()->getIdentificationCode());
+            $localAwayTeam = $this->writeTeamRepository->findByIdentificationCode($match->getAwayTeam()->getIdentificationCode());
+            $match->setHomeTeam($localHomeTeam);
+            $match->setAwayTeam($localAwayTeam);
+            $this->writeMatchRepository->save($match);
+        }
+
+        foreach($participations as $participation){
+            $participation = $this->participationMapper->toInfra($participation);
+            $player = $this->writePlayerRepository->findByIdentificationCode($participation->getPlayer()->getIdentificationCode());
+            $match = $this->writeMatchRepository->findByIdentificationCode($participation->getMatch()->getIdentificationCode());
+            $team = $this->writeTeamRepository->findByIdentificationCode($participation->getTeam()->getIdentificationCode());
+            $participation->setMatch($match);
+            $participation->setTeam($team);
+            $participation->setPlayer($player);
+            $this->writeParticipationRepository->save($participation);
+        }
+
+        return new FetchDataResponse();
+    }
+
+}

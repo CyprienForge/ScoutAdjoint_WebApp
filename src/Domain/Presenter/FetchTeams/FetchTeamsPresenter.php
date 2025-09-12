@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\FetchTeams;
 
+use Application\Query\FetchTeams\FetchTeamsOutputBoundary;
 use Domain\Response\FetchTeams\FetchTeamsResponse;
-use Domain\UseCase\FetchTeams\FetchTeamsOutputBoundary;
 use Domain\ViewModel\Entity\TeamViewModel;
 use Domain\ViewModel\FetchTeams\FetchTeamsViewModel;
 

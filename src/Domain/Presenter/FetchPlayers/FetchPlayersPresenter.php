@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\FetchPlayers;
 
+use Application\Query\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\Response\FetchPlayers\FetchPlayersResponse;
-use Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary;
 use Domain\ViewModel\Entity\PlayerViewModel;
 use Domain\ViewModel\FetchPlayers\FetchPlayersViewModel;
 

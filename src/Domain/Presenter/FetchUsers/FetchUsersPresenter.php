@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\FetchUsers;
 
+use Application\Query\FetchUsers\FetchUsersOutputBoundary;
 use Domain\Response\FetchUsers\FetchUsersResponse;
-use Domain\UseCase\FetchUsers\FetchUsersOutputBoundary;
 use Domain\ViewModel\Entity\UserViewModel;
 use Domain\ViewModel\FetchUsers\FetchUsersViewModel;
 

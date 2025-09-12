@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\ShowDetailsPlayer;
 
+use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Domain\Response\ShowDetailsPlayer\ShowDetailsPlayerResponse;
-use Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Domain\ViewModel\Entity\ParticipationViewModel;
 use Domain\ViewModel\Entity\PlayerViewModel;
 use Domain\ViewModel\ShowDetailsPlayer\ShowDetailsPlayerViewModel;

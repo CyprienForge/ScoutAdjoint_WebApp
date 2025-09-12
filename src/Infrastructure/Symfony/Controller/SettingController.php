@@ -2,6 +2,12 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Application\Command\DeleteUser\DeleteUserCommand;
+use Application\Command\EditUser\EditUserCommand;
+use Application\Query\FetchUsers\FetchUsersOutputBoundary;
+use Application\Query\FetchUsers\FetchUsersQuery;
+use Application\Query\ShowDetailsUser\ShowDetailsUserOutputBoundary;
+use Application\Query\ShowDetailsUser\ShowDetailsUserQuery;
 use Domain\Dto\EditUser\EditUserDTO;
 use Domain\Exception\DomainException;
 use Domain\Mapper\UserMapper;
@@ -9,13 +15,6 @@ use Domain\Request\DeleteUser\DeleteUserRequest;
 use Domain\Request\EditUser\EditUserRequest;
 use Domain\Request\FetchUsers\FetchUsersRequest;
 use Domain\Request\ShowDetailsUser\ShowDetailsUserRequest;
-use Domain\Response\FetchUsers\FetchUsersResponse;
-use Domain\UseCase\DeleteUser\DeleteUserUseCase;
-use Domain\UseCase\EditUser\EditUserUseCase;
-use Domain\UseCase\ShowDetailsUser\ShowDetailsUserOutputBoundary;
-use Domain\UseCase\ShowDetailsUser\ShowDetailsUserUseCase;
-use Domain\UseCase\FetchUsers\FetchUsersOutputBoundary;
-use Domain\UseCase\FetchUsers\FetchUsersUseCase;
 use Infrastructure\Symfony\Form\EditUserTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +25,7 @@ final class SettingController extends AbstractController
 {
 
     #[Route('/settings', name: 'settings')]
-    public function index(FetchUsersUseCase $useCase, FetchUsersOutputBoundary $presenter): Response
+    public function index(FetchUsersQuery $useCase, FetchUsersOutputBoundary $presenter): Response
     {
         $fetchUsersRequest = new FetchUsersRequest();
         $fetchUsersResponse = $useCase->execute($fetchUsersRequest);
@@ -38,7 +37,7 @@ final class SettingController extends AbstractController
     }
 
     #[Route('/settings/delete-user/{idUser}', name: 'delete_user')]
-    public function deleteUser(DeleteUserUseCase $useCase, UserMapper $userMapper, int $idUser): Response
+    public function deleteUser(DeleteUserCommand $useCase, UserMapper $userMapper, int $idUser): Response
     {
         $currentUserInfra = $this->getUser();
         $currentUser = $userMapper->toDomain($currentUserInfra);
@@ -54,7 +53,7 @@ final class SettingController extends AbstractController
     }
 
     #[Route('/settings/edit-user/{idUser}', name: 'edit_user')]
-    public function editUser(Request $request, ShowDetailsUserUseCase $useCase, int $idUser, ShowDetailsUserOutputBoundary $presenter, EditUserUseCase $editUserUseCase): Response
+    public function editUser(Request $request, ShowDetailsUserQuery $useCase, int $idUser, ShowDetailsUserOutputBoundary $presenter, EditUserCommand $editUserUseCase): Response
     {
         $requestDetailsUser = new ShowDetailsUserRequest($idUser);
         $responseDetailsUser = $useCase->execute($requestDetailsUser);

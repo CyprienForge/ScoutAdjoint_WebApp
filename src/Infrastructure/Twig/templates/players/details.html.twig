@@ -9,9 +9,12 @@
 
 {% block body %}
 
-    <div class="head">
+    <div class="head" style="display: flex; justify-content: space-between;">
         <a href="{{ path('get_players') }}" class="btn btn-soft btn-info ms-8 mt-8">
             Retour
+        </a>
+        <a href="{{ path('merge_players', { idPlayer: viewModel.playerViewModel.id }) }}" class="btn btn-primary mt-8">
+            Fusionner avec une autre fiche
         </a>
     </div>
 

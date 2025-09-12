@@ -16,6 +16,24 @@ services:
             - '../src/Domain/Entity'
             - '../src/Domain/ViewModel'
 
+    Application\Query\:
+        resource: '../src/Application/Query'
+        autowire: true
+        autoconfigure: true
+
+    Application\Command\:
+        resource: '../src/Application/Command'
+        autowire: true
+        autoconfigure: true
+
+    Infrastructure\Repository\:
+        resource: '../src/Infrastructure/Repository'
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $apiUrl: '%env(SUPABASE_URL)%'
+            string $apiKey: '%env(SUPABASE_API_KEY)%'
+
     Infrastructure\Symfony\Controller\:
         resource: '../src/Infrastructure/Symfony/Controller'
         tags: ['controller.service_arguments']
@@ -49,62 +67,18 @@ services:
             $teamMapperDoctrine: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
             $teamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
 
-    Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerUseCase:
-        arguments:
-            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
-            $participationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
-
-    Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchUseCase:
-        arguments:
-            $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
-            $participationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
-            $noteRepository: '@Infrastructure\Repository\Doctrine\NoteRepositoryDoctrine'
-
-    Domain\UseCase\FetchData\FetchDataUseCase:
-        arguments:
-            $readChampionshipRepository: '@Infrastructure\Repository\Supabase\ChampionshipRepositorySupabase'
-            $writeChampionshipRepository: '@Infrastructure\Repository\Doctrine\ChampionshipRepositoryDoctrine'
-            $readTeamRepository: '@Infrastructure\Repository\Supabase\TeamRepositorySupabase'
-            $writeTeamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
-            $readPlayerRepository: '@Infrastructure\Repository\Supabase\PlayerRepositorySupabase'
-            $writePlayerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
-            $readMatchRepository: '@Infrastructure\Repository\Supabase\MatchRepositorySupabase'
-            $writeMatchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
-            $readParticipationRepository: '@Infrastructure\Repository\Supabase\ParticipationRepositorySupabase'
-            $writeParticipationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
-            $championshipMapper: '@Infrastructure\Entity\Doctrine\Mapper\ChampionshipMapperDoctrine'
-            $teamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
-            $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
-            $participationMapper: '@Infrastructure\Entity\Doctrine\Mapper\ParticipationMapperDoctrine'
-
-    Domain\UseCase\FetchPlayers\FetchPlayersUseCase:
-        arguments:
-            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
-
-    Domain\UseCase\FetchMatchs\FetchMatchsUseCase:
-        arguments:
-            $matchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
-            $matchMapper: '@Infrastructure\Entity\Doctrine\Mapper\MatchMapperDoctrine'
-
-    Domain\UseCase\EditPlayer\EditPlayerUseCase:
-        arguments:
-            $playerRepository: '@Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine'
-            $playerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
-
-    Infrastructure\Repository\:
-        resource: '../src/Infrastructure/Repository'
-        autowire: true
-        autoconfigure: true
-        bind:
-            string $apiUrl: '%env(SUPABASE_URL)%'
-            string $apiKey: '%env(SUPABASE_API_KEY)%'
-
     Infrastructure\Service\GoogleAPISearch\GoogleApiLinkProfileTransfermarktSearcher:
         autowire: true
         autoconfigure: true
         bind:
             string $apiKey: '%env(GOOGLE_SEARCH_API_KEY)%'
             string $cx: '%env(GOOGLE_SEARCH_API_CX)%'
+
+    Infrastructure\Service\APIFootball\ApiFootballFetchBaseDataProvider:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $apiKey: '%env(FOOTBALL_API_KEY)%'
 
     Domain\Repository\ParticipationRepository: '@Infrastructure\Repository\Doctrine\ParticipationRepositoryDoctrine'
     Domain\Repository\PlacementRepository: '@Infrastructure\Repository\Doctrine\PlacementRepositoryDoctrine'
@@ -113,10 +87,6 @@ services:
     Domain\Repository\TeamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
     Domain\Repository\ChampionshipRepository: '@Infrastructure\Repository\Doctrine\ChampionshipRepositoryDoctrine'
     Domain\Repository\MatchRepository: '@Infrastructure\Repository\Doctrine\MatchRepositoryDoctrine'
-    Domain\UseCase\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersPresenter'
-    Domain\UseCase\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter'
-    Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchOutputBoundary: '@Domain\Presenter\ShowDetailsMatch\ShowDetailsMatchPresenter'
-    Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary: '@Domain\Presenter\FetchMatchs\FetchMatchsPresenter'
     Domain\Mapper\PlayerMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine'
     Domain\Mapper\NoteMapper: '@Infrastructure\Entity\Doctrine\Mapper\NoteMapperDoctrine'
     Domain\Mapper\TeamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'

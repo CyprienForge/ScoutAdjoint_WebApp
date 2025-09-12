@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Joueurs{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/merge_player.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="head">
+        <a href="{{ path('details_player', { idPlayer: 25 }) }}" class="btn btn-soft btn-info ms-8 mt-8">
+            Retour
+        </a>
+    </div>
+
+    <div class="flex justify-center">
+        <h2 class="text-3xl font-bold">
+            Fusionner 2 fiches joueurs
+        </h2>
+    </div>
+
+    <section class="merge-infos mt-8 ms-24">
+        <div>
+            <p>
+                La fusion fait en sorte que <span class="font-bold">TOUTES</span> les participations du joueur de droite soient intégrés à la fiche du joueur de gauche.
+                Le joueur de droite est alors <span class="font-bold">SUPPRIMÉ</span> et seul le joueur de gauche reste
+                Les états-civils et autres informations, seront modififables dans un second temps, sur la fiche du joueur.
+            </p>
+        </div>
+    </section>
+
+    <section class="mt-24" id="merge-section">
+        <div class="left-player">
+            <p>
+                ICI
+            </p>
+        </div>
+
+        <div class="center-arrow">
+            <p>ICI</p>
+        </div>
+
+        <div class="right-player">
+            <p>
+                ICI
+            </p>
+        </div>
+    </section>
+
+{% endblock %}

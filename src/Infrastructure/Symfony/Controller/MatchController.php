@@ -2,20 +2,20 @@
 
 namespace Infrastructure\Symfony\Controller;
 
+use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
+use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchCommand;
+use Application\Command\ExportReport\ExportReportCommand;
+use Application\Query\FetchMatchs\FetchMatchsOutputBoundary;
+use Application\Query\FetchMatchs\FetchMatchsQuery;
+use Application\Query\ListMatchInfos\ListMatchInfosQuery;
+use Application\Query\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
+use Application\Query\ShowDetailsMatch\ShowDetailsMatchQuery;
 use Domain\Dto\EditGlobalInfosMatch\EditGlobalInfosMatchDTO;
 use Domain\Request\EditGlobalInfosMatch\EditGlobalInfosMatchRequest;
 use Domain\Request\ExportReport\ExportReportRequest;
 use Domain\Request\FetchMatchs\FetchMatchsRequest;
 use Domain\Request\ListMatchInfos\ListMatchInfosRequest;
 use Domain\Request\ShowDetailsMatch\ShowDetailsMatchRequest;
-use Domain\UseCase\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
-use Domain\UseCase\EditGlobalInfosMatch\EditGlobalInfosMatchUseCase;
-use Domain\UseCase\ExportReport\ExportReportUseCase;
-use Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary;
-use Domain\UseCase\FetchMatchs\FetchMatchsUseCase;
-use Domain\UseCase\ListMatchInfos\ListMatchInfosUseCase;
-use Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
-use Domain\UseCase\ShowDetailsMatch\ShowDetailsMatchUseCase;
 use Infrastructure\Symfony\Form\EditGlobalInfosMatchTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MatchController extends AbstractController
 {
     #[Route('/matchs', name: 'get_matchs')]
-    public function fetchMatchs(Request $request, FetchMatchsUseCase $useCase, FetchMatchsOutputBoundary $presenter): Response
+    public function fetchMatchs(Request $request, FetchMatchsQuery $useCase, FetchMatchsOutputBoundary $presenter): Response
     {
         $request = new FetchMatchsRequest();
         $useCase->execute($request);
@@ -36,7 +36,7 @@ class MatchController extends AbstractController
     }
 
     #[Route('/matchs/details/{idMatch}/{idTeam}', name: 'details_match')]
-    public function detailsMatch(Request $request, int $idMatch, int $idTeam, ShowDetailsMatchUseCase $useCase, ShowDetailsMatchOutputBoundary $presenter): Response
+    public function detailsMatch(Request $request, int $idMatch, int $idTeam, ShowDetailsMatchQuery $useCase, ShowDetailsMatchOutputBoundary $presenter): Response
     {
         $request = new ShowDetailsMatchRequest($idMatch, $idTeam);
         $response = $useCase->execute($request);
@@ -47,7 +47,7 @@ class MatchController extends AbstractController
     }
 
     #[Route('/matchs/{idMatch}/global', name: 'details_match_global')]
-    public function detailsMatchGlobal(Request $request, int $idMatch, EditGlobalInfosMatchUseCase $useCase, EditGlobalInfosMatchOutputBoundary $presenter, ListMatchInfosUseCase $listMatchInfosUseCase): Response
+    public function detailsMatchGlobal(Request $request, int $idMatch, EditGlobalInfosMatchCommand $useCase, EditGlobalInfosMatchOutputBoundary $presenter, ListMatchInfosQuery $listMatchInfosUseCase): Response
     {
         $requestListMatchInfos = new ListMatchInfosRequest($idMatch);
         $responseListMatchInfos = $listMatchInfosUseCase->execute($requestListMatchInfos);
@@ -73,7 +73,7 @@ class MatchController extends AbstractController
     }
 
     #[Route('/matchs/export/{idMatch}', name: 'export_match')]
-    public function exportMatch(Request $request, int $idMatch, ExportReportUseCase $useCase): Response
+    public function exportMatch(Request $request, int $idMatch, ExportReportCommand $useCase): Response
     {
         $request = new ExportReportRequest($idMatch);
         $useCase->execute($request);

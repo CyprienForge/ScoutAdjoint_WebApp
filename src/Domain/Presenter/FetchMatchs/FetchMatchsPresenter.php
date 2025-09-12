@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\FetchMatchs;
 
+use Application\Query\FetchMatchs\FetchMatchsOutputBoundary;
 use Domain\Response\FetchMatchs\FetchMatchsResponse;
-use Domain\UseCase\FetchMatchs\FetchMatchsOutputBoundary;
 use Domain\ViewModel\Entity\MatchViewModel;
 use Domain\ViewModel\FetchMatchs\FetchMatchsViewModel;
 

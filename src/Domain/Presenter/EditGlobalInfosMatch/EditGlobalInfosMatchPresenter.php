@@ -2,8 +2,8 @@
 
 namespace Domain\Presenter\EditGlobalInfosMatch;
 
+use Application\UseCase\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
 use Domain\Response\EditGlobalInfosMatch\EditGlobalInfosMatchResponse;
-use Domain\UseCase\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
 use Domain\ViewModel\EditGlobalInfosMatch\EditGlobalInfosMatchViewModel;
 
 class EditGlobalInfosMatchPresenter implements EditGlobalInfosMatchOutputBoundary
