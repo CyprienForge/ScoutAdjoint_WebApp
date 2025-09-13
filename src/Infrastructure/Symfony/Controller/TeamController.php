@@ -3,13 +3,12 @@
 namespace Infrastructure\Symfony\Controller;
 
 use Application\Command\CreateTeam\CreateTeamCommand;
+use Application\Command\FillSquadTransfermarkt\FillSquadTransfermarktCommand;
 use Application\Query\FetchTeams\FetchTeamsOutputBoundary;
 use Application\Query\FetchTeams\FetchTeamsQuery;
-use Application\Command\FillSquadTransfermarkt\FillSquadTransfermarktCommand;
 use Application\Query\ListChampionships\ListChampionshipsQuery;
 use Domain\Entity\Team;
-use Domain\Mapper\ChampionshipMapper;
-use Domain\Repository\ChampionshipRepository;
+use Domain\Repository\Championship\ChampionshipRepository;
 use Domain\Request\CreateTeam\CreateTeamRequest;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Request\FillSquadTransfermarkt\FillSquadTransfermarktRequest;
@@ -22,11 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TeamController extends AbstractController
 {
-
-    public function __construct(
-        private ChampionshipRepository $championshipRepository,
-        private ChampionshipMapper $championshipMapper,
-    ){}
 
     #[Route('/teams/show', name: 'get_teams')]
     public function fetchTeams(Request $request, FetchTeamsQuery $useCase, FetchTeamsOutputBoundary $presenter): Response

@@ -5,23 +5,26 @@ namespace Application\Command\EditPlayer;
 use Domain\Entity\Placement;
 use Domain\Mapper\PlacementMapper;
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\PlacementRepository;
-use Domain\Repository\PlayerRepository;
+use Domain\Repository\Placement\PlacementRepository;
+use Domain\Repository\Placement\PlacementWriteRepository;
+use Domain\Repository\Player\PlayerReadRepository;
+use Domain\Repository\Player\PlayerWriteRepository;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 
 class EditPlayerCommand
 {
 
     public function __construct(
-        private PlayerRepository $playerRepository,
+        private PlayerReadRepository $playerReadRepository,
+        private PlayerWriteRepository $playerWriteRepository,
         private PlayerMapper $playerMapper,
         private PlacementMapper $placementMapper,
-        private PlacementRepository $placementRepository,
+        private PlacementWriteRepository $placementRepository,
     ){}
 
     public function execute(EditPlayerRequest $request)
     {
-        $playerInfra = $this->playerRepository->findById($request->editPlayerDTO->idPlayer);
+        $playerInfra = $this->playerReadRepository->findById($request->editPlayerDTO->idPlayer);
         $player = $this->playerMapper->toDomain($playerInfra);
 
         $player->setFirstName($request->editPlayerDTO->newFirstName);
@@ -51,7 +54,7 @@ class EditPlayerCommand
         }
 
         $player = $this->playerMapper->toInfra($player, $playerInfra);
-        $this->playerRepository->save($player);
+        $this->playerWriteRepository->save($player);
     }
 
 }

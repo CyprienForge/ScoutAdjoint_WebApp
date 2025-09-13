@@ -3,7 +3,7 @@
 namespace Application\Command\DeleteUser;
 
 use Domain\Exception\DeleteUser\DeleteCurrentUserException;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserWriteRepository;
 use Domain\Request\DeleteUser\DeleteUserRequest;
 use Domain\Response\DeleteUser\DeleteUserResponse;
 
@@ -11,7 +11,7 @@ class DeleteUserCommand
 {
 
     public function __construct(
-        private UserRepository $userRepository,
+        private UserWriteRepository $userRepository,
     ){}
 
     public function execute(DeleteUserRequest $request): DeleteUserResponse

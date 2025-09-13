@@ -2,7 +2,7 @@
 
 namespace Domain\Presenter\EditGlobalInfosMatch;
 
-use Application\UseCase\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
+use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
 use Domain\Response\EditGlobalInfosMatch\EditGlobalInfosMatchResponse;
 use Domain\ViewModel\EditGlobalInfosMatch\EditGlobalInfosMatchViewModel;
 

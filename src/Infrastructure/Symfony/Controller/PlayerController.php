@@ -4,10 +4,11 @@ namespace Infrastructure\Symfony\Controller;
 
 use Application\Command\CreatePlayer\CreatePlayerCommand;
 use Application\Command\EditPlayer\EditPlayerCommand;
+use Application\Command\LinkProfileTransfermarkt\LinkProfileTransfermarktCommand;
 use Application\Query\FetchPlayers\FetchPlayersOutputBoundary;
 use Application\Query\FetchPlayers\FetchPlayersQuery;
 use Application\Query\FetchPositions\FetchPositionsQuery;
-use Application\Command\LinkProfileTransfermarkt\LinkProfileTransfermarktCommand;
+use Application\Query\FetchTeams\FetchTeamsQuery;
 use Application\Query\ListEditPlayerInfos\ListEditPlayerInfosQuery;
 use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary;
 use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerQuery;
@@ -16,13 +17,14 @@ use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Mapper\PlayerMapper;
 use Domain\Mapper\PositionMapper;
 use Domain\Mapper\TeamMapper;
-use Domain\Repository\PlacementRepository;
-use Domain\Repository\PositionRepository;
-use Domain\Repository\TeamRepository;
+use Domain\Repository\Placement\PlacementRepository;
+use Domain\Repository\Position\PositionRepository;
+use Domain\Repository\Team\TeamRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
 use Domain\Request\FetchPositions\FetchPositionsRequest;
+use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
@@ -39,12 +41,6 @@ class PlayerController extends AbstractController
     public function __construct(
         private FetchPlayersOutputBoundary $presenter,
         private ShowDetailsPlayerOutputBoundary $presenterShowDetails,
-        private TeamMapper $teamMapper,
-        private PlayerMapper $playerMapper,
-        private TeamRepository $teamRepository,
-        private PositionRepository $positionRepository,
-        private PositionMapper $positionMapper,
-        private PlacementRepository $placementRepository,
     ){}
 
     #[Route('/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
@@ -117,12 +113,13 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/players/create', name: 'create_player')]
-    public function createPlayer(Request $request, CreatePlayerCommand $useCase): Response
+    public function createPlayer(Request $request, CreatePlayerCommand $useCase, FetchTeamsQuery $queryFetchTeams, FetchPositionsQuery $fetchPositionsQuery): Response
     {
-        $teamsInfra = array_filter($this->teamRepository->findAll());
-        $positionsInfra = array_filter($this->positionRepository->findAll());
-        $teams = array_map(fn($team) => $this->teamMapper->toDomain($team), $teamsInfra);
-        $positions = array_map(fn($position) => $this->positionMapper->toDomain($position), $positionsInfra);
+        $response = $queryFetchTeams->execute(new FetchTeamsRequest());
+        $teams = $response->teams;
+
+        $response = $fetchPositionsQuery->execute(new FetchPositionsRequest());
+        $positions = $response->positions;
 
         $createPlayerForm = $this->createForm(CreatePlayerTypeForm::class, new CreatePlayerDTO(), [
             'teams' => $teams,

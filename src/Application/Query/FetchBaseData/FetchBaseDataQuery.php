@@ -4,7 +4,7 @@ namespace Application\Query\FetchBaseData;
 
 use Domain\Entity\Championship;
 use Domain\Mapper\ChampionshipMapper;
-use Domain\Repository\ChampionshipRepository;
+use Domain\Repository\Championship\ChampionshipWriteRepository;
 use Domain\Request\FetchBaseData\FetchBaseDataRequest;
 use Domain\Response\FetchBaseData\FetchBaseDataResponse;
 use Domain\Service\FetchBaseData\FetchBaseDataProvider;
@@ -12,7 +12,7 @@ use Domain\Service\FetchBaseData\FetchBaseDataProvider;
 class FetchBaseDataQuery
 {
     public function __construct(
-        private ChampionshipRepository $championshipRepository,
+        private ChampionshipWriteRepository $championshipRepository,
         private ChampionshipMapper  $championshipMapper,
         private FetchBaseDataProvider $fetchBaseDataProvider
     ){}

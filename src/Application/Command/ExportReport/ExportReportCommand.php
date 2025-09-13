@@ -5,10 +5,14 @@ namespace Application\Command\ExportReport;
 use Domain\Dto\ExportReport\ReportDataDTO;
 use Domain\Mapper\MatchInfosMapper;
 use Domain\Mapper\MatchMapper;
-use Domain\Repository\MatchInfosRepository;
-use Domain\Repository\MatchRepository;
-use Domain\Repository\NoteRepository;
-use Domain\Repository\ParticipationRepository;
+use Domain\Repository\Match\MatchReadRepository;
+use Domain\Repository\Match\MatchRepository;
+use Domain\Repository\MatchInfos\MatchInfosReadRepository;
+use Domain\Repository\MatchInfos\MatchInfosRepository;
+use Domain\Repository\Note\NoteReadRepository;
+use Domain\Repository\Note\NoteRepository;
+use Domain\Repository\Participation\ParticipationReadRepository;
+use Domain\Repository\Participation\ParticipationRepository;
 use Domain\Request\ExportReport\ExportReportRequest;
 use Domain\Response\ExportReport\ExportReportResponse;
 use Domain\Service\ExportReport\ContentReportBuilder;
@@ -20,11 +24,11 @@ class ExportReportCommand
     public function __construct(
         private ReportExporter $reportExporter,
         private ContentReportBuilder $contentReportBuilder,
-        private ParticipationRepository  $participationRepository,
-        private MatchRepository $matchRepository,
+        private ParticipationReadRepository  $participationRepository,
+        private MatchReadRepository $matchRepository,
         private ExportReportOutputBoundary $presenter,
-        private NoteRepository $noteRepository,
-        private MatchInfosRepository $matchInfosRepository,
+        private NoteReadRepository $noteRepository,
+        private MatchInfosReadRepository $matchInfosRepository,
         private MatchInfosMapper $matchInfosMapper,
         private MatchMapper $matchMapper
     ){}

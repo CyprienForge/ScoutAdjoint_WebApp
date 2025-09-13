@@ -5,16 +5,18 @@ namespace Infrastructure\Entity\Doctrine\Mapper;
 use Domain\Entity\MatchInfos;
 use Domain\Mapper\MatchInfosMapper;
 use Domain\Mapper\MatchMapper;
-use Domain\Repository\MatchInfosRepository;
-use Domain\Repository\MatchRepository;
+use Domain\Repository\Match\MatchReadRepository;
+use Domain\Repository\Match\MatchRepository;
+use Domain\Repository\MatchInfos\MatchInfosReadRepository;
+use Domain\Repository\MatchInfos\MatchInfosRepository;
 use Infrastructure\Entity\Doctrine\MatchInfosDoctrine;
 
 class MatchInfosMapperDoctrine implements MatchInfosMapper
 {
     public function __construct(
         private MatchMapper $matchMapper,
-        private MatchRepository $matchRepository,
-        private MatchInfosRepository $matchInfosRepository,
+        private MatchReadRepository $matchRepository,
+        private MatchInfosReadRepository $matchInfosRepository,
     ){}
 
     public function toDomain($item)

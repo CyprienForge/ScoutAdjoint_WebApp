@@ -9,7 +9,7 @@ class Player
     private string $lastName;
     private \DateTime $birthDate;
     private Team $team;
-    private ?string $transfermarktUrl;
+    private ?string $transfermarktUrl = null;
 
     public function getId(): int
     {

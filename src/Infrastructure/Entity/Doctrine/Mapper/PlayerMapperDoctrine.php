@@ -3,18 +3,18 @@
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\Player;
-use Domain\Mapper\Mapper;
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\PlayerRepository;
-use Domain\Repository\TeamRepository;
+use Domain\Repository\Player\PlayerReadRepository;
+use Domain\Repository\Player\PlayerRepository;
+use Domain\Repository\Team\TeamReadRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 
 class PlayerMapperDoctrine implements PlayerMapper
 {
     public function __construct(
         private TeamMapperDoctrine $teamMapperDoctrine,
-        private TeamRepository $teamRepository,
-        private PlayerRepository $playerRepository,
+        private TeamReadRepository $teamRepository,
+        private PlayerReadRepository $playerRepository,
     ) {}
 
     public function toDomain($item)
@@ -37,7 +37,7 @@ class PlayerMapperDoctrine implements PlayerMapper
     {
         $playerDoctrine = null;
 
-        if ($item->getId()) {
+        if ($item->getId() == 0) {
             $playerDoctrine = $this->playerRepository->findById($item->getId());
         }
 

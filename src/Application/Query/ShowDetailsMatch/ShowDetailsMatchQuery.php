@@ -3,23 +3,18 @@
 namespace Application\Query\ShowDetailsMatch;
 
 use Domain\Dto\ShowDetailsMatch\ParticipationNotesDTO;
-use Domain\Mapper\NoteMapper;
 use Domain\Mapper\ParticipationMapper;
-use Domain\Repository\MatchRepository;
-use Domain\Repository\NoteRepository;
-use Domain\Repository\ParticipationRepository;
+use Domain\Repository\Note\NoteReadRepository;
+use Domain\Repository\Participation\ParticipationReadRepository;
 use Domain\Request\ShowDetailsMatch\ShowDetailsMatchRequest;
 use Domain\Response\ShowDetailsMatch\ShowDetailsMatchResponse;
 
 class ShowDetailsMatchQuery
 {
-
     public function __construct(
-        private MatchRepository $matchRepository,
-        private ParticipationRepository $participationRepository,
-        private NoteRepository $noteRepository,
+        private ParticipationReadRepository $participationRepository,
+        private NoteReadRepository $noteRepository,
         private ParticipationMapper $participationMapper,
-        private NoteMapper $noteMapper,
         private ShowDetailsMatchOutputBoundary $presenter
     ){}
 

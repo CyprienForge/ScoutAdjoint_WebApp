@@ -6,7 +6,8 @@ use Domain\Entity\User;
 use Domain\Exception\DomainException;
 use Domain\Exception\RegisterUser\IdentifierOrEmailAlreadyUsedException;
 use Domain\Mapper\UserMapper;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserReadRepository;
+use Domain\Repository\User\UserWriteRepository;
 use Domain\Request\RegisterUser\RegisterUserRequest;
 use Domain\Response\RegisterUser\RegisterUserResponse;
 use Domain\Service\RegisterUser\PasswordHasher;
@@ -15,7 +16,8 @@ use Domain\Validator\RegisterUser\UserValidator;
 class RegisterUserCommand
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserWriteRepository $userWriteRepository,
+        private UserReadRepository $userRepository,
         private UserMapper $userMapper,
         private PasswordHasher $passwordHasher,
         private UserValidator $userValidator
@@ -48,7 +50,7 @@ class RegisterUserCommand
         $user->setRoles(['ROLE_USER']);
 
         $userInfra = $this->userMapper->toInfra($user);
-        $this->userRepository->save($userInfra);
+        $this->userWriteRepository->save($userInfra);
         $user = $this->userMapper->toDomain($userInfra);
 
         return new RegisterUserResponse($user);

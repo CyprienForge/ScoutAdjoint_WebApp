@@ -3,11 +3,11 @@
 namespace Infrastructure\Entity\Doctrine;
 
 use Doctrine\ORM\Mapping as ORM;
-use Infrastructure\Repository\Doctrine\UserRepositoryDoctrine;
+use Infrastructure\Repository\Doctrine\User\UserWriteRepositoryDoctrine;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UserRepositoryDoctrine::class)]
+#[ORM\Entity(repositoryClass: UserWriteRepositoryDoctrine::class)]
 #[ORM\Table(name: "users")]
 class UserDoctrine implements PasswordAuthenticatedUserInterface, UserInterface
 {

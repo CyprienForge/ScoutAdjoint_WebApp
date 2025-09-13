@@ -4,14 +4,14 @@ namespace Application\Command\EditUser;
 
 use Domain\Exception\EditUser\EditCurrentPlayerException;
 use Domain\Mapper\UserMapper;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserWriteRepository;
 use Domain\Request\EditUser\EditUserRequest;
 use Domain\Response\EditUser\EditUserResponse;
 
 class EditUserCommand
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserWriteRepository $userRepository,
         private UserMapper $userMapper
     ){}
 

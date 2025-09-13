@@ -4,7 +4,7 @@ namespace Application\Command\Login;
 
 use Domain\Exception\Login\LoginFailedException;
 use Domain\Mapper\UserMapper;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserReadRepository;
 use Domain\Request\Login\LoginRequest;
 use Domain\Response\Login\LoginResponse;
 use Domain\Service\RegisterUser\PasswordHasher;
@@ -12,7 +12,7 @@ use Domain\Service\RegisterUser\PasswordHasher;
 class LoginCommand
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserReadRepository $userRepository,
         private UserMapper $userMapper,
         private PasswordHasher $passwordHasher,
     ){}

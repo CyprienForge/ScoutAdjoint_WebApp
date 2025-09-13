@@ -3,14 +3,14 @@
 namespace Application\Query\ListMatchInfos;
 
 use Domain\Mapper\MatchInfosMapper;
-use Domain\Repository\MatchInfosRepository;
+use Domain\Repository\MatchInfos\MatchInfosReadRepository;
 use Domain\Request\ListMatchInfos\ListMatchInfosRequest;
 use Domain\Response\ListMatchInfos\ListMatchInfosResponse;
 
 class ListMatchInfosQuery
 {
     public function __construct(
-        private MatchInfosRepository $matchInfosRepository,
+        private MatchInfosReadRepository $matchInfosRepository,
         private MatchInfosMapper $matchInfosMapper
     ){}
 

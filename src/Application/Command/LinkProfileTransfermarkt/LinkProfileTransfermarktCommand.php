@@ -3,7 +3,9 @@
 namespace Application\Command\LinkProfileTransfermarkt;
 
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\PlayerRepository;
+use Domain\Repository\Player\PlayerReadRepository;
+use Domain\Repository\Player\PlayerRepository;
+use Domain\Repository\Player\PlayerWriteRepository;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Response\LinkProfileTransfermarkt\LinkProfileTransfermarktResponse;
 use Domain\Service\LinkProfileTransfermarkt\LinkProfileTransfermarktSearcher;
@@ -12,7 +14,8 @@ class LinkProfileTransfermarktCommand
 {
     public function __construct(
         private LinkProfileTransfermarktSearcher $searcher,
-        private PlayerRepository $playerRepository,
+        private PlayerReadRepository $playerRepository,
+        private PlayerWriteRepository $playerWriteRepository,
         private PlayerMapper $playerMapper,
     ){}
 
@@ -25,7 +28,7 @@ class LinkProfileTransfermarktCommand
         $player->setTransfermarktUrl($linkTransfermarktProfile);
 
         $playerInfra = $this->playerMapper->toInfra($player);
-        $this->playerRepository->save($playerInfra);
+        $this->playerWriteRepository->save($playerInfra);
 
         return new LinkProfileTransfermarktResponse();
     }

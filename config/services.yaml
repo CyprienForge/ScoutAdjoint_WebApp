@@ -58,14 +58,9 @@ services:
         arguments:
             $teamMapper: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
 
-    Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine:
-        arguments:
-            $teamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
-
     Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine:
         arguments:
             $teamMapperDoctrine: '@Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine'
-            $teamRepository: '@Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine'
 
     Infrastructure\Service\GoogleAPISearch\GoogleApiLinkProfileTransfermarktSearcher:
         autowire: true

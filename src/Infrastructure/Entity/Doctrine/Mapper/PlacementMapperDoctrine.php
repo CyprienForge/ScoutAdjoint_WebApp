@@ -3,16 +3,17 @@
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Mapper\PlacementMapper;
-use Domain\Repository\PlayerRepository;
-use Domain\Repository\PositionRepository;
+use Domain\Repository\Player\PlayerReadRepository;
+use Domain\Repository\Position\PositionReadRepository;
+use Domain\Repository\Position\PositionRepository;
 use Infrastructure\Entity\Doctrine\PlacementDoctrine;
 
 class PlacementMapperDoctrine implements PlacementMapper
 {
 
     public function __construct(
-        private PlayerRepository $playerRepository,
-        private PositionRepository $positionRepository,
+        private PlayerReadRepository $playerRepository,
+        private PositionReadRepository $positionRepository,
     ){}
 
     public function toDomain($item)

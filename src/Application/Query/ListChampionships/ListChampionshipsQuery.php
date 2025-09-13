@@ -3,7 +3,7 @@
 namespace Application\Query\ListChampionships;
 
 use Domain\Mapper\ChampionshipMapper;
-use Domain\Repository\ChampionshipRepository;
+use Domain\Repository\Championship\ChampionshipReadRepository;
 use Domain\Request\ListChampionships\ListChampionshipsRequest;
 use Domain\Response\ListChampionships\ListChampionshipsResponse;
 
@@ -11,7 +11,7 @@ class ListChampionshipsQuery
 {
 
     public function __construct(
-        private ChampionshipRepository $championshipRepository,
+        private ChampionshipReadRepository $championshipRepository,
         private ChampionshipMapper $championshipMapper
     ){}
 

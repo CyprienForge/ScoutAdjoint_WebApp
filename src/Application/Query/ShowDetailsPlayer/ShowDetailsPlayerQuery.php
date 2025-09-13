@@ -4,16 +4,16 @@ namespace Application\Query\ShowDetailsPlayer;
 
 use Domain\Mapper\ParticipationMapper;
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\ParticipationRepository;
-use Domain\Repository\PlayerRepository;
+use Domain\Repository\Participation\ParticipationReadRepository;
+use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\Response\ShowDetailsPlayer\ShowDetailsPlayerResponse;
 
 class ShowDetailsPlayerQuery
 {
     public function __construct(
-        private PlayerRepository $playerRepository,
-        private ParticipationRepository $participationRepository,
+        private PlayerReadRepository $playerRepository,
+        private ParticipationReadRepository $participationRepository,
         private ShowDetailsPlayerOutputBoundary $presenter,
         private PlayerMapper $playerMapper,
         private ParticipationMapper $participationMapper,
@@ -24,7 +24,7 @@ class ShowDetailsPlayerQuery
         $player = $this->playerRepository->findById($request->idPlayer);
         $player = $this->playerMapper->toDomain($player);
 
-        $participationsInfra = $this->participationRepository->findByIdPlayer($player->getId());
+        $participationsInfra = $this->participationRepository->findByPlayer($player->getId());
         $participations = [];
         foreach($participationsInfra as $participation){
             $participations[] = $this->participationMapper->toDomain($participation);

@@ -3,14 +3,14 @@
 namespace Application\Query\FetchTeams;
 
 use Domain\Mapper\TeamMapper;
-use Domain\Repository\TeamRepository;
+use Domain\Repository\Team\TeamReadRepository;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Response\FetchTeams\FetchTeamsResponse;
 
 class FetchTeamsQuery
 {
     public function __construct(
-        private TeamRepository $teamRepository,
+        private TeamReadRepository $teamRepository,
         private TeamMapper $teamMapper,
         private FetchTeamsOutputBoundary $presenter
     ){}

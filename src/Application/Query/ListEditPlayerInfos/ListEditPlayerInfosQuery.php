@@ -4,9 +4,9 @@ namespace Application\Query\ListEditPlayerInfos;
 
 use Domain\Mapper\PositionMapper;
 use Domain\Mapper\TeamMapper;
-use Domain\Repository\PlacementRepository;
-use Domain\Repository\PositionRepository;
-use Domain\Repository\TeamRepository;
+use Domain\Repository\Placement\PlacementReadRepository;
+use Domain\Repository\Position\PositionReadRepository;
+use Domain\Repository\Team\TeamReadRepository;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Response\ListEditPlayerInfos\ListEditPlayerInfosResponse;
 
@@ -14,10 +14,10 @@ class ListEditPlayerInfosQuery
 {
 
     public function __construct(
-        private PositionRepository $positionRepository,
+        private PositionReadRepository $positionRepository,
         private PositionMapper $positionMapper,
-        private PlacementRepository $placementRepository,
-        private TeamRepository $teamRepository,
+        private PlacementReadRepository $placementRepository,
+        private TeamReadRepository $teamRepository,
         private TeamMapper $teamMapper
     ){}
 

@@ -2,15 +2,12 @@
 
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
-use Doctrine\ORM\EntityManager;
 use Domain\Entity\Team;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\TeamMapper;
-use Domain\Repository\ChampionshipRepository;
-use Domain\Repository\TeamRepository;
+use Domain\Repository\Championship\ChampionshipReadRepository;
+use Domain\Repository\Championship\ChampionshipRepository;
 use Infrastructure\Entity\Doctrine\TeamDoctrine;
-use Infrastructure\Repository\Doctrine\TeamRepositoryDoctrine;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * @implements Mapper<TeamDoctrine, Team>
@@ -18,8 +15,7 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 class TeamMapperDoctrine implements TeamMapper
 {
     public function __construct(
-        private TeamRepository $teamRepository,
-        private ChampionshipRepository $championshipRepository,
+        private ChampionshipReadRepository $championshipRepository,
     ){}
     public function toDomain($item)
     {

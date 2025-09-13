@@ -4,13 +4,13 @@ namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\User;
 use Domain\Mapper\UserMapper;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserReadRepository;
 use Infrastructure\Entity\Doctrine\UserDoctrine;
 
 class UserMapperDoctrine implements UserMapper
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserReadRepository $userRepository,
     ){}
 
     public function toDomain($item)

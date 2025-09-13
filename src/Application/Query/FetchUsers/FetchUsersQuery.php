@@ -3,14 +3,14 @@
 namespace Application\Query\FetchUsers;
 
 use Domain\Mapper\UserMapper;
-use Domain\Repository\UserRepository;
+use Domain\Repository\User\UserReadRepository;
 use Domain\Request\FetchUsers\FetchUsersRequest;
 use Domain\Response\FetchUsers\FetchUsersResponse;
 
 class FetchUsersQuery
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserReadRepository $userRepository,
         private UserMapper $userMapper,
     ){}
 

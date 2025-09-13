@@ -4,16 +4,18 @@ namespace Application\Command\EditGlobalInfosMatch;
 
 use Domain\Mapper\MatchInfosMapper;
 use Domain\Mapper\MatchMapper;
-use Domain\Repository\MatchInfosRepository;
-use Domain\Repository\MatchRepository;
+use Domain\Repository\Match\MatchReadRepository;
+use Domain\Repository\MatchInfos\MatchInfosReadRepository;
+use Domain\Repository\MatchInfos\MatchInfosWriteRepository;
 use Domain\Request\EditGlobalInfosMatch\EditGlobalInfosMatchRequest;
 use Domain\Response\EditGlobalInfosMatch\EditGlobalInfosMatchResponse;
 
 class EditGlobalInfosMatchCommand
 {
     public function __construct(
-        private MatchRepository $matchRepository,
-        private MatchInfosRepository $matchInfosRepository,
+        private MatchReadRepository $matchRepository,
+        private MatchInfosReadRepository $matchInfosRepository,
+        private MatchInfosWriteRepository $matchInfosWriteRepository,
         private EditGlobalInfosMatchOutputBoundary $presenter,
         private MatchMapper $matchMapper,
         private MatchInfosMapper $matchInfosMapper,
@@ -34,7 +36,7 @@ class EditGlobalInfosMatchCommand
             $editGlobalInfosMatch->setHomeTeamInfo($request->editGlobalInfosMatchDTO->getHomeTeamInfo());
             $editGlobalInfosMatch->setAwayTeamInfo($request->editGlobalInfosMatchDTO->getAwayTeamInfo());
 
-            $this->matchInfosRepository->save($this->matchInfosMapper->toInfra($editGlobalInfosMatch));
+            $this->matchInfosWriteRepository->save($this->matchInfosMapper->toInfra($editGlobalInfosMatch));
         }
 
         $response = new EditGlobalInfosMatchResponse(

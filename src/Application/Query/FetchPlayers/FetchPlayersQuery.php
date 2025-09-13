@@ -3,7 +3,7 @@
 namespace Application\Query\FetchPlayers;
 
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\PlayerRepository;
+use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Request\FetchPlayers\FetchPlayersRequest;
 use Domain\Response\FetchPlayers\FetchPlayersResponse;
 
@@ -11,7 +11,7 @@ class FetchPlayersQuery
 {
 
     public function __construct(
-      private PlayerRepository $playerRepository,
+      private PlayerReadRepository $playerRepository,
       private FetchPlayersOutputBoundary $presenter,
         private PlayerMapper $playerMapper,
     ){}

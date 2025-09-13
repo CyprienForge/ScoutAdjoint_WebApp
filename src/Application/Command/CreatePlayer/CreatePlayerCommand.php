@@ -6,8 +6,10 @@ use Domain\Entity\Placement;
 use Domain\Entity\Player;
 use Domain\Mapper\PlacementMapper;
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\PlacementRepository;
-use Domain\Repository\PlayerRepository;
+use Domain\Repository\Placement\PlacementRepository;
+use Domain\Repository\Placement\PlacementWriteRepository;
+use Domain\Repository\Player\PlayerRepository;
+use Domain\Repository\Player\PlayerWriteRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Response\CreatePlayer\CreatePlayerResponse;
 
@@ -16,9 +18,9 @@ class CreatePlayerCommand
 
     public function __construct(
         private PlayerMapper $playerMapper,
-        private PlayerRepository $playerRepository,
+        private PlayerWriteRepository $playerRepository,
         private PlacementMapper $placementMapper,
-        private PlacementRepository $placementRepository
+        private PlacementWriteRepository $placementRepository
     ){}
 
     public function execute(CreatePlayerRequest $request) : CreatePlayerResponse
@@ -26,7 +28,8 @@ class CreatePlayerCommand
         $createPlayerDTO = $request->createPlayerDTO;
 
         $player = new Player();
-        $player->setFirstName($createPlayerDTO->firstName)
+        $player->setId(0)
+                ->setFirstName($createPlayerDTO->firstName)
                 ->setLastName($createPlayerDTO->lastName)
                 ->setBirthDate($createPlayerDTO->birthDate)
                 ->setTeam($createPlayerDTO->team);
