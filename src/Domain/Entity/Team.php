@@ -5,7 +5,7 @@ namespace Domain\Entity;
 class Team
 {
     private ?int $id = null;
-    private string $name;
+    private ?string $name = null;
     private ?string $logoPath = null;
     private ?Championship $championship;
 
@@ -20,12 +20,12 @@ class Team
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): Team
+    public function setName(?string $name): Team
     {
         $this->name = $name;
         return $this;

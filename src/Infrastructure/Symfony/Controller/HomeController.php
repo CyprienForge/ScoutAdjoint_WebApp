@@ -12,6 +12,7 @@ use Domain\Request\FetchBaseData\FetchBaseDataRequest;
 use Domain\Request\Login\LoginRequest;
 use Domain\Request\Logout\LogoutRequest;
 use Domain\Request\RegisterUser\RegisterUserRequest;
+use Infrastructure\Entity\Doctrine\UserDoctrine;
 use Infrastructure\Symfony\Form\LoginTypeForm;
 use Infrastructure\Symfony\Form\RegisterTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,7 +60,7 @@ class HomeController extends AbstractController
             try{
                 $registerResponse = $registerUseCase->execute($registerRequest);
 
-                $userInfra = $userMapper->toInfra($registerResponse->user);
+                $userInfra = $userMapper->toInfra($registerResponse->user, new UserDoctrine());
                 $security->login($userInfra);
 
                 return $this->redirectToRoute('home');
@@ -89,7 +90,7 @@ class HomeController extends AbstractController
             try{
                 $loginResponse = $useCase->execute($loginRequest);
 
-                $userInfra = $userMapper->toInfra($loginResponse->user);
+                $userInfra = $userMapper->toInfra($loginResponse->user, new UserDoctrine());
                 $security->login($userInfra);
 
                 return $this->redirectToRoute('home');

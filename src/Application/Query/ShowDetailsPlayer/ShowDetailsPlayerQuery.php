@@ -15,20 +15,12 @@ class ShowDetailsPlayerQuery
         private PlayerReadRepository $playerRepository,
         private ParticipationReadRepository $participationRepository,
         private ShowDetailsPlayerOutputBoundary $presenter,
-        private PlayerMapper $playerMapper,
-        private ParticipationMapper $participationMapper,
     ){}
 
     public function execute(ShowDetailsPlayerRequest $request): ShowDetailsPlayerResponse
     {
         $player = $this->playerRepository->findById($request->idPlayer);
-        $player = $this->playerMapper->toDomain($player);
-
-        $participationsInfra = $this->participationRepository->findByPlayer($player->getId());
-        $participations = [];
-        foreach($participationsInfra as $participation){
-            $participations[] = $this->participationMapper->toDomain($participation);
-        }
+        $participations = $this->participationRepository->findByPlayer($player->getId());
 
         $response = new ShowDetailsPlayerResponse($player, $participations);
         $this->presenter->present($response);

@@ -17,15 +17,12 @@ class EditPlayerCommand
     public function __construct(
         private PlayerReadRepository $playerReadRepository,
         private PlayerWriteRepository $playerWriteRepository,
-        private PlayerMapper $playerMapper,
-        private PlacementMapper $placementMapper,
         private PlacementWriteRepository $placementRepository,
     ){}
 
     public function execute(EditPlayerRequest $request)
     {
-        $playerInfra = $this->playerReadRepository->findById($request->editPlayerDTO->idPlayer);
-        $player = $this->playerMapper->toDomain($playerInfra);
+        $player = $this->playerReadRepository->findById($request->editPlayerDTO->idPlayer);
 
         $player->setFirstName($request->editPlayerDTO->newFirstName);
         $player->setLastName($request->editPlayerDTO->newLastName);
@@ -49,11 +46,9 @@ class EditPlayerCommand
             $placement->setPosition($position);
             $placement->setPlayer($player);
 
-            $placementInfra = $this->placementMapper->toInfra($placement);
-            $this->placementRepository->save($placementInfra);
+            $this->placementRepository->save($placement);
         }
 
-        $player = $this->playerMapper->toInfra($player, $playerInfra);
         $this->playerWriteRepository->save($player);
     }
 

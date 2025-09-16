@@ -17,26 +17,22 @@ class EditGlobalInfosMatchCommand
         private MatchInfosReadRepository $matchInfosRepository,
         private MatchInfosWriteRepository $matchInfosWriteRepository,
         private EditGlobalInfosMatchOutputBoundary $presenter,
-        private MatchMapper $matchMapper,
-        private MatchInfosMapper $matchInfosMapper,
     ){}
 
     public function execute(EditGlobalInfosMatchRequest $request) : EditGlobalInfosMatchResponse
     {
-        $matchInfra = $this->matchRepository->findById($request->idMatch);
-        $match = $this->matchMapper->toDomain($matchInfra);
+        $match = $this->matchRepository->findById($request->idMatch);
 
         if($request->editGlobalInfosMatchDTO != null)
         {
-            $editGlobalInfosMatchInfra = $this->matchInfosRepository->findByMatch($match->getId());
-            $editGlobalInfosMatch = $this->matchInfosMapper->toDomain($editGlobalInfosMatchInfra);
+            $editGlobalInfosMatch = $this->matchInfosRepository->findByMatch($match->getId());
 
             $editGlobalInfosMatch->setPreMatchInfo($request->editGlobalInfosMatchDTO->getPreMatchInfo());
             $editGlobalInfosMatch->setPostMatchInfo($request->editGlobalInfosMatchDTO->getPostMatchInfo());
             $editGlobalInfosMatch->setHomeTeamInfo($request->editGlobalInfosMatchDTO->getHomeTeamInfo());
             $editGlobalInfosMatch->setAwayTeamInfo($request->editGlobalInfosMatchDTO->getAwayTeamInfo());
 
-            $this->matchInfosWriteRepository->save($this->matchInfosMapper->toInfra($editGlobalInfosMatch));
+            $this->matchInfosWriteRepository->save($editGlobalInfosMatch);
         }
 
         $response = new EditGlobalInfosMatchResponse(

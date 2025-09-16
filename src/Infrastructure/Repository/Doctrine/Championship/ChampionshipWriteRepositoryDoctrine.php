@@ -5,6 +5,7 @@ namespace Infrastructure\Repository\Doctrine\Championship;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Entity\Championship;
 use Domain\Repository\Championship\ChampionshipWriteRepository;
 use Infrastructure\Entity\Doctrine\ChampionshipDoctrine;
 

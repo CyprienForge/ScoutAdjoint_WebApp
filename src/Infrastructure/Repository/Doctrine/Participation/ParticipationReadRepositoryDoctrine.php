@@ -42,16 +42,32 @@ class ParticipationReadRepositoryDoctrine extends ServiceEntityRepository implem
             ->setParameter('team', $idTeam)
             ->orderBy('p.numero', 'ASC');
 
-        return $qb->getQuery()->getResult();
+        $result = $qb->getQuery()->getResult();
+
+        $participations = [];
+        foreach($result as $participationDoctrine)
+        {
+            $participations[] = $this->participationMapper->toDomain($participationDoctrine);
+        }
+
+        return $participations;
     }
 
     public function findById(int $id)
     {
-        return $this->find($id);
+        $participationDoctrine = $this->find($id);
+        return $this->participationMapper->toDomain($participationDoctrine);
     }
 
     public function findByPlayer(int $idPlayer)
     {
-        return $this->findBy(['player' => $idPlayer]);
+        $participations = [];
+        $participationsDoctrine = $this->findBy(['player' => $idPlayer]);
+        foreach($participationsDoctrine as $participation)
+        {
+            $participations[] = $this->participationMapper->toDomain($participation);
+        }
+
+        return $participations;
     }
 }

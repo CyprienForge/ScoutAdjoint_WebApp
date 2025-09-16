@@ -8,6 +8,7 @@ use Domain\Mapper\PlacementMapper;
 use Domain\Mapper\PlayerMapper;
 use Domain\Repository\Placement\PlacementRepository;
 use Domain\Repository\Placement\PlacementWriteRepository;
+use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Repository\Player\PlayerRepository;
 use Domain\Repository\Player\PlayerWriteRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
@@ -17,9 +18,8 @@ class CreatePlayerCommand
 {
 
     public function __construct(
-        private PlayerMapper $playerMapper,
+        private PlayerReadRepository $playerReadRepository,
         private PlayerWriteRepository $playerRepository,
-        private PlacementMapper $placementMapper,
         private PlacementWriteRepository $placementRepository
     ){}
 
@@ -33,21 +33,17 @@ class CreatePlayerCommand
                 ->setLastName($createPlayerDTO->lastName)
                 ->setBirthDate($createPlayerDTO->birthDate)
                 ->setTeam($createPlayerDTO->team);
-
-        $playerInfra = $this->playerMapper->toInfra($player);
-        $this->playerRepository->save($playerInfra);
-        $player = $this->playerMapper->toDomain($playerInfra);
+        $this->playerRepository->save($player);
+        $player = $this->playerReadRepository->findById($this->playerRepository->getLastInsertId());
 
         foreach($createPlayerDTO->positions as $position){
             $placement = new Placement();
 
             $placement->setPosition($position)->setPlayer($player);
-            $placementInfra = $this->placementMapper->toInfra($placement);
-
-            $this->placementRepository->save($placementInfra);
+            $this->placementRepository->save($placement);
         }
 
-        return new CreatePlayerResponse();
+        return new CreatePlayerResponse($player);
     }
 
 }

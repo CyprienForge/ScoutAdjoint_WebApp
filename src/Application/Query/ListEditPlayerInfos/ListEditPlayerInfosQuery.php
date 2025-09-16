@@ -15,26 +15,20 @@ class ListEditPlayerInfosQuery
 
     public function __construct(
         private PositionReadRepository $positionRepository,
-        private PositionMapper $positionMapper,
         private PlacementReadRepository $placementRepository,
         private TeamReadRepository $teamRepository,
-        private TeamMapper $teamMapper
     ){}
 
     public function execute(ListEditPlayerInfosRequest $request) : ListEditPlayerInfosResponse
     {
-        $allPositionsInfra = $this->positionRepository->findAll();
-        $allPositions = array_map(fn($pos) => $this->positionMapper->toDomain($pos), $allPositionsInfra);
+        $allPositions = $this->positionRepository->findAll();
+        $positionsSelected = $this->placementRepository->findByPlayer($request->playerId);
 
-        $placementsInfra = array_filter($this->placementRepository->findByPlayer($request->playerId));
-        $positions = array_map(fn($placement) => $this->positionMapper->toDomain($placement->getPosition()), $placementsInfra);
-
-        $teamsInfra = array_filter($this->teamRepository->findAll());
-        $teams = array_map(fn($team) => $this->teamMapper->toDomain($team), $teamsInfra);
+        $teams = $this->teamRepository->findAll();
 
         $listEditInfosResponse = new ListEditPlayerInfosResponse(
             $allPositions,
-            $positions,
+            $positionsSelected,
             $teams,
         );
         return $listEditInfosResponse;

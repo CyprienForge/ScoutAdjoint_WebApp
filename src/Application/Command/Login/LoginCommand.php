@@ -13,7 +13,6 @@ class LoginCommand
 {
     public function __construct(
         private UserReadRepository $userRepository,
-        private UserMapper $userMapper,
         private PasswordHasher $passwordHasher,
     ){}
 
@@ -26,9 +25,7 @@ class LoginCommand
             throw new LoginFailedException("Le mot de passe et / ou l'identifiant ou l'email sont incorrect");
         }
 
-        $userInfra = $userInfraEmail == null ? $userInfraIdentifier : $userInfraEmail;
-        $user = $this->userMapper->toDomain($userInfra);
-
+        $user = $userInfraEmail == null ? $userInfraIdentifier : $userInfraEmail;
         $isPasswordValid = $this->passwordHasher->verify($request->password, $user->getPassword());
         if(!$isPasswordValid)
         {

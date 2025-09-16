@@ -13,14 +13,11 @@ class FetchPlayersQuery
     public function __construct(
       private PlayerReadRepository $playerRepository,
       private FetchPlayersOutputBoundary $presenter,
-        private PlayerMapper $playerMapper,
     ){}
 
     public function execute(FetchPlayersRequest $request) : FetchPlayersResponse
     {
-        $players = [];
-
-        $playersResponse = $this->playerRepository->findPaginated(
+        $players = $this->playerRepository->findPaginated(
             $request->limit,
             $request->offset,
             $request->firstNameSearch,
@@ -30,9 +27,6 @@ class FetchPlayersQuery
             $request->positions,
             $request->team
         );
-        foreach($playersResponse as $playerResponse){
-            $players[] = $this->playerMapper->toDomain($playerResponse);
-        }
 
         $response = new FetchPlayersResponse($players, $request->pageNumber, $request->limit);
         $this->presenter->present($response);

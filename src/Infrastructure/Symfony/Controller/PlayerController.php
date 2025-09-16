@@ -132,7 +132,8 @@ class PlayerController extends AbstractController
             $player = $createPlayerForm->getData();
             $request = new CreatePlayerRequest($player);
 
-            $useCase->execute($request);
+            $response = $useCase->execute($request);
+            return $this->redirectToRoute('details_player', ['idPlayer' => $response->playerCreated->getId()]);
         }
 
         return $this->render('players/create.html.twig', [
@@ -149,7 +150,7 @@ class PlayerController extends AbstractController
         return $this->redirectToRoute('details_player', ['idPlayer' => $idPlayer]);
     }
 
-    #[Route('/players/merge-players/{idPlayer}', name: 'merge_players')]
+    #[Route('/players/merge-players/{idPlayer}', name: 'merge_players_page')]
     public function mergePlayers(Request $request, int $idPlayer) : Response
     {
         return $this->render('players/merge.html.twig', []);

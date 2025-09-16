@@ -6,5 +6,5 @@ use Domain\Repository\WriteRepository;
 
 interface PlayerWriteRepository extends WriteRepository
 {
-
+    public function getLastInsertId() : int;
 }

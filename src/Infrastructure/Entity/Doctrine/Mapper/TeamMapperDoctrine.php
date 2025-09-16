@@ -3,6 +3,7 @@
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\Team;
+use Domain\Mapper\ChampionshipMapper;
 use Domain\Mapper\Mapper;
 use Domain\Mapper\TeamMapper;
 use Domain\Repository\Championship\ChampionshipReadRepository;
@@ -16,6 +17,7 @@ class TeamMapperDoctrine implements TeamMapper
 {
     public function __construct(
         private ChampionshipReadRepository $championshipRepository,
+        private ChampionshipMapper $championshipMapper,
     ){}
     public function toDomain($item)
     {
@@ -24,8 +26,7 @@ class TeamMapperDoctrine implements TeamMapper
         $team->setName($item->getName());
         $team->setLogoPath($item->getLogoPath());
 
-        $championshipMapperDoctrine = new ChampionshipMapperDoctrine();
-        $championship = $championshipMapperDoctrine->toDomain($item->getChampionship());
+        $championship = $this->championshipMapper->toDomain($item->getChampionship());
 
         $team->setChampionship($championship);
 
@@ -38,11 +39,14 @@ class TeamMapperDoctrine implements TeamMapper
         $teamDoctrine->setName($item->getName());
         $teamDoctrine->setLogoPath($item->getLogoPath());
 
-        $championshipDoctrine = null;
-        if($item->getChampionship() !== null && $item->getChampionship()->getId() !== null){
-            $championshipDoctrine = $this->championshipRepository->findById($item->getChampionship()->getId());
+        if ($item->getChampionship() !== null && $item->getChampionship()->getId() !== null) {
+            $championshipDoctrine = $this->championshipRepository->find($item->getChampionship()->getId());
+            if (!$championshipDoctrine) {
+                $teamDoctrine = $this->championshipMapper->toInfra($item->getChampionship());
+            }
+
+            $teamDoctrine->setChampionship($championshipDoctrine);
         }
-        $teamDoctrine->setChampionship($championshipDoctrine);
 
         return $teamDoctrine;
     }

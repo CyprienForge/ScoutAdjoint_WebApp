@@ -18,7 +18,6 @@ class RegisterUserCommand
     public function __construct(
         private UserWriteRepository $userWriteRepository,
         private UserReadRepository $userRepository,
-        private UserMapper $userMapper,
         private PasswordHasher $passwordHasher,
         private UserValidator $userValidator
     ){}
@@ -31,13 +30,13 @@ class RegisterUserCommand
             throw $e;
         }
 
-        $userInfra = $this->userRepository->findByIdentifier($request->identifier);
-        if($userInfra != null){
+        $user = $this->userRepository->findByIdentifier($request->identifier);
+        if($user != null){
             throw new IdentifierOrEmailAlreadyUsedException("L'identifiant et / ou l'email sont déjà associés à un compte");
         }
 
-        $userInfra = $this->userRepository->findByEmail($request->email);
-        if($userInfra != null){
+        $user = $this->userRepository->findByEmail($request->email);
+        if($user != null){
             throw new IdentifierOrEmailAlreadyUsedException("L'identifiant et / ou l'email sont déjà associés à un compte");
         }
 
@@ -49,10 +48,8 @@ class RegisterUserCommand
         $user->setIdentifier($request->identifier);
         $user->setRoles(['ROLE_USER']);
 
-        $userInfra = $this->userMapper->toInfra($user);
-        $this->userWriteRepository->save($userInfra);
-        $user = $this->userMapper->toDomain($userInfra);
-
+        $this->userWriteRepository->save($user);
+        $user->setId($this->userWriteRepository->getLastInsertId());
         return new RegisterUserResponse($user);
     }
 

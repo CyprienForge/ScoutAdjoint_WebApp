@@ -8,6 +8,7 @@ use Domain\Mapper\Mapper;
 use Domain\Mapper\MatchMapper;
 use Domain\Mapper\StadiumMapper;
 use Domain\Mapper\TeamMapper;
+use Domain\Repository\Team\TeamReadRepository;
 use Infrastructure\Entity\Doctrine\MatchDoctrine;
 
 class MatchMapperDoctrine implements MatchMapper
@@ -16,6 +17,7 @@ class MatchMapperDoctrine implements MatchMapper
         private TeamMapper $teamMapper,
         private StadiumMapper $stadiumMapper,
         private ChampionshipMapper $championshipMapper,
+        private TeamReadRepository $teamReadRepository,
     ){}
     public function toDomain($item)
     {
@@ -37,16 +39,21 @@ class MatchMapperDoctrine implements MatchMapper
         return $match;
     }
 
-    public function toInfra($item)
+    public function toInfra($item, ?MatchDoctrine $existing = null)
     {
-        $matchDoctrine = new MatchDoctrine();
+        $matchDoctrine = $existing ?? new MatchDoctrine();
+
         $matchDoctrine->setId($item->getId());
         $matchDoctrine->setDate($item->getDate());
         $matchDoctrine->setScoreHome($item->getScoreHome());
         $matchDoctrine->setScoreAway($item->getScoreAway());
 
-        $homeTeam = $this->teamMapper->toInfra($item->getHomeTeam());
-        $awayTeam = $this->teamMapper->toInfra($item->getAwayTeam());
+        $homeTeamInfra = $this->teamReadRepository->findById($item->getHomeTeam()->getId());
+        $awayTeamInfra = $this->teamReadRepository->findById($item->getAwayTeam()->getId());
+
+        $homeTeam = $this->teamMapper->toInfra($homeTeamInfra);
+        $awayTeam = $this->teamMapper->toInfra($awayTeamInfra);
+
         $matchDoctrine->setHomeTeam($homeTeam);
         $matchDoctrine->setAwayTeam($awayTeam);
         $matchDoctrine->setIsPrepared($item->isPrepared());

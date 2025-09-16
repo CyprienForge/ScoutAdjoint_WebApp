@@ -11,20 +11,13 @@ class FetchUsersQuery
 {
     public function __construct(
         private UserReadRepository $userRepository,
-        private UserMapper $userMapper,
     ){}
 
     public function execute(FetchUsersRequest $request): FetchUsersResponse
     {
-        $users = [];
-        $usersInfra = $this->userRepository->findAll();
-
-        foreach($usersInfra as $userInfra)
-        {
-            $users[] = $this->userMapper->toDomain($userInfra);
-        }
-
+        $users = $this->userRepository->findAll();
         $fetchUsersResponse = new FetchUsersResponse($users);
+
         return $fetchUsersResponse;
     }
 

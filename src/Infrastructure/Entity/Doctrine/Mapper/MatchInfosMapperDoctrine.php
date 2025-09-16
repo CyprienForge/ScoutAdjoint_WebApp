@@ -6,17 +6,13 @@ use Domain\Entity\MatchInfos;
 use Domain\Mapper\MatchInfosMapper;
 use Domain\Mapper\MatchMapper;
 use Domain\Repository\Match\MatchReadRepository;
-use Domain\Repository\Match\MatchRepository;
-use Domain\Repository\MatchInfos\MatchInfosReadRepository;
-use Domain\Repository\MatchInfos\MatchInfosRepository;
 use Infrastructure\Entity\Doctrine\MatchInfosDoctrine;
 
 class MatchInfosMapperDoctrine implements MatchInfosMapper
 {
     public function __construct(
         private MatchMapper $matchMapper,
-        private MatchReadRepository $matchRepository,
-        private MatchInfosReadRepository $matchInfosRepository,
+        private MatchReadRepository $matchReadRepository,
     ){}
 
     public function toDomain($item)
@@ -32,16 +28,15 @@ class MatchInfosMapperDoctrine implements MatchInfosMapper
         return $matchInfos;
     }
 
-    public function toInfra($item)
+    public function toInfra($item, ?MatchInfosDoctrine $existing = null)
     {
-        $matchInfosDoctrine = $this->matchInfosRepository->findByMatch($item->getMatch()->getId());
-        if (!$matchInfosDoctrine) {
-            $matchInfosDoctrine = new MatchInfosDoctrine();
-            $matchDoctrine = $this->matchRepository->findById($item->getMatch()->getId());
-            $matchInfosDoctrine->setMatch($matchDoctrine);
-        }
+        $matchInfosDoctrine = $existing ?? new MatchInfosDoctrine();
+
+        $match = $this->matchReadRepository->findById($item->getMatch()->getId());
+        $matchInfra = $this->matchMapper->toInfra($match);
 
         $matchInfosDoctrine->setId($item->getId());
+        $matchInfosDoctrine->setMatch($matchInfra);
         $matchInfosDoctrine->setPreMatchInfo($item->getPreMatchInfo());
         $matchInfosDoctrine->setPostMatchInfo($item->getPostMatchInfo());
         $matchInfosDoctrine->setHomeTeamInfo($item->getHomeTeamInfo());

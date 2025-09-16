@@ -6,12 +6,13 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Mapper\PlayerMapper;
 use Domain\Repository\Player\PlayerReadRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 
 class PlayerReadRepositoryDoctrine extends ServiceEntityRepository implements PlayerReadRepository
 {
-    public function __construct(private EntityManagerInterface $em, ManagerRegistry $registry){
+    public function __construct(private EntityManagerInterface $em, private PlayerMapper $playerMapper, ManagerRegistry $registry){
         parent::__construct($registry, PlayerDoctrine::class);
     }
     public function findPaginated(int $limit, int $offset, ?string $firstName = null, ?string $lastName = null, ?DateTime $startBirthDate = null, ?DateTime $endBirthDate = null, ?array $positions = null, ?string $team = null)
@@ -41,14 +42,23 @@ class PlayerReadRepositoryDoctrine extends ServiceEntityRepository implements Pl
                 ->setParameter('team', '%'.strtolower($team).'%');
         }
 
-        return $queryBuilder->setFirstResult($offset)
+        $result = $queryBuilder->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+
+        $players = [];
+        foreach($result as $player)
+        {
+            $players[] = $this->playerMapper->toDomain($player);
+        }
+
+        return $players;
     }
 
     public function findById(int $id)
     {
-        return $this->find($id);
+        $playerDoctrine = $this->find($id);
+        return $this->playerMapper->toDomain($playerDoctrine);
     }
 }

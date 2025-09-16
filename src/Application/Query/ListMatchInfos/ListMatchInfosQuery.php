@@ -11,12 +11,11 @@ class ListMatchInfosQuery
 {
     public function __construct(
         private MatchInfosReadRepository $matchInfosRepository,
-        private MatchInfosMapper $matchInfosMapper
     ){}
 
     public function execute(ListMatchInfosRequest $request): ListMatchInfosResponse
     {
-        $matchInfosInfra = $this->matchInfosRepository->findByMatch($request->idMatch);
-        return new ListMatchInfosResponse($this->matchInfosMapper->toDomain($matchInfosInfra));
+        $matchInfos = $this->matchInfosRepository->findByMatch($request->idMatch);
+        return new ListMatchInfosResponse($matchInfos);
     }
 }

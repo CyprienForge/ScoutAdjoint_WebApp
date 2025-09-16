@@ -4,19 +4,19 @@ namespace Domain\Entity;
 
 class Player
 {
-    private int $id;
+    private ?int $id = null;
     private string $firstName;
     private string $lastName;
     private \DateTime $birthDate;
     private Team $team;
     private ?string $transfermarktUrl = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): Player
+    public function setId(?int $id): Player
     {
         $this->id = $id;
         return $this;

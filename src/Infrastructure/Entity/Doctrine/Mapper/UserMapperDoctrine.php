@@ -9,9 +9,7 @@ use Infrastructure\Entity\Doctrine\UserDoctrine;
 
 class UserMapperDoctrine implements UserMapper
 {
-    public function __construct(
-        private UserReadRepository $userRepository,
-    ){}
+    public function __construct(){}
 
     public function toDomain($item)
     {
@@ -26,18 +24,13 @@ class UserMapperDoctrine implements UserMapper
         return $user;
     }
 
-    public function toInfra($item)
+    public function toInfra($item, ?UserDoctrine $existing = null)
     {
-        $userDoctrine = null;
+        $userDoctrine = $existing ?? new UserDoctrine();
 
-        if ($item->getId()) {
-            $userDoctrine = $this->userRepository->findById($item->getId());
+        if($existing){
+            $userDoctrine->setId($item->getId());
         }
-
-        if (!$userDoctrine) {
-            $userDoctrine = new UserDoctrine();
-        }
-
         $userDoctrine->setEmail($item->getEmail());
         $userDoctrine->setIdentifier($item->getIdentifier());
         $userDoctrine->setPassword($item->getPassword());

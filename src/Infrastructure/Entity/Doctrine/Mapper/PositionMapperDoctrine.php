@@ -4,6 +4,7 @@ namespace Infrastructure\Entity\Doctrine\Mapper;
 
 use Domain\Entity\Position;
 use Domain\Mapper\PositionMapper;
+use Infrastructure\Entity\Doctrine\PositionDoctrine;
 
 class PositionMapperDoctrine implements PositionMapper
 {
@@ -17,8 +18,11 @@ class PositionMapperDoctrine implements PositionMapper
         return $position;
     }
 
-    public function toInfra($item)
+    public function toInfra($item, ?PositionDoctrine $existing = null)
     {
-        // TODO: Implement toInfra() method.
+        $positionDoctrine = $existing ?? new PositionDoctrine();
+        $positionDoctrine->setLibelle($item->getLibelle());
+
+        return $positionDoctrine;
     }
 }

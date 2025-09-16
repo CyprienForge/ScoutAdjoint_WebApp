@@ -14,7 +14,6 @@ class ShowDetailsMatchQuery
     public function __construct(
         private ParticipationReadRepository $participationRepository,
         private NoteReadRepository $noteRepository,
-        private ParticipationMapper $participationMapper,
         private ShowDetailsMatchOutputBoundary $presenter
     ){}
 
@@ -25,7 +24,6 @@ class ShowDetailsMatchQuery
 
         foreach($participations as $participation)
         {
-            $participation = $this->participationMapper->toDomain($participation);
             $notes = $this->noteRepository->findByParticipation($participation->getId());
 
             $participationsNotes[] = new ParticipationNotesDTO($participation, $notes);

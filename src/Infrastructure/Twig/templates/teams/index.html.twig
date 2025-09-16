@@ -14,6 +14,12 @@
         <a class="btn btn-primary" href="{{ path('create_team') }}">Créer équipe</a>
     </div>
 
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice" style="color: black; margin-top: 4%; margin-left: auto; padding: 1%; border-radius: 1rem; margin-right: auto; text-align: center; background-color: #27F535; width: 50%;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <section>
         {% for team in viewModel.teamViewModels %}
                 <p class="mt-8">

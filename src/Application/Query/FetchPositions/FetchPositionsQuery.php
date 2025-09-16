@@ -11,17 +11,10 @@ class FetchPositionsQuery
 {
     public function __construct(
         private PositionReadRepository $positionRepository,
-        private PositionMapper $positionMapper,
     ){}
     public function execute(FetchPositionsRequest $request): FetchPositionsResponse
     {
-        $positionsInfra = $this->positionRepository->findAll();
-        $positions = [];
-
-        foreach($positionsInfra as $position){
-            $positions[] = $this->positionMapper->toDomain($position);
-        }
-
+        $positions = $this->positionRepository->findAll();
         return new FetchPositionsResponse($positions);
     }
 

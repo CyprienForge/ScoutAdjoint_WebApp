@@ -11,19 +11,12 @@ class FetchTeamsQuery
 {
     public function __construct(
         private TeamReadRepository $teamRepository,
-        private TeamMapper $teamMapper,
         private FetchTeamsOutputBoundary $presenter
     ){}
 
     public function execute(FetchTeamsRequest $request) : FetchTeamsResponse
     {
-        $teamsInfra = $this->teamRepository->findAll();
-        $teams = [];
-
-        foreach($teamsInfra as $team){
-            $teams[] = $this->teamMapper->toDomain($team);
-        }
-
+        $teams = $this->teamRepository->findAll();
         $response = new FetchTeamsResponse($teams);
         $this->presenter->present($response);
 

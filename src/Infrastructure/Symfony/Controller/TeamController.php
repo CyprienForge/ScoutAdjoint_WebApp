@@ -8,6 +8,7 @@ use Application\Query\FetchTeams\FetchTeamsOutputBoundary;
 use Application\Query\FetchTeams\FetchTeamsQuery;
 use Application\Query\ListChampionships\ListChampionshipsQuery;
 use Domain\Entity\Team;
+use Domain\Exception\DomainException;
 use Domain\Repository\Championship\ChampionshipRepository;
 use Domain\Request\CreateTeam\CreateTeamRequest;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
@@ -45,8 +46,16 @@ class TeamController extends AbstractController
         $createTeamForm->handleRequest($request);
 
         if($createTeamForm->isSubmitted() && $createTeamForm->isValid()){
-            $request = new CreateTeamRequest($createTeamForm->getData());
-            $useCase->execute($request);
+            try{
+                $request = new CreateTeamRequest($createTeamForm->getData());
+                $useCase->execute($request);
+            }catch(DomainException $e){
+                $this->addFlash('error', $e->getMessage());
+                return $this->redirectToRoute('create_team');
+            }
+
+            $this->addFlash('success', "L'équipe a été créée avec succès !");
+            return $this->redirectToRoute('get_teams');
         }
 
         return $this->render('teams/create.html.twig', [

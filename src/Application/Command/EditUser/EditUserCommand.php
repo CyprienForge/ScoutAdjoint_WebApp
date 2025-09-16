@@ -12,7 +12,6 @@ class EditUserCommand
 {
     public function __construct(
         private UserWriteRepository $userRepository,
-        private UserMapper $userMapper
     ){}
 
     public function execute(EditUserRequest $request): EditUserResponse
@@ -24,8 +23,7 @@ class EditUserCommand
         $request->newRoles[] = 'ROLE_USER';
 
         $request->user->setRoles(array_values($request->newRoles));
-        $userInfra = $this->userMapper->toInfra($request->user);
-        $this->userRepository->save($userInfra);
+        $this->userRepository->save($request->user);
 
         return new EditUserResponse();
     }

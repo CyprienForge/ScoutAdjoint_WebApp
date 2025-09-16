@@ -26,17 +26,13 @@ class ExportReportCommand
         private ContentReportBuilder $contentReportBuilder,
         private ParticipationReadRepository  $participationRepository,
         private MatchReadRepository $matchRepository,
-        private ExportReportOutputBoundary $presenter,
         private NoteReadRepository $noteRepository,
         private MatchInfosReadRepository $matchInfosRepository,
-        private MatchInfosMapper $matchInfosMapper,
-        private MatchMapper $matchMapper
     ){}
 
     public function execute(ExportReportRequest $request) : ExportReportResponse
     {
-        $matchInfra = $this->matchRepository->findById($request->idMatch);
-        $match = $this->matchMapper->toDomain($matchInfra);
+        $match = $this->matchRepository->findById($request->idMatch);
         $participations = $this->participationRepository->findByMatch($match->getId());
 
         $homeTeamPlayers = [];
@@ -65,8 +61,7 @@ class ExportReportCommand
             }
         }
 
-        $matchInfosInfra = $this->matchInfosRepository->findByMatch($match->getId());
-        $matchInfos = $this->matchInfosMapper->toDomain($matchInfosInfra);
+        $matchInfos = $this->matchInfosRepository->findByMatch($match->getId());
 
         $reportDataDTO = new ReportDataDTO(
             $homeTeamPlayers,

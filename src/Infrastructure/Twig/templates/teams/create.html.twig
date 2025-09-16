@@ -11,6 +11,12 @@
     <section class="form-wrapper bg-base-200">
         <h2>Créer une équipe</h2>
 
+        {% for message in app.flashes('error') %}
+            <div class="flash-notice" style="color: red; margin-top: 4%; margin-left: auto; padding: 1%; border-radius: 1rem; margin-right: auto; text-align: center; width: 50%;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ form_start(form, {'attr': {'class': 'player-form'}}) }}
             <div class="form-group">
                 {{ form_label(form.name) }}

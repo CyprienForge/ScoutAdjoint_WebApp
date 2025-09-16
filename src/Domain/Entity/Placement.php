@@ -6,16 +6,16 @@ use Domain\Entity\Position;
 
 class Placement
 {
-    private int $id;
+    private ?int $id = null;
     private Player $player;
     private Position $position;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): Placement
+    public function setId(?int $id): Placement
     {
         $this->id = $id;
         return $this;

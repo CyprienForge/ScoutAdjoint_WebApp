@@ -2,6 +2,7 @@
 
 namespace Application\Command\CreateTeam;
 
+use Domain\Exception\DomainException;
 use Domain\Mapper\TeamMapper;
 use Domain\Repository\Team\TeamWriteRepository;
 use Domain\Request\CreateTeam\CreateTeamRequest;
@@ -13,15 +14,17 @@ class CreateTeamCommand
 
     public function __construct(
         private TeamWriteRepository $teamRepository,
-        private TeamMapper $teamMapper,
         private CreateTeamValidator $createTeamValidator,
     ){}
 
     public function execute(CreateTeamRequest $request): CreateTeamResponse
     {
-        $this->createTeamValidator->validate($request->team);
-        $teamInfra = $this->teamMapper->toInfra($request->team);
-        $this->teamRepository->save($teamInfra);
+        try{
+            $this->createTeamValidator->validate($request->team);
+        }catch(DomainException $e){
+            throw $e;
+        }
+        $this->teamRepository->save($request->team);
 
         return new CreateTeamResponse();
     }
