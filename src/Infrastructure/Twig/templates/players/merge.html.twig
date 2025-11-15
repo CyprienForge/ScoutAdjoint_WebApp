@@ -10,7 +10,7 @@
 {% block body %}
 
     <div class="head">
-        <a href="{{ path('details_player', { idPlayer: 25 }) }}" class="btn btn-soft btn-info ms-8 mt-8">
+        <a href="{{ path('details_player', { idPlayer: viewModel.playerViewModel.idPlayerToMerge }) }}" class="btn btn-soft btn-info ms-8 mt-8">
             Retour
         </a>
     </div>
@@ -33,18 +33,21 @@
 
     <section class="mt-24" id="merge-section">
         <div class="left-player">
-            <p>
-                ICI
+            <p class="font-bold">
+                {{ viewModel.playerViewModel.firstName }} {{ viewModel.playerViewModel.lastName }}
             </p>
         </div>
 
         <div class="center-arrow">
-            <p>ICI</p>
+            <p>
+                <===
+            </p>
         </div>
 
         <div class="right-player">
             <p>
-                ICI
+                {{ form_start(form) }}
+                {{ form_end(form) }}
             </p>
         </div>
     </section>

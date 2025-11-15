@@ -61,4 +61,9 @@ class PlayerReadRepositoryDoctrine extends ServiceEntityRepository implements Pl
         $playerDoctrine = $this->find($id);
         return $this->playerMapper->toDomain($playerDoctrine);
     }
+
+    public function findAll(): array
+    {
+        return $this->findAll();
+    }
 }

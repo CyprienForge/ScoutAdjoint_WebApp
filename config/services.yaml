@@ -89,4 +89,6 @@ services:
     Domain\Mapper\PlacementMapper: '@Infrastructure\Entity\Doctrine\Mapper\PlacementMapperDoctrine'
     Domain\Mapper\ChampionshipMapper: '@Infrastructure\Entity\Doctrine\Mapper\ChampionshipMapperDoctrine'
 
+    Application\Query\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersJsonPresenter'
+    Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Infrastructure\Json\Presenter\ShowDetailsPlayerPresenterJson'
 

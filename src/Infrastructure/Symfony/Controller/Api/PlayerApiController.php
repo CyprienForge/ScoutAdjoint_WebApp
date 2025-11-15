@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Symfony\Controller;
+namespace Infrastructure\Symfony\Controller\Api;
 
 use Application\Command\CreatePlayer\CreatePlayerCommand;
 use Application\Command\DeletePlayer\DeletePlayerCommand;
@@ -14,19 +14,22 @@ use Application\Query\ShowDetailsPlayer\ShowDetailsPlayerQuery;
 use Application\Query\ShowMergeInfos\ShowMergeOutputBoundary;
 use Application\Query\ShowMergeInfos\ShowMergeQuery;
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
+use Domain\Dto\EditPlayer\EditPlayerDTO;
 use Domain\Presenter\FetchPlayers\FetchPlayersPresenter;
 use Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter;
 use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\DeletePlayer\DeletePlayerRequest;
-use Domain\Request\FetchPlayers\FetchPlayersRequest;
+use Domain\Request\EditPlayer\EditPlayerRequest;
 use Domain\Request\FetchPositions\FetchPositionsRequest;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
+use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\Request\ShowMerge\ShowMergeRequest;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 use Infrastructure\Symfony\Form\CreatePlayerTypeForm;
+use Infrastructure\Symfony\Form\EditPlayerTypeForm;
 use Infrastructure\Symfony\Form\MergePlayer\MergePlayerTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,21 +37,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PlayerController extends AbstractController
+class PlayerApiController extends AbstractController
 {
     public function __construct(
         private FetchPlayersPresenter      $presenter,
         private ShowDetailsPlayerPresenter $presenterShowDetails,
     ){}
 
-    #[Route('/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
+    #[Route('/api/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
     public function fetchPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
     {
-        $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($page, null, null, null, null, null, null, $limit, $page * $limit);
-        $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
-        return new JsonResponse($this->presenter->getPresentation());
+
+        return $this->render('players/index.html.twig', [
+            'viewModel' => $this->presenter->getViewModel(),
+        ]);
     }
 
     #[Route('/players/details/{idPlayer}', name: 'details_player')]
@@ -57,7 +60,31 @@ class PlayerController extends AbstractController
         $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
         $response = $useCase->execute($detailsRequest);
 
-        return new JsonResponse($this->presenterShowDetails->getPresentation());
+        $listInfosRequest = new ListEditPlayerInfosRequest($idPlayer);
+        $listInfosResponse = $listInfosUseCase->execute($listInfosRequest);
+
+        $editPlayerDto = EditPlayerDTO::fromPlayer($response->player);
+        $editPlayerDto->setNewPositions($listInfosResponse->positionsSelected);
+
+        $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $editPlayerDto, [
+            'positions' => $listInfosResponse->allPositions,
+            'teams' => $listInfosResponse->teams,
+        ]);
+        $editPlayerForm->handleRequest($request);
+
+        if($editPlayerForm->isSubmitted() && $editPlayerForm->isValid()){
+            $fileImage = $editPlayerForm->get('newImage')->getData();
+            $editPlayer = $editPlayerForm->getData();
+
+            // $newImage = new ImagePlayer($fileImage->getClientOriginalName(), $fileImage->getMimeType(), $fileImage->getSize());
+            $editRequest = new EditPlayerRequest($editPlayer);
+            $editUseCase->execute($editRequest);
+        }
+
+        return $this->render('players/details.html.twig', [
+            'viewModel' => $this->presenterShowDetails->getViewModel(),
+            'form' => $editPlayerForm->createView(),
+        ]);
     }
 
     #[Route('/players/create', name: 'create_player')]

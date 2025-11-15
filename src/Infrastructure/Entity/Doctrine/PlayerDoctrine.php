@@ -5,9 +5,9 @@ namespace Infrastructure\Entity\Doctrine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Infrastructure\Repository\Doctrine\PlayerRepositoryDoctrine;
+use Infrastructure\Repository\Doctrine\Player\PlayerReadRepositoryDoctrine;
 
-#[ORM\Entity(repositoryClass: PlayerRepositoryDoctrine::class)]
+#[ORM\Entity(repositoryClass: PlayerReadRepositoryDoctrine::class)]
 #[ORM\Table(name: "players")]
 class PlayerDoctrine
 {
@@ -176,5 +176,10 @@ class PlayerDoctrine
         $this->transfermarktUrl = $transfermarktUrl;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getFirstName() . " " . $this->getLastName();
     }
 }

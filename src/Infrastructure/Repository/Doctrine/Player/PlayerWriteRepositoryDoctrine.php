@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Domain\Mapper\PlayerMapper;
 use Domain\Repository\Player\PlayerWriteRepository;
+use Infrastructure\Entity\Doctrine\PlacementDoctrine;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 
 class PlayerWriteRepositoryDoctrine extends ServiceEntityRepository implements PlayerWriteRepository
@@ -36,5 +37,22 @@ class PlayerWriteRepositoryDoctrine extends ServiceEntityRepository implements P
     {
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->delete(PlayerDoctrine::class, 'player')->getQuery()->execute();
+    }
+
+    public function deleteById(int $idPlayer): void
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->delete(PlacementDoctrine::class, 'placement')
+                     ->where('placement.player = :idPlayer')
+                     ->setParameter('idPlayer', $idPlayer)
+                     ->getQuery()
+                     ->execute();
+
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->delete(PlayerDoctrine::class, 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $idPlayer)
+            ->getQuery()
+            ->execute();
     }
 }

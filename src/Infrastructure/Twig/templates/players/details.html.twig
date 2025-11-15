@@ -13,9 +13,21 @@
         <a href="{{ path('get_players') }}" class="btn btn-soft btn-info ms-8 mt-8">
             Retour
         </a>
-        <a href="{{ path('merge_players_page', { idPlayer: viewModel.playerViewModel.id }) }}" class="btn btn-primary mt-8">
-            Fusionner avec une autre fiche
-        </a>
+        <div>
+            <a href="{{ path('merge_players_page', { idPlayer: viewModel.playerViewModel.id }) }}" class="btn btn-primary mt-8">
+                Fusionner avec une autre fiche
+            </a>
+            <a
+                href="{{ path('delete_player', { idPlayer: viewModel.playerViewModel.id }) }}"
+                class="btn btn-error mt-8"
+                data-controller="confirm"
+                data-action="click->confirm#confirm"
+                data-confirm-message-value="Es-tu sûr de vouloir supprimer ce joueur ? Cette action est irréversible."
+            >
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_player' ~ viewModel.playerViewModel.id) }}">
+                Supprimer le joueur
+            </a>
+        </div>
     </div>
 
     <div class="flex justify-center">

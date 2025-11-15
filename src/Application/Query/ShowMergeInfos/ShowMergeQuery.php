@@ -10,11 +10,16 @@ class ShowMergeQuery
 {
     public function __construct(
         private PlayerReadRepository $playerReadRepository,
+        private ShowMergeOutputBoundary $presenter
     ){}
 
     public function execute(ShowMergeRequest $showMergeRequest) : ShowMergeResponse
     {
-        return new ShowMergeResponse();
+        $playerToMerge = $this->playerReadRepository->findById($showMergeRequest->idPlayerToMerge);
+        $response = new ShowMergeResponse($playerToMerge);
+        $this->presenter->present($response);
+
+        return $response;
     }
 
 }
