@@ -2,6 +2,7 @@
 
 namespace Application\Query\ShowDetailsPlayer;
 
+use Domain\Exception\ShowDetailsPlayer\PlayerNotFoundException;
 use Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter;
 use Domain\Repository\Participation\ParticipationReadRepository;
 use Domain\Repository\Player\PlayerReadRepository;
@@ -18,7 +19,11 @@ class ShowDetailsPlayerQuery
 
     public function execute(ShowDetailsPlayerRequest $request): ShowDetailsPlayerResponse
     {
-        $player = $this->playerRepository->findById($request->idPlayer);
+        try{
+            $player = $this->playerRepository->findById($request->idPlayer);
+        }catch (PlayerNotFoundException $e){
+            throw $e;
+        }
         $participations = $this->participationRepository->findByPlayer($player->getId());
 
         $response = new ShowDetailsPlayerResponse($player, $participations);

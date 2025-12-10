@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Exception\ShowDetailsPlayer\PlayerNotFoundException;
 use Domain\Mapper\PlayerMapper;
 use Domain\Repository\Player\PlayerReadRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
@@ -59,6 +60,9 @@ class PlayerReadRepositoryDoctrine extends ServiceEntityRepository implements Pl
     public function findById(int $id)
     {
         $playerDoctrine = $this->find($id);
+        if(!$playerDoctrine){
+            throw new PlayerNotFoundException("Player with ID : " .  $id . " doesn't exists !");
+        }
         return $this->playerMapper->toDomain($playerDoctrine);
     }
 

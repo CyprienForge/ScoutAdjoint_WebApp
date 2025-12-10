@@ -1,20 +1,33 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
     providers:
         app_user_provider:
             entity:
                 class: Infrastructure\Entity\Doctrine\UserDoctrine
                 property: email
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api_login:
+            pattern: ^/api/login
+            security: false
+        api_register:
+            pattern: ^/api/register
+            security: false
+        aoi_logout:
+            pattern: ^/api/logout
+            security: false
+        api_is_connected:
+            pattern: ^/api/is-connected
+            security: false
         main:
             lazy: true
             provider: app_user_provider
+            jwt: ~
             custom_authenticator: Infrastructure\Symfony\Security\LoginFormAuthenticator
             entry_point: Infrastructure\Symfony\Security\LoginFormAuthenticator
             logout:
@@ -23,30 +36,16 @@ security:
                 csrf_parameter: _csrf_token
                 csrf_token_id: logout
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
     access_control:
-        - { path: ^/logout, roles: PUBLIC_ACCESS }
-        - { path: ^/$, roles: PUBLIC_ACCESS }
-        - { path: ^/login$, roles: PUBLIC_ACCESS }
-        - { path: ^/register$, roles: PUBLIC_ACCESS }
-        - { path: ^/home, roles: ROLE_USER }
-        - { path: ^/settings, roles: ROLE_CHIEF_SCOUT }
-        - { path: ^/settings/$, roles: ROLE_CHIEF_SCOUT }
-        - { path: ^/, roles: ROLE_SCOUT }
+        - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/is-connected, roles: PUBLIC_ACCESS }
+        - { path: ^/api/logout, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/, roles: FULLY_IDENTIFIED_ACCESS }
 
-when@test:
-    security:
-        password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+lexik_jwt_authentication:
+    token_extractors:
+        cookie:
+            enabled: true
+            name: BEARER

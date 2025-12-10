@@ -15,18 +15,21 @@ use Application\Query\ShowMergeInfos\ShowMergeOutputBoundary;
 use Application\Query\ShowMergeInfos\ShowMergeQuery;
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
 use Domain\Dto\EditPlayer\EditPlayerDTO;
+use Domain\Exception\ShowDetailsPlayer\PlayerNotFoundException;
 use Domain\Presenter\FetchPlayers\FetchPlayersPresenter;
 use Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter;
 use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Request\CreatePlayer\CreatePlayerRequest;
 use Domain\Request\DeletePlayer\DeletePlayerRequest;
 use Domain\Request\EditPlayer\EditPlayerRequest;
+use Domain\Request\FetchPlayers\FetchPlayersRequest;
 use Domain\Request\FetchPositions\FetchPositionsRequest;
 use Domain\Request\FetchTeams\FetchTeamsRequest;
 use Domain\Request\LinkProfileTransfermarkt\LinkProfileTransfermarktRequest;
 use Domain\Request\ListEditPlayerInfos\ListEditPlayerInfosRequest;
 use Domain\Request\ShowDetailsPlayer\ShowDetailsPlayerRequest;
 use Domain\Request\ShowMerge\ShowMergeRequest;
+use Domain\Response\ShowDetailsPlayer\ShowDetailsPlayerResponse;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 use Infrastructure\Symfony\Form\CreatePlayerTypeForm;
 use Infrastructure\Symfony\Form\EditPlayerTypeForm;
@@ -44,47 +47,44 @@ class PlayerApiController extends AbstractController
         private ShowDetailsPlayerPresenter $presenterShowDetails,
     ){}
 
-    #[Route('/api/players/show/{page}', name: 'get_players', defaults: ['page' => 0])]
+    #[Route('/api/players/show/{page}', name: 'api_get_players', defaults: ['page' => 0])]
     public function fetchPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
     {
+        $limit = 10;
+        $fetchPlayersRequest = new FetchPlayersRequest($page, null, null, null, null, null, null, $limit, $page * $limit);
+        $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
-
-        return $this->render('players/index.html.twig', [
-            'viewModel' => $this->presenter->getViewModel(),
-        ]);
+        return new JsonResponse($this->presenter->getPresentation(), Response::HTTP_OK);
     }
 
-    #[Route('/players/details/{idPlayer}', name: 'details_player')]
-    public function detailsPlayer(Request $request, ShowDetailsPlayerQuery $useCase, EditPlayerCommand $editUseCase,ListEditPlayerInfosQuery $listInfosUseCase, int $idPlayer) : Response
+    #[Route('/api/players/filter/{page}', name: 'api_filter_players', defaults: ['page' => 0])]
+    public function filterPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
     {
-        $detailsRequest = new ShowDetailsPlayerRequest($idPlayer);
-        $response = $useCase->execute($detailsRequest);
+        $firstNameSearch = $request->query->get('firstName') ?? null;
+        $lastNameSearch = $request->query->get('lastName') ?? null;
+        $teamSearch = $request->query->get('team') ?? null;
 
-        $listInfosRequest = new ListEditPlayerInfosRequest($idPlayer);
-        $listInfosResponse = $listInfosUseCase->execute($listInfosRequest);
+        $limit = 10;
+        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstNameSearch, $lastNameSearch, null, null, null, $teamSearch, $limit, $page * $limit);
+        $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
-        $editPlayerDto = EditPlayerDTO::fromPlayer($response->player);
-        $editPlayerDto->setNewPositions($listInfosResponse->positionsSelected);
+        return new JsonResponse($this->presenter->getPresentation(), Response::HTTP_OK);
+    }
 
-        $editPlayerForm = $this->createForm(EditPlayerTypeForm::class, $editPlayerDto, [
-            'positions' => $listInfosResponse->allPositions,
-            'teams' => $listInfosResponse->teams,
-        ]);
-        $editPlayerForm->handleRequest($request);
-
-        if($editPlayerForm->isSubmitted() && $editPlayerForm->isValid()){
-            $fileImage = $editPlayerForm->get('newImage')->getData();
-            $editPlayer = $editPlayerForm->getData();
-
-            // $newImage = new ImagePlayer($fileImage->getClientOriginalName(), $fileImage->getMimeType(), $fileImage->getSize());
-            $editRequest = new EditPlayerRequest($editPlayer);
-            $editUseCase->execute($editRequest);
+    #[Route('/api/players/details/{idPlayer}', name: 'api_details_player')]
+    public function detailsPlayer(Request $request, ShowDetailsPlayerQuery $useCase, int $idPlayer) : Response
+    {
+        try{
+            $useCaseRequest = new ShowDetailsPlayerRequest($idPlayer);
+            $useCaseResponse = $useCase->execute($useCaseRequest);
+        }catch (PlayerNotFoundException $e){
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        catch(\Exception $e){
+            return new JsonResponse(['message' => 'Une erreur inattendue est survenue'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->render('players/details.html.twig', [
-            'viewModel' => $this->presenterShowDetails->getViewModel(),
-            'form' => $editPlayerForm->createView(),
-        ]);
+        return new JsonResponse($this->presenterShowDetails->getPresentation(), Response::HTTP_OK);
     }
 
     #[Route('/players/create', name: 'create_player')]

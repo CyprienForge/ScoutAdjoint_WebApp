@@ -41,37 +41,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'register')]
-    public function register(Request $request, RegisterUserCommand $registerUseCase, UserMapper $userMapper, Security $security): Response
-    {
-        $registerForm = $this->createForm(RegisterTypeForm::class);
-        $registerForm->handleRequest($request);
-
-        if($registerForm->isSubmitted() && $registerForm->isValid())
-        {
-            $registerData = $registerForm->getData();
-
-            $registerRequest = new RegisterUserRequest(
-                $registerData['identifier'],
-                $registerData['email'],
-                $registerData['password'],
-            );
-
-            try{
-                $registerResponse = $registerUseCase->execute($registerRequest);
-
-                $userInfra = $userMapper->toInfra($registerResponse->user, new UserDoctrine());
-                $security->login($userInfra);
-
-                return $this->redirectToRoute('home');
-            }catch(DomainException $de){
-                $this->addFlash('error', $de->getMessage());
-            }
-        }
-
-        return $this->redirectToRoute('login_page');
-    }
-
     #[Route('/login', name: 'login')]
     public function login(Request $request, Security $security, LoginCommand $useCase, UserMapper $userMapper): Response
     {
