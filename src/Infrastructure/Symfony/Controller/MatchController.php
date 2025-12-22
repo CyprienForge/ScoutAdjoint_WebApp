@@ -2,15 +2,15 @@
 
 namespace Infrastructure\Symfony\Controller;
 
-use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
 use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchCommand;
+use Application\Command\EditGlobalInfosMatch\EditGlobalInfosMatchOutputBoundary;
 use Application\Command\ExportReport\ExportReportCommand;
-use Application\Query\FetchMatchs\FetchMatchsOutputBoundary;
 use Application\Query\FetchMatchs\FetchMatchsQuery;
 use Application\Query\ListMatchInfos\ListMatchInfosQuery;
-use Application\Query\ShowDetailsMatch\ShowDetailsMatchOutputBoundary;
 use Application\Query\ShowDetailsMatch\ShowDetailsMatchQuery;
 use Domain\Dto\EditGlobalInfosMatch\EditGlobalInfosMatchDTO;
+use Domain\Presenter\FetchMatchs\FetchMatchsPresenter;
+use Domain\Presenter\ShowDetailsMatch\ShowDetailsMatchPresenter;
 use Domain\Request\EditGlobalInfosMatch\EditGlobalInfosMatchRequest;
 use Domain\Request\ExportReport\ExportReportRequest;
 use Domain\Request\FetchMatchs\FetchMatchsRequest;
@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MatchController extends AbstractController
 {
     #[Route('/matchs', name: 'get_matchs')]
-    public function fetchMatchs(Request $request, FetchMatchsQuery $useCase, FetchMatchsOutputBoundary $presenter): Response
+    public function fetchMatchs(Request $request, FetchMatchsQuery $useCase, FetchMatchsPresenter $presenter): Response
     {
         $request = new FetchMatchsRequest();
         $useCase->execute($request);
@@ -36,7 +36,7 @@ class MatchController extends AbstractController
     }
 
     #[Route('/matchs/details/{idMatch}/{idTeam}', name: 'details_match')]
-    public function detailsMatch(Request $request, int $idMatch, int $idTeam, ShowDetailsMatchQuery $useCase, ShowDetailsMatchOutputBoundary $presenter): Response
+    public function detailsMatch(Request $request, int $idMatch, int $idTeam, ShowDetailsMatchQuery $useCase, ShowDetailsMatchPresenter $presenter): Response
     {
         $request = new ShowDetailsMatchRequest($idMatch, $idTeam);
         $response = $useCase->execute($request);

@@ -22,10 +22,12 @@ class PlayerMapperDoctrine implements PlayerMapper
         $player->setFirstName($item->getFirstName());
         $player->setLastName($item->getLastName());
         $player->setBirthDate($item->getBirthDate());
+        $player->setGeneralNote($item->getGeneralNote());
 
-        $team = $this->teamMapperDoctrine->toDomain($item->getTeam());
-
-        $player->setTeam($team);
+        if($item->getTeam() !== null) {
+            $team = $this->teamMapperDoctrine->toDomain($item->getTeam());
+            $player->setTeam($team);
+        }
         $player->setTransfermarktUrl($item->getTransfermarktUrl());
 
         return $player;
@@ -40,6 +42,7 @@ class PlayerMapperDoctrine implements PlayerMapper
         $playerDoctrine->setLastName($item->getLastName());
         $playerDoctrine->setBirthDate($item->getBirthDate());
         $playerDoctrine->setTransfermarktUrl($item->getTransfermarktUrl());
+        $playerDoctrine->setGeneralNote($item->getGeneralNote());
 
         if ($item->getTeam() !== null && $item->getTeam()->getId() !== null) {
             $teamDoctrine = $this->teamRepository->find($item->getTeam()->getId());

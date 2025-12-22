@@ -15,6 +15,7 @@ use Application\Query\ShowMergeInfos\ShowMergeOutputBoundary;
 use Application\Query\ShowMergeInfos\ShowMergeQuery;
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
 use Domain\Dto\EditPlayer\EditPlayerDTO;
+use Domain\Exception\NotFoundException;
 use Domain\Exception\ShowDetailsPlayer\PlayerNotFoundException;
 use Domain\Presenter\FetchPlayers\FetchPlayersPresenter;
 use Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter;
@@ -38,6 +39,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PlayerApiController extends AbstractController
@@ -48,10 +50,10 @@ class PlayerApiController extends AbstractController
     ){}
 
     #[Route('/api/players/show/{page}', name: 'api_get_players', defaults: ['page' => 0])]
-    public function fetchPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
+    public function fetchPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, int $page): Response
     {
         $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($page, null, null, null, null, null, null, $limit, $page * $limit);
+        $fetchPlayersRequest = new FetchPlayersRequest($page, null, null, null, null, null, null, $limit, $page * $limit, false);
         $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return new JsonResponse($this->presenter->getPresentation(), Response::HTTP_OK);
@@ -60,13 +62,25 @@ class PlayerApiController extends AbstractController
     #[Route('/api/players/filter/{page}', name: 'api_filter_players', defaults: ['page' => 0])]
     public function filterPlayers(Request $request, FetchPlayersQuery $fetchPlayersUseCase, FetchPositionsQuery $fetchPositionsUseCase, int $page): Response
     {
-        $firstNameSearch = $request->query->get('firstName') ?? null;
-        $lastNameSearch = $request->query->get('lastName') ?? null;
-        $teamSearch = $request->query->get('team') ?? null;
+        $data = json_decode($request->getContent(), true);
+        $firstNameSearch = $data['firstName'] ?? null;
+        $lastNameSearch = $data['lastName'] ?? null;
+        $teamSearch = $data['teamName'] ?? null;
+        $positions = $data['positions'] ?? null;
+        $startBirthDateSearch = $data['minBirthDate'] ?? null;
+        $endBirthDateSearch = $data['maxBirthDate'] ?? null;
+        $isOr = $data['isOr'] ?? true;
+
+        if($startBirthDateSearch != null){
+            $startBirthDateSearch = new \DateTime($startBirthDateSearch);
+        }
+        if($endBirthDateSearch != null){
+            $endBirthDateSearch = new \DateTime($endBirthDateSearch);
+        }
 
         $limit = 10;
-        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstNameSearch, $lastNameSearch, null, null, null, $teamSearch, $limit, $page * $limit);
-        $fetchPlayersUseCase->execute($fetchPlayersRequest);
+        $fetchPlayersRequest = new FetchPlayersRequest($page, $firstNameSearch, $lastNameSearch, $startBirthDateSearch, $endBirthDateSearch, $positions, $teamSearch, $limit, $page * $limit, $isOr);
+        $response = $fetchPlayersUseCase->execute($fetchPlayersRequest);
 
         return new JsonResponse($this->presenter->getPresentation(), Response::HTTP_OK);
     }
@@ -87,77 +101,68 @@ class PlayerApiController extends AbstractController
         return new JsonResponse($this->presenterShowDetails->getPresentation(), Response::HTTP_OK);
     }
 
-    #[Route('/players/create', name: 'create_player')]
-    public function createPlayer(Request $request, CreatePlayerCommand $useCase, FetchTeamsQuery $queryFetchTeams, FetchPositionsQuery $fetchPositionsQuery): Response
+    #[Route('/api/players', name: 'api_create_player', methods: ['POST'])]
+    public function createPlayer(Request $request, CreatePlayerCommand $useCase) : Response
     {
-        $response = $queryFetchTeams->execute(new FetchTeamsRequest());
-        $teams = $response->teams;
+        try{
+            $data = json_decode($request->getContent(), true);
 
-        $response = $fetchPositionsQuery->execute(new FetchPositionsRequest());
-        $positions = $response->positions;
+            $createPlayerDto = (new CreatePlayerDTO())
+                ->setFirstName($data['firstName'])
+                ->setLastName($data['lastName'])
+                ->setBirthDate(new \DateTime())
+                ->setIdTeam($data['team'])
+                ->setPositions($data['positions']);
+            $requestCommand = new CreatePlayerRequest($createPlayerDto);
+            $response = $useCase->execute($requestCommand);
+        }catch (NotFoundException $e){
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+        catch (\Exception $e){
+            return new JsonResponse(['message' => 'Une erreur innatendue est survenue !'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse(['message' => 'Joueur crée avec succès'], 200);
+    }
 
-        $createPlayerForm = $this->createForm(CreatePlayerTypeForm::class, new CreatePlayerDTO(), [
-            'teams' => $teams,
-            'positions' => $positions
-        ]);
-        $createPlayerForm->handleRequest($request);
+    #[Route('/api/players/{idPlayer}', name: 'api_edit_player', methods: ['PUT'])]
+    public function editPlayer(Request $request, int $idPlayer, EditPlayerCommand $useCase) : Response
+    {
+        try{
+            $data = json_decode($request->getContent(), true);
+            $editPlayerDto = new EditPlayerDTO();
+            $editPlayerDto->idPlayer = $idPlayer;
+            $editPlayerDto->newFirstName = $data['firstName'];
+            $editPlayerDto->newLastName = $data['lastName'];
+            $editPlayerDto->newBirthDate = new \DateTime($data['birthDate']);
+            $editPlayerDto->newPositions = $data['positions'];
+            $editPlayerDto->newTeam = $data['team'];
+            $editPlayerDto->newGeneralInfo = $data['generalInfo'];
 
-        if($createPlayerForm->isSubmitted() && $createPlayerForm->isValid())
-        {
-            $player = $createPlayerForm->getData();
-            $request = new CreatePlayerRequest($player);
-
-            $response = $useCase->execute($request);
-            return $this->redirectToRoute('details_player', ['idPlayer' => $response->playerCreated->getId()]);
+            $requestUseCase = new EditPlayerRequest($editPlayerDto);
+            $useCase->execute($requestUseCase);
+        }catch (NotFoundException $e){
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+        catch (\Exception $e){
+            return new JsonResponse(['message' => 'Une erreur innatendue est survenue !'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->render('players/create.html.twig', [
-            'form' => $createPlayerForm->createView(),
-        ]);
+        return new JsonResponse(['Joueur modifié avec succès'], 200);
     }
 
-    #[Route('/players/link-transfermarkt/{idPlayer}', name: 'link_transfermarkt_profile')]
-    public function linkTransfermarktProfile(Request $request, int $idPlayer, LinkProfileTransfermarktCommand $useCase) : Response
+    #[Route('/api/players/{idPlayer}', name: 'api_edit_player', methods: ['DELETE'])]
+    public function deletePlayer(int $idPlayer, DeletePlayerCommand $useCase) : Response
     {
-        $request = new LinkProfileTransfermarktRequest($idPlayer);
-        $useCase->execute($request);
+        try{
+            $response = $useCase->execute(new DeletePlayerRequest($idPlayer));
+        }catch (NotFoundException $e){
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+        catch (\Exception $e){
+            return new JsonResponse(['message' => 'Une erreur innatendue est survenue !'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
-        return $this->redirectToRoute('details_player', ['idPlayer' => $idPlayer]);
-    }
-
-    #[Route('/players/merge-players/{idPlayer}', name: 'merge_players_page')]
-    public function mergePlayers(Request $request, ShowMergeQuery $useCase, int $idPlayer, ShowMergeOutputBoundary $showMergeOutputBoundary) : Response
-    {
-        $useCase->execute(new ShowMergeRequest($idPlayer));
-
-        $form = $this->createForm(MergePlayerTypeForm::class);
-        $form->handleRequest($request);
-
-        return $this->render('players/merge.html.twig', [
-            'viewModel' => $showMergeOutputBoundary->getViewModel(),
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/players/delete/{idPlayer}', name: 'delete_player')]
-    public function deletePlayer(Request $request, int $idPlayer, DeletePlayerCommand $useCase) : Response
-    {
-        $useCase->execute(new DeletePlayerRequest($idPlayer));
-        return $this->redirectToRoute('get_players', ['page' => 0]);
-    }
-
-    #[Route('/test', name: 'list_players')]
-    public function listPlayers(PlayerReadRepository $playerReadRepository): JsonResponse
-    {
-        $players = $playerReadRepository->findAll();
-
-        $results = array_map(fn(PlayerDoctrine $player) => [
-            'id' => $player->getId(),
-            'name' => $player->getName(),
-        ], $players);
-
-        ($results);
-        return new JsonResponse($results);
+        return new JsonResponse(["message" => 'Joueur supprimé avec succès'], Response::HTTP_OK);
     }
 
 }

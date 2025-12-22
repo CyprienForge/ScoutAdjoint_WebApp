@@ -12,9 +12,11 @@ class FetchPlayersJsonPresenter implements FetchPlayersPresenter
 
     public function present(FetchPlayersResponse $response): void
     {
+        $index = 0;
         foreach($response->getPlayers() as $player) {
             $playerDto = new PlayerJsonDto();
-            $this->result[] = $playerDto->toDto($player);
+            $this->result[] = $playerDto->toDto($player, $response->getPositions()[$index]);
+            $index++;
         }
     }
 

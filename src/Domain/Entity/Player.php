@@ -8,8 +8,10 @@ class Player
     private string $firstName;
     private string $lastName;
     private \DateTime $birthDate;
-    private Team $team;
+    private ?Team $team = null;
     private ?string $transfermarktUrl = null;
+
+    private ?string $generalNote = "";
 
     public function getId(): ?int
     {
@@ -55,12 +57,12 @@ class Player
         return $this;
     }
 
-    public function getTeam(): Team
+    public function getTeam(): ?Team
     {
         return $this->team;
     }
 
-    public function setTeam(Team $team): Player
+    public function setTeam(?Team $team): Player
     {
         $this->team = $team;
         return $this;
@@ -74,6 +76,17 @@ class Player
     public function setTransfermarktUrl(?string $transfermarktUrl): Player
     {
         $this->transfermarktUrl = $transfermarktUrl;
+        return $this;
+    }
+
+    public function getGeneralNote(): ?string
+    {
+        return $this->generalNote;
+    }
+
+    public function setGeneralNote(?string $generalNote): Player
+    {
+        $this->generalNote = $generalNote;
         return $this;
     }
 }

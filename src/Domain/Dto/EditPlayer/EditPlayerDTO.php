@@ -13,9 +13,10 @@ class EditPlayerDTO
     public string $newFirstName;
     public string $newLastName;
     public \DateTime $newBirthDate;
-    public Team $newTeam;
+    public int $newTeam;
     public ?ImagePlayerDTO $newImage;
     public array $newPositions;
+    public string $newGeneralInfo;
 
     public static function fromPlayer(Player $player): self
     {
@@ -24,7 +25,7 @@ class EditPlayerDTO
         $dto->newFirstName = $player->getFirstName();
         $dto->newLastName = $player->getLastName();
         $dto->newBirthDate = $player->getBirthDate();
-        $dto->newTeam = $player->getTeam();
+        $dto->newTeam = $player->getTeam()->getId();
 
         return $dto;
     }

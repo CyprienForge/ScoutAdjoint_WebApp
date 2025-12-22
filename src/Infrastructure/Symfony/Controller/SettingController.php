@@ -4,13 +4,13 @@ namespace Infrastructure\Symfony\Controller;
 
 use Application\Command\DeleteUser\DeleteUserCommand;
 use Application\Command\EditUser\EditUserCommand;
-use Application\Query\FetchUsers\FetchUsersOutputBoundary;
 use Application\Query\FetchUsers\FetchUsersQuery;
 use Application\Query\ShowDetailsUser\ShowDetailsUserOutputBoundary;
 use Application\Query\ShowDetailsUser\ShowDetailsUserQuery;
 use Domain\Dto\EditUser\EditUserDTO;
 use Domain\Exception\DomainException;
 use Domain\Mapper\UserMapper;
+use Domain\Presenter\FetchUsers\FetchUsersPresenter;
 use Domain\Request\DeleteUser\DeleteUserRequest;
 use Domain\Request\EditUser\EditUserRequest;
 use Domain\Request\FetchUsers\FetchUsersRequest;
@@ -25,7 +25,7 @@ final class SettingController extends AbstractController
 {
 
     #[Route('/settings', name: 'settings')]
-    public function index(FetchUsersQuery $useCase, FetchUsersOutputBoundary $presenter): Response
+    public function index(FetchUsersQuery $useCase, FetchUsersPresenter $presenter): Response
     {
         $fetchUsersRequest = new FetchUsersRequest();
         $fetchUsersResponse = $useCase->execute($fetchUsersRequest);

@@ -78,9 +78,9 @@ class ExportReportCommand
         $fileName = $match->getHomeTeam()->getName() . '_' . $match->getAwayTeam()->getName() . '_' . $match->getDate()->format('dmYHis');
 
         $content = $this->contentReportBuilder->buildContent($reportDataDTO);
-        $this->reportExporter->export($content, $fileName);
+        $pdf = $this->reportExporter->export($content, $fileName);
 
-        return new ExportReportResponse();
+        return new ExportReportResponse($pdf, $fileName);
     }
 
 }

@@ -7,7 +7,8 @@ class FetchPlayersResponse
     public function __construct(
         private array $players,
         private string $pageNumber,
-        private int $limit
+        private int $limit,
+        private array $positions = []
     ){}
 
     public function getPlayers() : array
@@ -23,5 +24,10 @@ class FetchPlayersResponse
     public function getPageNumber() : string
     {
         return $this->pageNumber;
+    }
+
+    public function getPositions() : array
+    {
+        return $this->positions;
     }
 }

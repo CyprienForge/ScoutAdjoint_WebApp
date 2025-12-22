@@ -49,7 +49,7 @@ class AuthController extends AbstractController
         $cookie = new Cookie(
             'BEARER',
             $jwt,
-            0,
+            time() + (24 * 60 * 60),
             '/',
             null,
             $request->isSecure(),
@@ -86,7 +86,7 @@ class AuthController extends AbstractController
             $cookie = new Cookie(
                 'BEARER',
                 $jwt,
-                0,
+                time() + (24 * 60 * 60),
                 '/',
                 null,
                 $request->isSecure(),
@@ -135,7 +135,6 @@ class AuthController extends AbstractController
             if(!$user){
                 return new JsonResponse(['isAuthenticated' => false], Response::HTTP_OK);
             }
-            $isAdmin = array_search('ROLE_ADMIN', $user->getRoles());
         }catch(\Exception $e){
             return new JsonResponse(['message' => 'Une erreur inattendue est survenue'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -144,7 +143,7 @@ class AuthController extends AbstractController
             'isAuthenticated' => true,
             'username' => $user->getIdentifier(),
             'email' => $user->getEmail(),
-            'isAdmin' => $isAdmin,
+            'roles' => $user->getRoles(),
         ], 200);
     }
 

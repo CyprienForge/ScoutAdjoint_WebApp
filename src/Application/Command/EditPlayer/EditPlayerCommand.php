@@ -9,6 +9,8 @@ use Domain\Repository\Placement\PlacementRepository;
 use Domain\Repository\Placement\PlacementWriteRepository;
 use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Repository\Player\PlayerWriteRepository;
+use Domain\Repository\Position\PositionReadRepository;
+use Domain\Repository\Team\TeamReadRepository;
 use Domain\Request\EditPlayer\EditPlayerRequest;
 
 class EditPlayerCommand
@@ -18,6 +20,8 @@ class EditPlayerCommand
         private PlayerReadRepository $playerReadRepository,
         private PlayerWriteRepository $playerWriteRepository,
         private PlacementWriteRepository $placementRepository,
+        private TeamReadRepository $teamReadRepository,
+        private PositionReadRepository $positionReadRepository,
     ){}
 
     public function execute(EditPlayerRequest $request)
@@ -27,7 +31,10 @@ class EditPlayerCommand
         $player->setFirstName($request->editPlayerDTO->newFirstName);
         $player->setLastName($request->editPlayerDTO->newLastName);
         $player->setBirthDate($request->editPlayerDTO->newBirthDate);
-        $player->setTeam($request->editPlayerDTO->newTeam);
+        $player->setGeneralNote($request->editPlayerDTO->newGeneralInfo);
+
+        $team = $this->teamReadRepository->findById($request->editPlayerDTO->newTeam);
+        $player->setTeam($team);
 
         /*
         try{
@@ -43,6 +50,7 @@ class EditPlayerCommand
         foreach($request->editPlayerDTO->getNewPositions() as $position)
         {
             $placement = new Placement();
+            $position = $this->positionReadRepository->findById($position);
             $placement->setPosition($position);
             $placement->setPlayer($player);
 

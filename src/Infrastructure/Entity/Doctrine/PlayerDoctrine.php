@@ -43,6 +43,9 @@ class PlayerDoctrine
     #[ORM\Column(name: 'transfermarkt_url', length: 255, nullable: true)]
     private ?string $transfermarktUrl = null;
 
+    #[ORM\Column(length: 5000, name: 'general_note', nullable: true)]
+    private ?string $generalNote = null;
+
     public function __construct()
     {
         $this->participationDoctrines = new ArrayCollection();
@@ -181,5 +184,17 @@ class PlayerDoctrine
     public function __toString(): string
     {
         return (string) $this->getFirstName() . " " . $this->getLastName();
+    }
+
+    public function getGeneralNote(): ?string
+    {
+        return $this->generalNote;
+    }
+
+    public function setGeneralNote(string $generalNote): static
+    {
+        $this->generalNote = $generalNote;
+
+        return $this;
     }
 }

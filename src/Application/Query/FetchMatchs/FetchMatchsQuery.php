@@ -2,7 +2,7 @@
 
 namespace Application\Query\FetchMatchs;
 
-use Domain\Mapper\MatchMapper;
+use Domain\Presenter\FetchMatchs\FetchMatchsPresenter;
 use Domain\Repository\Match\MatchReadRepository;
 use Domain\Request\FetchMatchs\FetchMatchsRequest;
 use Domain\Response\FetchMatchs\FetchMatchsResponse;
@@ -11,8 +11,8 @@ class FetchMatchsQuery
 {
 
     public function __construct(
-        private MatchReadRepository $matchRepository,
-        private FetchMatchsOutputBoundary $presenter,
+        private MatchReadRepository  $matchRepository,
+        private FetchMatchsPresenter $presenter,
     ){}
 
     public function execute(FetchMatchsRequest $request) : FetchMatchsResponse

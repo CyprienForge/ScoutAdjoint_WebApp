@@ -91,4 +91,4 @@ services:
 
     Application\Query\FetchPlayers\FetchPlayersOutputBoundary: '@Domain\Presenter\FetchPlayers\FetchPlayersJsonPresenter'
     Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerOutputBoundary: '@Infrastructure\Json\Presenter\ShowDetailsPlayerPresenterJson'
-
+    Domain\Presenter\FetchMatchs\FetchMatchsPresenter: '@Infrastructure\Json\Presenter\FetchMatchsJsonPresenter'

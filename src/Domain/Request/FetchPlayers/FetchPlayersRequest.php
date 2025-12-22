@@ -15,6 +15,7 @@ class FetchPlayersRequest
       public ?array $positions,
       public ?string $team,
       public int $limit = 15,
-      public int $offset = 0
+      public int $offset = 0,
+      public bool $isOr = false
     ){}
 }

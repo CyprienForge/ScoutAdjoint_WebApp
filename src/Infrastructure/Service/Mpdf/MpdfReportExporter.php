@@ -19,6 +19,6 @@ class MpdfReportExporter implements ReportExporter
         ]);
 
         $mpdf->WriteHTML($html);
-        $mpdf->Output($fileName, 'D');
+        return $mpdf->Output($fileName, 'S');
     }
 }

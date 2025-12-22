@@ -5,6 +5,7 @@ namespace Infrastructure\Repository\Doctrine\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Exception\NotFoundException;
 use Domain\Mapper\PositionMapper;
 use Domain\Repository\Position\PositionReadRepository;
 use Infrastructure\Entity\Doctrine\PositionDoctrine;
@@ -31,6 +32,9 @@ class PositionReadRepositoryDoctrine extends ServiceEntityRepository implements 
     public function findById(int $id)
     {
         $positionInfra = $this->find($id);
+        if($positionInfra == null){
+            throw new NotFoundException("Position with id : {$id} cannot be found");
+        }
         return $this->positionMapper->toDomain($positionInfra);
     }
 }

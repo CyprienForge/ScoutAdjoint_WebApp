@@ -12,7 +12,9 @@ final class PlayerJsonDto
     public string $lastName;
     public string $birthDate;
     public ?TeamJsonDto $team;
-    public function toDto(Player $player): PlayerJsonDto
+    public ?array $positions = [];
+    public string $generalNote = "";
+    public function toDto(Player $player, array $positions = []): PlayerJsonDto
     {
         $teamJsonDto = new TeamJsonDto();
 
@@ -21,6 +23,15 @@ final class PlayerJsonDto
         $this->lastName = $player->getLastName();
         $this->birthDate = $player->getBirthDate()->format('Y-m-d');
         $this->team = $player->getTeam() ? $teamJsonDto->toDto($player->getTeam()) : null;
+        $this->generalNote = $player->getGeneralNote() ?? "";
+
+        foreach($positions as $position) {
+            $this->positions[] = [
+                'id' => $position->getId(),
+                'libelle' => $position->getLibelle(),
+            ];
+        }
+
         return $this;
     }
 }

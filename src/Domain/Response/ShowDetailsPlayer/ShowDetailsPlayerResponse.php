@@ -8,6 +8,7 @@ class ShowDetailsPlayerResponse
 {
     public function __construct(
         public Player $player,
-        public array $participations
+        public array $participations,
+        public array $placements,
     ){}
 }

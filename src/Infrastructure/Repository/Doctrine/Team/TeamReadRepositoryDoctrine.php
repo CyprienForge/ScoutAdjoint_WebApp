@@ -5,6 +5,7 @@ namespace Infrastructure\Repository\Doctrine\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Exception\NotFoundException;
 use Domain\Mapper\TeamMapper;
 use Domain\Repository\Team\TeamReadRepository;
 use Infrastructure\Entity\Doctrine\TeamDoctrine;
@@ -31,6 +32,9 @@ class TeamReadRepositoryDoctrine extends ServiceEntityRepository implements Team
     public function findById(int $id)
     {
         $teamDoctrine = $this->find($id);
+        if($teamDoctrine == null){
+            throw new NotFoundException("Team with id : {$id} cannot be found");
+        }
         return $this->teamMapper->toDomain($teamDoctrine);
     }
 }
