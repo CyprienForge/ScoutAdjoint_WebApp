@@ -2,7 +2,7 @@
 
 namespace Domain\Entity;
 
-use Domain\Entity\Position;
+use Domain\Entity\Player\Player;
 
 class Placement
 {

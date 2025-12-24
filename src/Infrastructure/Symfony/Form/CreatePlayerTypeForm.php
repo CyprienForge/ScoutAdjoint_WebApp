@@ -3,7 +3,6 @@
 namespace Infrastructure\Symfony\Form;
 
 use Domain\Dto\CreatePlayer\CreatePlayerDTO;
-use Domain\Entity\Player;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;

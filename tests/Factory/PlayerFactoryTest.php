@@ -2,7 +2,7 @@
 
 namespace App\Tests\Factory;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 use Domain\Factory\PlayerFactory;
 use PHPUnit\Framework\TestCase;
 

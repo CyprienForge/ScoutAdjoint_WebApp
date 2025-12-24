@@ -23,8 +23,8 @@ class PlayerWriteRepositoryDoctrine extends ServiceEntityRepository implements P
     public function save($item) : void
     {
         $playerDoctrine = null;
-        if ($item->getId() !== null) {
-            $playerDoctrine = $this->find($item->getId());
+        if ($item->getId()->value() !== null) {
+            $playerDoctrine = $this->find($item->getId()->value());
         }
 
         $playerDoctrine = $this->playerMapper->toInfra($item, $playerDoctrine);

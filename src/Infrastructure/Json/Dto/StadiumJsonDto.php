@@ -2,7 +2,8 @@
 
 namespace Infrastructure\Json\Dto;
 
-use Domain\Entity\Stadium;
+use Domain\Entity\Stadium\Stadium;
+use Domain\Entity\Stadium\ValueObject\StadiumAddress;
 
 class StadiumJsonDto
 {
@@ -12,10 +13,12 @@ class StadiumJsonDto
     public string $name;
 
     public function toDto(Stadium $stadium) : StadiumJsonDto{
-        $this->id = $stadium->getId();
-        $this->street = $stadium->getStreet();
-        $this->postalCode = $stadium->getPostalCode();
-        $this->name = $stadium->getName();
+        $this->id = $stadium->getId()->value();
+
+        $address = $stadium->getAddress();
+        $this->street = $address->getStreet();
+        $this->postalCode = $address->getPostalCode();
+        $this->name = $stadium->getName()->value();
 
         return $this;
     }

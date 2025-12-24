@@ -2,7 +2,7 @@
 
 namespace Domain\Factory;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 /**
  * @implements Factory<Player>

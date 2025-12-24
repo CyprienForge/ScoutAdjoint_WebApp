@@ -2,6 +2,8 @@
 
 namespace Application\Query\ShowDetailsPlayer;
 
+use Domain\Entity\Player\ValueObject\TransfermarktUrl;
+use Domain\Exception\Entity\Player\InvalidTransfermarktUrlException;
 use Domain\Exception\ShowDetailsPlayer\PlayerNotFoundException;
 use Domain\Presenter\ShowDetailsPlayer\ShowDetailsPlayerPresenter;
 use Domain\Repository\Participation\ParticipationReadRepository;

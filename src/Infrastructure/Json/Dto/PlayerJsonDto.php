@@ -2,8 +2,7 @@
 
 namespace Infrastructure\Json\Dto;
 
-use DateTime;
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 final class PlayerJsonDto
 {
@@ -18,12 +17,12 @@ final class PlayerJsonDto
     {
         $teamJsonDto = new TeamJsonDto();
 
-        $this->id = $player->getId();
-        $this->firstName = $player->getFirstName();
-        $this->lastName = $player->getLastName();
-        $this->birthDate = $player->getBirthDate()->format('Y-m-d');
+        $this->id = $player->getId()->value();
+        $this->firstName = $player->getName()->firstName();
+        $this->lastName = $player->getName()->lastName();
+        $this->birthDate = $player->getBirthDate()->value()->format('Y-m-d');
         $this->team = $player->getTeam() ? $teamJsonDto->toDto($player->getTeam()) : null;
-        $this->generalNote = $player->getGeneralNote() ?? "";
+        $this->generalNote = $player->getGeneralNote()->value() ?? "";
 
         foreach($positions as $position) {
             $this->positions[] = [

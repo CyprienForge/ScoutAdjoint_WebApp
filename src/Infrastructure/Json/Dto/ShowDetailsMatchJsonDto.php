@@ -14,8 +14,8 @@ class ShowDetailsMatchJsonDto
 
     public function toDto(ParticipationNotesDTO $dtoEntry) : ShowDetailsMatchJsonDto
     {
-        $this->firstName = $dtoEntry->getParticipation()->getPlayer()->getFirstName();
-        $this->lastName = $dtoEntry->getParticipation()->getPlayer()->getLastName();
+        $this->firstName = $dtoEntry->getParticipation()->getPlayer()->getName()->firstName();
+        $this->lastName = $dtoEntry->getParticipation()->getPlayer()->getName()->lastName();
         $this->numero = $dtoEntry->getParticipation()->getNumero();
 
         foreach($dtoEntry->getNotes() as $note){

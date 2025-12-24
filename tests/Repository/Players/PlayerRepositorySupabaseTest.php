@@ -2,7 +2,7 @@
 
 namespace App\Tests\Repository\Players;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 use Infrastructure\Repository\Supabase\PlayerRepositorySupabase;
 use PHPUnit\Framework\TestCase;
 

@@ -2,6 +2,8 @@
 
 namespace Domain\Entity;
 
+use Domain\Entity\Stadium\Stadium;
+
 class MatchGame
 {
     private int $id;

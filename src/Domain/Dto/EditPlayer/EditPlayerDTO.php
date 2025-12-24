@@ -2,7 +2,7 @@
 
 namespace Domain\Dto\EditPlayer;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 use Domain\Entity\Team;
 
 class EditPlayerDTO

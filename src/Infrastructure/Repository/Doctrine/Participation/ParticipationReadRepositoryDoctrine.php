@@ -5,6 +5,7 @@ namespace Infrastructure\Repository\Doctrine\Participation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Entity\Player\ValueObject\PlayerId;
 use Domain\Mapper\ParticipationMapper;
 use Domain\Repository\Participation\ParticipationReadRepository;
 use Infrastructure\Entity\Doctrine\ParticipationDoctrine;
@@ -59,10 +60,10 @@ class ParticipationReadRepositoryDoctrine extends ServiceEntityRepository implem
         return $this->participationMapper->toDomain($participationDoctrine);
     }
 
-    public function findByPlayer(int $idPlayer)
+    public function findByPlayer(PlayerId $idPlayer)
     {
         $participations = [];
-        $participationsDoctrine = $this->findBy(['player' => $idPlayer]);
+        $participationsDoctrine = $this->findBy(['player' => $idPlayer->value()]);
         foreach($participationsDoctrine as $participation)
         {
             $participations[] = $this->participationMapper->toDomain($participation);

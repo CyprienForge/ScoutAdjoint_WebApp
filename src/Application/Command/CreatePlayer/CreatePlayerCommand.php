@@ -3,7 +3,12 @@
 namespace Application\Command\CreatePlayer;
 
 use Domain\Entity\Placement;
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
+use Domain\Entity\Player\ValueObject\GeneralNote;
+use Domain\Entity\Player\ValueObject\PlayerBirthDate;
+use Domain\Entity\Player\ValueObject\PlayerId;
+use Domain\Entity\Player\ValueObject\PlayerName;
+use Domain\Entity\Player\ValueObject\TransfermarktUrl;
 use Domain\Repository\Placement\PlacementWriteRepository;
 use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Repository\Player\PlayerWriteRepository;
@@ -25,17 +30,23 @@ class CreatePlayerCommand
 
     public function execute(CreatePlayerRequest $request) : CreatePlayerResponse
     {
-        $player = new Player();
+        $team = null;
         $createPlayerDTO = $request->createPlayerDTO;
         if($createPlayerDTO->idTeam != null){
             $team = $this->teamReadRepository->findById($createPlayerDTO->idTeam);
-            $player->setTeam($team);
         }
 
-        $player->setId(0)
-                ->setFirstName($createPlayerDTO->firstName)
-                ->setLastName($createPlayerDTO->lastName)
-                ->setBirthDate($createPlayerDTO->birthDate);
+        $player = new Player(
+            new PlayerId(0),
+            new PlayerName(
+                $createPlayerDTO->firstName,
+                $createPlayerDTO->lastName,
+            ),
+            new PlayerBirthDate($createPlayerDTO->birthDate),
+            $team,
+            new TransfermarktUrl(),
+            new GeneralNote()
+        );
 
         $this->playerRepository->save($player);
         $player = $this->playerReadRepository->findById($this->playerRepository->getLastInsertId());

@@ -2,15 +2,10 @@
 
 namespace Infrastructure\Symfony\Form;
 
-use Domain\Dto\CreatePlayer\CreatePlayerDTO;
 use Domain\Dto\EditUser\EditUserDTO;
-use Domain\Entity\Player;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

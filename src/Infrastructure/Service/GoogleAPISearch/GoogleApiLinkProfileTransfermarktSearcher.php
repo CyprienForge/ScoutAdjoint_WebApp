@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Service\GoogleAPISearch;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 use Domain\Service\LinkProfileTransfermarkt\LinkProfileTransfermarktSearcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

@@ -2,7 +2,7 @@
 
 namespace Domain\Response\ShowMerge;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 class ShowMergeResponse
 {

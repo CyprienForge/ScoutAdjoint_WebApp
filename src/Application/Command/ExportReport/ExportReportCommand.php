@@ -71,7 +71,7 @@ class ExportReportCommand
             $match->getHomeTeam()->getName(),
             $match->getAwayTeam()->getName(),
             $match->getDate()->format('d/m/Y H:i'),
-            $match->getStadium()->getName(),
+            $match->getStadium()->getName()->value(),
             $match->getChampionship()->getName(),
             $matchInfos
         );

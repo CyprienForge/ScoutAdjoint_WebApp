@@ -2,7 +2,7 @@
 
 namespace Domain\Service\LinkProfileTransfermarkt;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 interface LinkProfileTransfermarktSearcher
 {

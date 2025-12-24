@@ -2,7 +2,7 @@
 
 namespace Domain\Response\ShowDetailsPlayer;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 class ShowDetailsPlayerResponse
 {

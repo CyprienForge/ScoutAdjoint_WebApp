@@ -2,6 +2,8 @@
 
 namespace Domain\Entity;
 
+use Domain\Entity\Player\Player;
+
 class Participation
 {
     private int $id;

@@ -18,11 +18,11 @@ class ExportReportPlayerViewModel
 
     public function getName() : string
     {
-        return $this->participation->getPlayer()->getFirstName() . ' ' . $this->participation->getPlayer()->getLastName();
+        return $this->participation->getPlayer()->getName()->firstName() . ' ' . $this->participation->getPlayer()->getName()->lastName();
     }
 
     public function getYear() : string
     {
-        return $this->participation->getPlayer()->getBirthDate()->format('Y');
+        return $this->participation->getPlayer()->getBirthDate()->getYear();
     }
 }

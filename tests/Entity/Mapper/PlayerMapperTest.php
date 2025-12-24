@@ -2,12 +2,9 @@
 
 namespace App\Tests\Entity\Mapper;
 
-use Domain\Entity\Player;
-use Domain\Entity\Team;
-use Domain\Factory\ChampionshipFactory;
+use Domain\Entity\Player\Player;
 use Infrastructure\Entity\Doctrine\ChampionshipDoctrine;
 use Infrastructure\Entity\Doctrine\Mapper\PlayerMapperDoctrine;
-use Infrastructure\Entity\Doctrine\Mapper\TeamMapperDoctrine;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 use Infrastructure\Entity\Doctrine\TeamDoctrine;
 use PHPUnit\Framework\TestCase;

@@ -2,7 +2,7 @@
 
 namespace Domain\Response\CreatePlayer;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
 
 class CreatePlayerResponse
 {

@@ -2,9 +2,13 @@
 
 namespace Infrastructure\Entity\Doctrine\Mapper;
 
-use Domain\Entity\Player;
+use Domain\Entity\Player\Player;
+use Domain\Entity\Player\ValueObject\GeneralNote;
+use Domain\Entity\Player\ValueObject\PlayerBirthDate;
+use Domain\Entity\Player\ValueObject\PlayerId;
+use Domain\Entity\Player\ValueObject\PlayerName;
+use Domain\Entity\Player\ValueObject\TransfermarktUrl;
 use Domain\Mapper\PlayerMapper;
-use Domain\Repository\Player\PlayerReadRepository;
 use Domain\Repository\Team\TeamReadRepository;
 use Infrastructure\Entity\Doctrine\PlayerDoctrine;
 
@@ -17,19 +21,26 @@ class PlayerMapperDoctrine implements PlayerMapper
 
     public function toDomain($item)
     {
-        $player = new Player();
-        $player->setId($item->getId() ?? 0);
-        $player->setFirstName($item->getFirstName());
-        $player->setLastName($item->getLastName());
-        $player->setBirthDate($item->getBirthDate());
-        $player->setGeneralNote($item->getGeneralNote());
+        $id = $item->getId();
+        $firstName = $item->getFirstName();
+        $lastName = $item->getLastName();
+        $birthDate = $item->getBirthDate();
+        $generalNote = $item->getGeneralNote();
 
+        $team = null;
         if($item->getTeam() !== null) {
             $team = $this->teamMapperDoctrine->toDomain($item->getTeam());
-            $player->setTeam($team);
         }
-        $player->setTransfermarktUrl($item->getTransfermarktUrl());
+        $transfermarktUrl = $item->getTransfermarktUrl();
 
+        $player = new Player(
+            new PlayerId($id),
+            new PlayerName($firstName, $lastName),
+            new PlayerBirthDate($birthDate),
+            $team,
+            new TransfermarktUrl($transfermarktUrl),
+            new GeneralNote($generalNote)
+        );
         return $player;
     }
 
@@ -37,12 +48,12 @@ class PlayerMapperDoctrine implements PlayerMapper
     {
         $playerDoctrine = $existing ?? new PlayerDoctrine();
 
-        $playerDoctrine->setId($item->getId());
-        $playerDoctrine->setFirstName($item->getFirstName());
-        $playerDoctrine->setLastName($item->getLastName());
-        $playerDoctrine->setBirthDate($item->getBirthDate());
-        $playerDoctrine->setTransfermarktUrl($item->getTransfermarktUrl());
-        $playerDoctrine->setGeneralNote($item->getGeneralNote());
+        $playerDoctrine->setId($item->getId()->value());
+        $playerDoctrine->setFirstName($item->getName()->firstName());
+        $playerDoctrine->setLastName($item->getName()->lastName());
+        $playerDoctrine->setBirthDate($item->getBirthDate()->value());
+        $playerDoctrine->setTransfermarktUrl($item->getTransfermarktUrl()->value());
+        $playerDoctrine->setGeneralNote($item->getGeneralNote()->value());
 
         if ($item->getTeam() !== null && $item->getTeam()->getId() !== null) {
             $teamDoctrine = $this->teamRepository->find($item->getTeam()->getId());

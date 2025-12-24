@@ -5,6 +5,7 @@ namespace Infrastructure\Repository\Doctrine\Placement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Entity\Player\ValueObject\PlayerId;
 use Domain\Mapper\PlacementMapper;
 use Domain\Mapper\PositionMapper;
 use Domain\Repository\Placement\PlacementReadRepository;
@@ -16,12 +17,12 @@ class PlacementReadRepositoryDoctrine extends ServiceEntityRepository implements
         parent::__construct($registry, PlacementDoctrine::class);
     }
 
-    public function findByPlayer(int $idPlayer): array
+    public function findByPlayer(PlayerId $idPlayer): array
     {
         $placementsDoctrine = $this->createQueryBuilder('pl')
             ->join('pl.position', 'pos')
             ->where('pl.player = :idPlayer')
-            ->setParameter('idPlayer', $idPlayer)
+            ->setParameter('idPlayer', $idPlayer->value())
             ->getQuery()
             ->getResult();
 
